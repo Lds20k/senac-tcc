@@ -25,15 +25,16 @@ jobs:
       - name: Compile LaTeX via latexmk
         # You may pin to the exact commit or the version.
         # uses: antaljanosbenjamin/compile-latex@9bd5857f8d3c1a7e448116c9be00be52f20d5cc4
-        uses: antaljanosbenjamin/compile-latex@v1.0.0
+      - uses: actions/checkout@v2
+      - uses: antaljanosbenjamin/compile-latex@v1.0.0
         with:
           # The LaTeX file to be compiled, relative to the root of the repository.
           file: 
             # The directory for output files, relative to the root of the repository.
-            ../../latex/main.tex
+            latex/main.tex
           output-directory: 
             # optional, default is .
             # Additional arguments to pass over to latexmk.
-            ../../latex/pdf/
+            latex/pdf
           args: # optional
              -pdf
