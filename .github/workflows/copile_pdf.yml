@@ -4,10 +4,9 @@ jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: antaljanosbenjamin/compile-latex@v1.0.0
-        with:
-          file: ./../../latex/test.tex
-          output-directory: ./../../latex/pdf
-          args: -pdf
-      - run: '(test -f latex/pdf/test.pdf && echo PDF exists) || (echo PDF does not exist && exit 1)'
+    - uses: actions/checkout@v1
+    - name: Compilation
+      uses: vinay0410/tectonic-action@master
+      with:
+        tex_path: 'latex/main.tex'
+        push: 'yes'
