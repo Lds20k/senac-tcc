@@ -1,13 +1,12 @@
+name: Build LaTeX document
 on: [push]
-
 jobs:
-  latex-job:
+  build_latex:
     runs-on: ubuntu-latest
-    name: A job to Compile Latex file
     steps:
-    - uses: actions/checkout@v1
-    - name: Compilation
-      uses: vinay0410/tectonic-action@master
-      with:
-        tex_path: 'latex/main.tex'
-        push: 'yes'
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX document
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: latex/main.tex
