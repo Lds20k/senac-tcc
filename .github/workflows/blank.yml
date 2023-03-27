@@ -34,6 +34,6 @@ jobs:
           output-directory: 
             # optional, default is .
             # Additional arguments to pass over to latexmk.
-            latex/pdf
+            latex/pdf/
           args: # optional
-             -pdf final.pdf
+             -pdf
