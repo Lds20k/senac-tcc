@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/latex
 # Edit at https://www.toptal.com/developers/gitignore?templates=latex
 
-latex/*.pdf
+latex/main.pdf
 
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
