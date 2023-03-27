@@ -9,4 +9,4 @@ jobs:
       - name: Compile LaTeX document
         uses: dante-ev/latex-action@latest
         with:
-          root_file: latex/smain.tex
+          root_file: latex/main.tex
