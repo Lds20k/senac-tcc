@@ -11,4 +11,4 @@ jobs:
         with:
           root_file: latex/main.tex
           working_directory: latex
-          args: -pdf pdf/main.pdf 
+          args: -pdf -output-directory="pdf" 
