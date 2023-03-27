@@ -1,17 +1,13 @@
-name: Build LaTeX document
 on: [push]
+
 jobs:
-  build_latex:
+  latex-job:
     runs-on: ubuntu-latest
+    name: A job to Compile Latex file
     steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v3
-      - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@v2
-        with:
-          root_file: ./latex/main.tex
-      - name: Upload PDF file
-        uses: actions/upload-artifact@v3
-        with:
-          name: PDF
-          path: ./latex/pdf/main.pdf
+    - uses: actions/checkout@v1
+    - name: Compilation
+      uses: vinay0410/tectonic-action@master
+      with:
+        tex_path: 'latex/main.tex'
+        push: 'yes'
