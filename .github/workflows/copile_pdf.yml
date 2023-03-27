@@ -10,5 +10,5 @@ jobs:
         uses: dante-ev/latex-action@latest
         with:
           root_file: main.tex
-          working_directory: ./latex
-          args: -pdf -output-directory="pdf" 
+          working_directory: latex
+          args: -pdf -output-directory=pdf
