@@ -1,0 +1,13 @@
+name: Compile pdf
+on: [push]
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: antaljanosbenjamin/compile-latex@v1.0.0
+        with:
+          file: latex/test.tex
+          output: latex/pdf
+          args: -pdf
+      - run: '(test -f latex/pdf/test.pdf && echo PDF exists) || (echo PDF does not exist && exit 1)'
