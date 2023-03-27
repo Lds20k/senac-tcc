@@ -30,10 +30,10 @@ jobs:
           # The LaTeX file to be compiled, relative to the root of the repository.
           file: 
             # The directory for output files, relative to the root of the repository.
-            ./latex/main.tex
+            latex/main.tex
           output-directory: 
             # optional, default is .
             # Additional arguments to pass over to latexmk.
-            ./latex/pdf/final.pdf
+            latex/pdf
           args: # optional
-             -pdf
+             -pdf final.pdf
