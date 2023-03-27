@@ -1,5 +1,5 @@
 name: Compile pdf
-on: [push, pull_request]
+on: [push]
 jobs:
   compile:
     runs-on: ubuntu-latest
