@@ -1,12 +1,17 @@
-name: Compile pdf
+name: Build LaTeX document
 on: [push]
 jobs:
-  compile:
+  build_latex:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Compilation
-      uses: vinay0410/tectonic-action@master
-      with:
-        tex_path: 'latex/main.tex'
-        push: 'yes'
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: ./latex/main.tex
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: PDF
+          path: ./latex/pdf/main.pdf
