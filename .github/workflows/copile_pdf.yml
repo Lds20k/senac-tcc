@@ -18,4 +18,4 @@ jobs:
           message: Show GitHub logo
           committer_name: GitHub Actions
           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
-          add: './latex/pdf/main.pdf' 
+          add: './latex/pdf/main.pdf --no-ignore-removal/-A' 
