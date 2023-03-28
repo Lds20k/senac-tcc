@@ -19,3 +19,5 @@ jobs:
           committer_name: GitHub Actions
           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
           add: './latex/pdf/main.pdf'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
