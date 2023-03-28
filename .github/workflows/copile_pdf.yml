@@ -12,4 +12,4 @@ jobs:
           root_file: main.tex
           working_directory: latex
           args: -pdf -output-directory=pdf
-      - run: '(test -f latex/pdf/test.pdf && echo PDF exists) || (echo PDF does not exist && exit 1)'
+      - run: '(test -f latex/pdf/test.pdf && echo PDF exists) || (echo PDF does not exist && pwd && exit 1)'
