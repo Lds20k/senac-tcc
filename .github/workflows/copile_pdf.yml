@@ -5,15 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Compile LaTeX document
-        uses: dante-ev/latex-action@latest
+      - uses: dante-ev/latex-action@latest
         with:
           root_file: main.tex
           working_directory: latex
           args: -pdf -output-directory=pdf
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: Show GitHub logo
-          committer_name: GitHub Actions
-          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+      - run: '(test -f latex/pdf/test.pdf && echo PDF exists) || (echo PDF does not exist && exit 1)'
