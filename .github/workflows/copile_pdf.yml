@@ -12,4 +12,11 @@ jobs:
           root_file: main.tex
           working_directory: latex
           args: -pdf -output-directory=pdf
-      - run: '(test -f ./latex/pdf/main.pdf && latexmk -c && ls ./latex/pdf/ && echo PDF exists) || (echo PDF does not exist && pwd && ls ./latex/pdf/ && exit 1)'
+      - run: '(test -f ./latex/pdf/main.pdf && echo PDF exists) || (echo PDF does not exist && pwd && ls ./latex/pdf/ && exit 1)'
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Show GitHub logo
+          committer_name: GitHub Actions
+          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+          remove: ./latex/pdf/main.pdf
+          add: 'latex/pdf/main.pdf' 
