@@ -15,7 +15,7 @@ jobs:
       - run: '(test -f ./latex/pdf/main.pdf && echo PDF exists) || (echo PDF does not exist && pwd && ls ./latex/pdf/ && exit 1)'
       - uses: EndBug/add-and-commit@v9
         with:
-          message: Show GitHub logo
-          committer_name: GitHub Actions
+          message: Adding pdf file
+          default_author: github_actions
           add: './latex/pdf/main.pdf'
 
