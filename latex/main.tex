@@ -77,6 +77,8 @@ de um modelo de inteligência artificial e utilizará os resultados em um diagra
 Este trabalho foi concebido em busca de fazer a junção de um modelo de inteligência artificial convolucional com a decomposição de espaço do diagrama de Veronoi, bem como disponibilizar mais uma forma de geração procedural de conteúdo que seja pratico, de baixo custo e possua
 facilidade na configuração de parâmetros.
 
+O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space\citep{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o ponto mais proximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\citep{poligonos_de_thiessen_ou_voronoi}. O diagrama de Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
+
 \section{Objetivos}
 
 O objetivo geral deste trabalho explora técnicas e algoritmos que permeiam os ramos de inteligência artificial com foco em identificar contornos em imagens e computação gráfica centrado em gerar mapas usando heurísticas.
@@ -89,21 +91,42 @@ Ademais visto especificamente temos como objetivos:
 	\item Aplicar um algoritmo para reconhecer a imagem com o contorno e gerar como saída a imagem do mapa gerado
 \end{itemize}
 
-\section{T}
-
-O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space\citep{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o ponto mais proximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\citep{poligonos_de_thiessen_ou_voronoi}. O diagrama de Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
 
 
 \chapter{Fundamentação teórica}
 \label{sec:background}
 	\label{sec:fund_teorica}
 
-A fundamentação teórica apresenta os principais conceitos relacionados ao domínio do problema. Não é objetivo da fundamentação teórica apresentar um conhecimento novo. O objetivo é caracterizar o domínio do problema, apresentando os principais conceitos que viabilizem o desenvolvimento de uma solução. Pode ser entendida como a fundamentação teórica, \emph{i.e.}, conceitos teóricos computacionais e científicos utilizados no desenvolvimento do \acr{TCC}.
+Este capítulo tem objetivo de apresentar conceitos necessários para entendimento do trabalho;
 
-Este capítulo pode ter várias subseções, uma para cada diferente tema abordado. Por exemplo, se o objetivo do projeto final for implementar um jogo computacional de competição em ferramentas de redes sociais, pode-se ter uma subseção tratando os jogos computacionais e seus aspectos e posteriormente uma outra subseção tratando de redes sociais. Esta organização deve ser bem definida, mas o princípio básico do bom encadeamento deve ser preservado.
+\section{Inteligencia Artificial}
+
+\subsection{Visão computacional}
+
+\section{Geração procedural}
+
+\subsection{Diagrama de Voronoi}
+
+\subsection{Mapas de ilhas 2d com biomas}
 
 
-As Figuras, Tabelas e Equações devem ser numeradas e citadas no texto. A Tabela \ref{tab:exemplo} apresenta um exemplo de tabela\footnote{Observe este exemplo para que você faça tabelas simples como esta.}. A Figura \ref{fig:exemplo} apresenta um exemplo de figura. A Equação \ref{eq:exemplo} apresenta um exemplo de equação, onde $x$ é a variável independente e $y$ a variável dependente\footnote{Evite quebrar as equações no meio do texto. Use referência cruzada para citá-la e construir sua discussão.}. Cada figura, tabela e equação merece um parágrafo de explicação própria.
+
+A fundamentação teórica apresenta os principais conceitos relacionados ao domínio do problema. Não é objetivo da fundamentação teórica 
+apresentar um conhecimento novo. O objetivo é caracterizar o domínio do problema, apresentando os principais conceitos que viabilizem o 
+desenvolvimento de uma solução. Pode ser entendida como a fundamentação teórica, \emph{i.e.}, conceitos teóricos computacionais e 
+científicos utilizados no desenvolvimento do \acr{TCC}.
+
+Este capítulo pode ter várias subseções, uma para cada diferente tema abordado. Por exemplo, se o objetivo do projeto final for 
+implementar um jogo computacional de competição em ferramentas de redes sociais, pode-se ter uma subseção tratando os jogos computacionais 
+e seus aspectos e posteriormente uma outra subseção tratando de redes sociais. Esta organização deve ser bem definida, mas o princípio 
+básico do bom encadeamento deve ser preservado.
+
+
+As Figuras, Tabelas e Equações devem ser numeradas e citadas no texto. A Tabela \ref{tab:exemplo} apresenta um exemplo de 
+tabela\footnote{Observe este exemplo para que você faça tabelas simples como esta.}. A Figura \ref{fig:exemplo} apresenta um 
+exemplo de figura. A Equação \ref{eq:exemplo} apresenta um exemplo de equação, onde $x$ é a variável independente e $y$ a variável 
+dependente\footnote{Evite quebrar as equações no meio do texto. Use referência cruzada para citá-la e construir sua discussão.}.
+Cada figura, tabela e equação merece um parágrafo de explicação própria.
 
 \begin{table}[!ht]
 	\centering
