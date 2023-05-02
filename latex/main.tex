@@ -19,6 +19,7 @@
 
 % Definição de acronimos
 \newacro{TCC}{Trabalho de Conclusão de Curso}
+\newacro{IA}{Inteligencia Artificial}
 
 \begin{document}
 \pagenumbering{gobble}
@@ -67,27 +68,30 @@ Por outro lado, as empresas de desenvolvimento de jogos continuam a trabalhar in
 O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto. Por exemplo, a empresa Rockstar Games revelou que o jogo "Grand Theft Auto V" custou cerca de 265 milhões de dólares para ser produzido e comercializado (referência). Isso destaca a importância de acelerar o processo de desenvolvimento e reduzir custos, sem comprometer a qualidade do produto final.
 
 Uma solução para reduzir custos e economizar tempo é a utilização da geração procedural de conteúdo (PCG), que permite gerar mapas de forma automatizada. A PCG é uma técnica que trata da criação automática de conteúdos (Araújo,2018). Com a utilização da técnica PCG, as empresas conseguem gerar mapas de forma rápida e eficiente, sem a necessidade de investir em recursos humanos para criação manual de cada elemento. Além disso, a PCG permite a criação de conteúdo personalizado e variado, garantindo uma experiência única para cada usuário. Isso resulta em uma redução significativa de custos e em um aumento da eficiência operacional da empresa, uma vez que a criação de conteúdo manualmente é uma tarefa demorada e dispendiosa. Com a PCG, as empresas podem produzir uma grande quantidade de conteúdo de forma rápida e, portanto, podem lançar seus jogos mais rapidamente no mercado.
+
+"Bill Gates, um dos fundadores da Microsoft, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas"\space\citep{inteligencia_artificial_e_avanco_bbc}. É possível ver
+a relevância do tema e justamente por isso que este trabalho acompanhara o desenvolvimento
+de um modelo de inteligência artificial e utilizará os resultados em um diagrama de Veronoi.
 \section{Justificativa}
 
-"Bill Gates, um dos fundadores da Microsoft, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas"\space\citep{inteligencia_artificial_e_avanco_bbc}. É possível ver a relevância do tema, e justamente por isso o nosso trabalho acompanhara o desenvolvimento de um IA e utilizara os resultados no diagrama de Veronoi.
-
-O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space\citep{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o ponto mais proximo, calcular a precipitação de uma área, 
-estudar os padrões de crescimento das florestas, etc,\space\citep{poligonos_de_thiessen_ou_voronoi}. O diagrama de Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
-
-A principal motivação para a realização dessa monografia é a junção das areas de maior interesse de cada um dos participante, são essas, IA, algoritmos de ruídos, diagramas e jogos.
+Este trabalho foi concebido em busca de fazer a junção de um modelo de inteligência artificial convolucional com a decomposição de espaço do diagrama de Veronoi, bem como disponibilizar mais uma forma de geração procedural de conteúdo que seja pratico, de baixo custo e possua
+facilidade na configuração de parâmetros.
 
 \section{Objetivos}
 
-Contudo, este trabalho tem como objetivo geral explorar técnicas e algoritmos que permeiam os ramos de inteligência artificial com foco em identificar contornos em imagens e computação gráfica centrado em gerar mapas usando heurísticas.
+O objetivo geral deste trabalho explora técnicas e algoritmos que permeiam os ramos de inteligência artificial com foco em identificar contornos em imagens e computação gráfica centrado em gerar mapas usando heurísticas.
 Ademais visto especificamente temos como objetivos:
 
-- Achar um dataset para treinar a inteligência artificial que irá identificar contornos em imagens
+\begin{itemize}
+	\item Encontrar um dataset para treinar a inteligência artificial que irá identificar contornos em imagens
+	\item Treinar uma inteligência artificial para identificar contornos em imagens
+	\item Testar algoritmos de gerar ruídos para criar o mapa
+	\item Aplicar um algoritmo para reconhecer a imagem com o contorno e gerar como saída a imagem do mapa gerado
+\end{itemize}
 
-- Treinar uma inteligência artificial para identificar contornos em imagens
+\section{T}
 
-- Testar algoritmos de gerar ruídos para criar o mapa 
-
-- Aplicar um algoritmo para reconhecer a imagem com o contorno e gerar como saída a imagem do mapa gerado
+O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space\citep{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o ponto mais proximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\citep{poligonos_de_thiessen_ou_voronoi}. O diagrama de Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
 
 
 \chapter{Fundamentação teórica}
