@@ -1,0 +1,30 @@
+name: Copile and push latex file
+on:
+  push:
+    branches:
+    - master
+    paths:
+      - 'latex/**'
+  workflow_dispatch:
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install latexmk
+        run: 'sudo apt-get update -y && sudo apt-get install -y latexmk && sudo apt install texlive-full -y'
+      - name: Clone repo
+        uses: actions/checkout@v3
+      - name: Give permission
+        run: 'sudo chmod -R 777 .'
+      - name: Compile LaTeX document
+        run: (cd ./latex && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main && makeglossaries main && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main  && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main)
+      - name: Test if pdf was compiled
+        run: '(cd ./latex && test -f ./main.pdf && echo PDF exists) || (echo PDF does not exist && pwd && ls && exit 1)'
+      - name: Change filename and path of pdf
+        run: 'cp	./latex/main.pdf	./ && mv ./main.pdf ./visao_projeto.pdf'
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Adding pdf file
+          default_author: github_actions
+          add: './visao_projeto.pdf'
