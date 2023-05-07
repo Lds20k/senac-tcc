@@ -2,7 +2,7 @@ name: Copile and push latex file
 on:
   push:
     branches:
-    - master
+    - main
     paths:
       - 'latex/**'
   workflow_dispatch:
