@@ -1,169 +1,576 @@
-\documentclass[12pt]{tcc} 
+%% abtex2-modelo-trabalho-academico.tex, v-1.9.2 laurocesar
+%% Copyright 2012-2014 by abnTeX2 group at http://abntex2.googlecode.com/ 
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%% 
+%% The Current Maintainer of this work is the abnTeX2 team, led
+%% by Lauro César Araujo. Further information are available on 
+%% http://abntex2.googlecode.com/
+%%
+%% This work consists of the files abntex2-modelo-trabalho-academico.tex,
+%% abntex2-modelo-include-comandos and abntex2-modelo-references.bib
+%%
 
-\usepackage[brazil]{babel} 
-\usepackage[T1]{fontenc}
-%\usepackage[brazilian,hyperpageref]{backref}
-\usepackage[hidelinks]{hyperref}
-\usepackage[pt-BR]{datetime2}
-% \DTMlangsetup{showdayofmonth=false}
-\usepackage[portuguese,ruled,linesnumbered,algochapter,titlenumbered]{algorithm2e}
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% abnTeX2: Modelo de Trabalho Academico (tese de doutorado, dissertacao de
+% mestrado e trabalhos monograficos em geral) em conformidade com 
+% ABNT NBR 14724:2011: Informacao e documentacao - Trabalhos academicos -
+% Apresentacao
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
 
+\documentclass[
+	% -- opções da classe memoir --
+	12pt,				% tamanho da fonte
+	openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	twoside,			% para impressão em verso e anverso. Oposto a oneside
+	a4paper,			% tamanho do papel. 
+	% -- opções da classe abntex2 --
+	%chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
+	%section=TITLE,		% títulos de seções convertidos em letras maiúsculas
+	%subsection=TITLE,	% títulos de subseções convertidos em letras maiúsculas
+	%subsubsection=TITLE,% títulos de subsubseções convertidos em letras maiúsculas
+	% -- opções do pacote babel --
+	english,			% idioma adicional para hifenização
+	french,				% idioma adicional para hifenização
+	spanish,			% idioma adicional para hifenização
+	brazil				% o último idioma é o principal do documento
+	]{abntex2}
 
-% As figuras ficam armazenadas na pasta figuras
-\graphicspath{{./figures/}}
-
-% Informações do trabalho
-\newcommand\dtitle{Geração de mapas procedurais a partir de visão computacional }
-\newcommand\dauthor{Lucas da Silva Santos\\Matheus Zanivan Andrade\\ Rafael Nascimento Lourenço}
-\newcommand\dadvisor{Orientador, D.Sc.\\Coorientador}
-
-% Definição de acronimos
-\newacro{TCC}{Trabalho de Conclusão de Curso}
-
-\begin{document}
-\pagenumbering{gobble}
-\pagenumbering{roman}
-
-\dcover
-
-\dcoverback
-	
-\dlibrary{ficha.pdf}
+% ---
+% Pacotes básicos 
+% ---
+\usepackage{lmodern}			% Usa a fonte Latin Modern			
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{lastpage}			% Usado pela Ficha catalográfica
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{microtype} 			% para melhorias de justificação
+\usepackage[final]{pdfpages}
+% ---
 		
-\ddedicatory{
-	\raggedleft \normalsize Dedicatória.
+% ---
+% Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
+% ---
+\usepackage{lipsum}				% para geração de dummy text
+% ---
+
+% ---
+% Pacotes de citações
+% ---
+\usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
+\usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+
+% --- 
+% CONFIGURAÇÕES DE PACOTES
+% --- 
+
+% ---
+% Configurações do pacote backref
+% Usado sem a opção hyperpageref de backref
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+% Texto padrão antes do número das páginas
+\renewcommand{\backref}{}
+% Define os textos da citação
+\renewcommand*{\backrefalt}[4]{
+	\ifcase #1 %
+		Nenhuma citação no texto.%
+	\or
+		Citado na página #2.%
+	\else
+		Citado #1 vezes nas páginas #2.%
+	\fi}%
+% ---
+
+% ---
+% Informações de dados para CAPA e FOLHA DE ROSTO
+% ---
+\titulo{Geração procedural de mapas de ilhas 2d com biomas através de visão computacional}
+\autor{Lucas da Silva Santos\\Matheus Zanivan Andrade\\ Rafael Nascimento Lourenço}
+\local{São Paulo - Brasil}
+\data{2023}
+\orientador{Lauro César Araujo}
+\coorientador{Equipe \abnTeX}
+\instituicao{%
+  Senac: Serviço Nacional de Aprendizagem Comercial
+  \par
+  Bacharelado em ciência da computação
 }
+\tipotrabalho{Trabalho de Conclusão de Curso (TCC)}
+% O preambulo deve conter o tipo do trabalho, o objetivo, 
+% o nome da instituição e a área de concentração 
+\preambulo{Modelo canônico de trabalho monográfico acadêmico em conformidade com
+as normas ABNT apresentado à comunidade de usuários \LaTeX.}
+% ---
 
-\dacknowledgment{
-	Agradece-se à CAPES, CNPq e FAPERJ pelo financiamento parcial desta pesquisa.\\
-	\\
-	Agradece-se também Noname.
+
+% ---
+% Configurações de aparência do PDF final
+
+% alterando o aspecto da cor azul
+\definecolor{blue}{RGB}{41,5,195}
+
+% informações do PDF
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={\@author},
+    	pdfsubject={\imprimirpreambulo},
+	    pdfcreator={LaTeX with abnTeX2},
+		pdfkeywords={abnt}{latex}{abntex}{abntex2}{trabalho acadêmico}, 
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=blue,          	% color of internal links
+    	citecolor=blue,        		% color of links to bibliography
+    	filecolor=magenta,      		% color of file links
+		urlcolor=blue,
+		bookmarksdepth=4
 }
+\makeatother
+% --- 
 
-\dresumo{
-Este roteiro traz as principais informações para a elaboração do trabalho de conclusão de curso. o trabalho deve ser escrito de modo a se mostrar interessante e importante. Para tanto, a forma de escrevê-lo, principalmente no resumo e  introdução, é fundamental. É o momento no qual o autor deve ``vender o trabalho''\footnote{Aprenda a usar as aspas corretamente olhando este exemplo.}. 
-}{palavras chaves separadas por ponto e vírgula}	
+% --- 
+% Espaçamentos entre linhas e parágrafos 
+% --- 
 
-\dabstract{
-	Resumo escrito em inglês
-}{palavras chaves separadas por ponto e vírgula}
+% O tamanho do parágrafo é dado por:
+\setlength{\parindent}{1.3cm}
 
-\dtables
-	
+% Controle do espaçamento entre um parágrafo e outro:
+\setlength{\parskip}{0.2cm}  % tente também \onelineskip
 
-\pagenumbering{arabic}
-\justifying
-	
-\chapter{Introdução}
-\label{sec:introducao}
+% ---
+% compila o indice
+% ---
+\makeindex
+% ---
+
+% ----
+% Início do documento
+% ----
+\begin{document}
+
+% Retira espaço extra obsoleto entre as frases.
+\frenchspacing 
+
+% ----------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% ----------------------------------------------------------
+% \pretextual
+
+% ---
+% Capa
+% ---
+\imprimircapa
+% ---
+
+% ---
+% Folha de rosto
+% (o * indica que haverá a ficha bibliográfica)
+% ---
+\imprimirfolhaderosto*
+% ---
+
+% ---
+% Inserir a ficha bibliografica
+% ---
+% Isto é um exemplo de Ficha Catalográfica, ou ``Dados internacionais de
+% catalogação-na-publicação''. Você pode utilizar este modelo como referência. 
+% Porém, provavelmente a biblioteca da sua universidade lhe fornecerá um PDF
+% com a ficha catalográfica definitiva após a defesa do trabalho. Quando estiver
+% com o documento, salve-o como PDF no diretório do seu projeto e substitua todo
+% o conteúdo de implementação deste arquivo pelo comando abaixo:
+%
+\begin{fichacatalografica}
+    \includepdf{ficha.pdf}
+\end{fichacatalografica}
+% ---
+
+% ---
+% Inserir errata
+% ---
+% \begin{errata}
+% Elemento opcional da \citeonline[4.2.1.2]{NBR14724:2011}. Exemplo:
+
+% \vspace{\onelineskip}
+
+% FERRIGNO, C. R. A. \textbf{Tratamento de neoplasias ósseas apendiculares com
+% reimplantação de enxerto ósseo autólogo autoclavado associado ao plasma
+% rico em plaquetas}: estudo crítico na cirurgia de preservação de membro em
+% cães. 2011. 128 f. Tese (Livre-Docência) - Faculdade de Medicina Veterinária e
+% Zootecnia, Universidade de São Paulo, São Paulo, 2011.
+
+% \begin{table}[htb]
+% \center
+% \footnotesize
+% \begin{tabular}{|p{1.4cm}|p{1cm}|p{3cm}|p{3cm}|}
+%   \hline
+%    \textbf{Folha} & \textbf{Linha}  & \textbf{Onde se lê}  & \textbf{Leia-se}  \\
+%     \hline
+%     1 & 10 & auto-conclavo & autoconclavo\\
+%    \hline
+% \end{tabular}
+% \end{table}
+
+% \end{errata}
+% ---
+
+% ---
+% Inserir folha de aprovação
+% ---
+
+% Isto é um exemplo de Folha de aprovação, elemento obrigatório da NBR
+% 14724/2011 (seção 4.2.1.3). Você pode utilizar este modelo até a aprovação
+% do trabalho. Após isso, substitua todo o conteúdo deste arquivo por uma
+% imagem da página assinada pela banca com o comando abaixo:
+%
+% \includepdf{folhadeaprovacao_final.pdf}
+%
+\begin{folhadeaprovacao}
+
+  \begin{center}
+    {\ABNTEXchapterfont\large\imprimirautor}
+
+    \vspace*{\fill}\vspace*{\fill}
+    \begin{center}
+      \ABNTEXchapterfont\bfseries\Large\imprimirtitulo
+    \end{center}
+    \vspace*{\fill}
+    
+    \hspace{.45\textwidth}
+    \begin{minipage}{.5\textwidth}
+        \imprimirpreambulo
+    \end{minipage}%
+    \vspace*{\fill}
+   \end{center}
+        
+   Trabalho aprovado. \imprimirlocal, 24 de novembro de 2012:
+
+   \assinatura{\textbf{\imprimirorientador} \\ Orientador} 
+   \assinatura{\textbf{Professor} \\ Convidado 1}
+   \assinatura{\textbf{Professor} \\ Convidado 2}
+   %\assinatura{\textbf{Professor} \\ Convidado 3}
+   %\assinatura{\textbf{Professor} \\ Convidado 4}
+      
+   \begin{center}
+    \vspace*{0.5cm}
+    {\large\imprimirlocal}
+    \par
+    {\large\imprimirdata}
+    \vspace*{1cm}
+  \end{center}
+  
+\end{folhadeaprovacao}
+% ---
+
+% ---
+% Dedicatória
+% ---
+\begin{dedicatoria}
+   \vspace*{\fill}
+   \centering
+   \noindent
+   \textit{ Este trabalho é dedicado às crianças adultas que,\\
+   quando pequenas, sonharam em se tornar cientistas.} \vspace*{\fill}
+\end{dedicatoria}
+% ---
+
+% ---
+% Agradecimentos
+% ---
+\begin{agradecimentos}
+Os agradecimentos principais são direcionados à Gerald Weber, Miguel Frasson,
+Leslie H. Watter, Bruno Parente Lima, Flávio de Vasconcellos Corrêa, Otavio Real
+Salvador, Renato Machnievscz\footnote{Os nomes dos integrantes do primeiro
+projeto abn\TeX\ foram extraídos de
+\url{http://codigolivre.org.br/projects/abntex/}} e todos aqueles que
+contribuíram para que a produção de trabalhos acadêmicos conforme
+as normas ABNT com \LaTeX\ fosse possível.
+
+Agradecimentos especiais são direcionados ao Centro de Pesquisa em Arquitetura
+da Informação\footnote{\url{http://www.cpai.unb.br/}} da Universidade de
+Brasília (CPAI), ao grupo de usuários
+\emph{latex-br}\footnote{\url{http://groups.google.com/group/latex-br}} e aos
+novos voluntários do grupo
+\emph{\abnTeX}\footnote{\url{http://groups.google.com/group/abntex2} e
+\url{http://abntex2.googlecode.com/}}~que contribuíram e que ainda
+contribuirão para a evolução do \abnTeX.
+
+\end{agradecimentos}
+% ---
+
+% ---
+% Epígrafe
+% ---
+\begin{epigrafe}
+    \vspace*{\fill}
+	\begin{flushright}
+		\textit{``Não vos amoldeis às estruturas deste mundo, \\
+		mas transformai-vos pela renovação da mente, \\
+		a fim de distinguir qual é a vontade de Deus: \\
+		o que é bom, o que Lhe é agradável, o que é perfeito.\\
+		(Bíblia Sagrada, Romanos 12, 2)}
+	\end{flushright}
+\end{epigrafe}
+% ---
+
+% ---
+% RESUMOS
+% ---
+
+% resumo em português
+% \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+% \begin{resumo}
+%  Segundo a \citeonline[3.1-3.2]{NBR6028:2003}, o resumo deve ressaltar o
+%  objetivo, o método, os resultados e as conclusões do documento. A ordem e a extensão
+%  destes itens dependem do tipo de resumo (informativo ou indicativo) e do
+%  tratamento que cada item recebe no documento original. O resumo deve ser
+%  precedido da referência do documento, com exceção do resumo inserido no
+%  próprio documento. (\ldots) As palavras-chave devem figurar logo abaixo do
+%  resumo, antecedidas da expressão Palavras-chave:, separadas entre si por
+%  ponto e finalizadas também por ponto.
+
+%  \textbf{Palavras-chaves}: latex. abntex. editoração de texto.
+% \end{resumo}
+
+% resumo em inglês
+% \begin{resumo}[Abstract]
+%  \begin{otherlanguage*}{english}
+%    This is the english abstract.
+
+%    \vspace{\onelineskip}
+ 
+%    \noindent 
+%    \textbf{Key-words}: latex. abntex. text editoration.
+%  \end{otherlanguage*}
+% \end{resumo}
+% ---
+
+% ---
+% inserir lista de ilustrações
+% ---
+% \pdfbookmark[0]{\listfigurename}{lof}
+% \listoffigures*
+% \cleardoublepage
+% ---
+
+% ---
+% inserir lista de tabelas
+% ---
+% \pdfbookmark[0]{\listtablename}{lot}
+% \listoftables*
+% \cleardoublepage
+% ---
+
+% ---
+% inserir lista de abreviaturas e siglas
+% ---
+% \begin{siglas}
+%   \item[ABNT] Associação Brasileira de Normas Técnicas
+%   \item[abnTeX] ABsurdas Normas para TeX
+% \end{siglas}
+% ---
+
+% ---
+% inserir lista de símbolos
+% ---
+% \begin{simbolos}
+%   \item[$ \Gamma $] Letra grega Gama
+%   \item[$ \Lambda $] Lambda
+%   \item[$ \zeta $] Letra grega minúscula zeta
+%   \item[$ \in $] Pertence
+% \end{simbolos}
+% ---
+
+% ---
+% inserir o sumario
+% ---
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+% ---
+
+
+
+% ----------------------------------------------------------
+% ELEMENTOS TEXTUAIS
+% ----------------------------------------------------------
+\textual
+
+% ----------------------------------------------------------
+% Introdução (exemplo de capítulo sem numeração, mas presente no Sumário)
+% ----------------------------------------------------------
+\chapter[Introdução]{Introdução}
+% ----------------------------------------------------------
 
 \section{Contexto}
 
-A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo(Santana, 2022 ) essa industria tende a ultrapassar em 2023 os US$ 200,0 bilhões (aproximadamente R$ 1 trilhão).
+A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo(Santana, 2022) essa industria tende a ultrapassar em 2023 os US\$ 200,0 bilhões (aproximadamente R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente e somente na plataforma digital Steam, foram publicados 10.963 novos títulos em 2022(Clement, 2022).
 
-Por outro lado as fabricantes de Games desenvolvem sem parar suprir o público gamer que em 2022 cresceu 2,5\% no Brasil (PGB - 2022), só que para um jogo chegar ao consumidor final ele passa por diversos processos de criação, que são extremamente complexos e rígido, uma vez que uma equipe de desenvolvimento com designers e programadores tem que mover muita das suas forças para elaboração de mapas 2D e 3D, afim de deixar o jogo com a melhor aparência e mais optimizado. 
+Por outro lado, as empresas de desenvolvimento de jogos continuam a trabalhar incessantemente para atender a uma demanda de mercado que cresceu 2,5\% no Brasil em 2022 
+(PGB - 2022). No entanto, para que um jogo chegue ao consumidor final é preciso passa por diversos processos de criação extremamente complexos e rigorosos. Uma equipe de desenvolvimento, composta por designers e programadores, precisa dedicar muitos recursos para a elaboração de mapas 2D e 3D, com o objetivo de garantir a melhor aparência e otimização do jogo.
 
-Uma solução para a redução de custo, tanto como de tempo quanto de dinheiro pode-se utilizar a geração procedural de conteúdos, com o objetivo de gerar mapas proceduralmente .A geração procedural de conteúdo (PCG) trata da criação automática de conteúdos.(Araújo, 2018) 
+O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto. Por exemplo, a empresa Rockstar Games revelou que o jogo \"Grand Theft Auto V\" custou cerca de 265 milhões de dólares para ser produzido e comercializado (referência). Isso destaca a importância de acelerar o processo de desenvolvimento e reduzir custos, sem comprometer a qualidade do produto final.
 
+Uma solução para reduzir custos e economizar tempo é a utilização da geração procedural de conteúdo (PCG), que permite gerar mapas de forma automatizada. A PCG é uma técnica que trata da criação automática de conteúdos (Araújo,2018). Com a utilização da técnica PCG, as empresas conseguem gerar mapas de forma rápida e eficiente, sem a necessidade de investir em recursos humanos para criação manual de cada elemento. Além disso, a PCG permite a criação de conteúdo personalizado e variado, garantindo uma experiência única para cada usuário. Isso resulta em uma redução significativa de custos e em um aumento da eficiência operacional da empresa, uma vez que a criação de conteúdo manualmente é uma tarefa demorada e dispendiosa. Com a PCG, as empresas podem produzir uma grande quantidade de conteúdo de forma rápida e, portanto, podem lançar seus jogos mais rapidamente no mercado.
+
+\"Bill Gates, um dos fundadores da Microsoft, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas\"\space
+\cite{inteligencia_artificial_e_avanco_bbc}. É possível ver
+a relevância do tema e justamente por isso que este trabalho acompanhara o desenvolvimento
+de um modelo de inteligência artificial e utilizará os resultados em um diagrama de Veronoi.
 \section{Justificativa}
 
-"Bill Gates, um dos fundadores da Microsoft, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas"\space\citep{inteligencia_artificial_e_avanco_bbc}. É possível ver a relevância do tema, e justamente por isso o nosso trabalho acompanhara o desenvolvimento de um IA e utilizara os resultados no diagrama de Veronoi.
-
-O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space\citep{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o ponto mais proximo, calcular a precipitação de uma área, 
-estudar os padrões de crescimento das florestas, etc,\space\citep{poligonos_de_thiessen_ou_voronoi}. O diagrama de Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
-
-A principal motivação para a realização dessa monografia é a junção das areas de maior interesse de cada um dos participante, são essas, IA, algoritmos de ruídos, diagramas e jogos.
-
+Este trabalho foi concebido em busca de fazer a junção de um modelo de inteligência artificial convolucional com a decomposição de espaço do diagrama de Veronoi, bem como 
+disponibilizar mais uma forma de geração procedural de conteúdo que seja pratico, de baixo custo e possua
+facilidade na configuração de parâmetros.
 \section{Objetivos}
 
-Este trabalho tem como objetivo geral explorar técnicas e algoritmos que permeiam os ramos de inteligência artificial com foco em identificar contornos em imagens e computação gráfica centrado em gerar mapas usando heurísticas.
+O objetivo geral deste trabalho explora técnicas e algoritmos que permeiam os ramos de inteligência artificial com foco em identificar contornos em imagens e computação 
+gráfica centrado em gerar mapas usando heurísticas.
 Ademais visto especificamente temos como objetivos:
 
-- Achar um dataset para treinar uma inteligência artificial que irá identificar contornos em imagens
-
-- Treinar uma inteligência artificial para identificar contornos em imagens
-
-- Testar algoritmos que geram ruídos para criar biomas 
-
-- Aplicar um algoritmo para reconhecer a imagem com o contorno e gerar como saída a imagem do mapa
+\begin{itemize}
+	\item Encontrar um dataset para treinar a inteligência artificial que irá identificar contornos em imagens
+	\item Treinar uma inteligência artificial para identificar contornos em imagens
+	\item Testar algoritmos de gerar ruídos para criar o mapa
+	\item Aplicar um algoritmo para reconhecer a imagem com o contorno e gerar como saída a imagem do mapa gerado
+\end{itemize}
 
 
 \chapter{Fundamentação teórica}
 \label{sec:background}
 	\label{sec:fund_teorica}
 
-A fundamentação teórica apresenta os principais conceitos relacionados ao domínio do problema. Não é objetivo da fundamentação teórica apresentar um conhecimento novo. O objetivo é caracterizar o domínio do problema, apresentando os principais conceitos que viabilizem o desenvolvimento de uma solução. Pode ser entendida como a fundamentação teórica, \emph{i.e.}, conceitos teóricos computacionais e científicos utilizados no desenvolvimento do \acr{TCC}.
+Este capítulo tem objetivo de apresentar conceitos necessários para entendimento do trabalho;
 
-Este capítulo pode ter várias subseções, uma para cada diferente tema abordado. Por exemplo, se o objetivo do projeto final for implementar um jogo computacional de competição em ferramentas de redes sociais, pode-se ter uma subseção tratando os jogos computacionais e seus aspectos e posteriormente uma outra subseção tratando de redes sociais. Esta organização deve ser bem definida, mas o princípio básico do bom encadeamento deve ser preservado.
+\section{Inteligencia Artificial}
+
+\subsection{Visão computacional}
+
+\section{Geração procedural}
+\subsection{Diagrama de Voronoi}
+
+O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space
+\cite{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o 
+ponto mais proximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. O diagrama de 
+Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
 
 
-As Figuras, Tabelas e Equações devem ser numeradas e citadas no texto. A Tabela \ref{tab:exemplo} apresenta um exemplo de tabela\footnote{Observe este exemplo para que você faça tabelas simples como esta.}. A Figura \ref{fig:exemplo} apresenta um exemplo de figura. A Equação \ref{eq:exemplo} apresenta um exemplo de equação, onde $x$ é a variável independente e $y$ a variável dependente\footnote{Evite quebrar as equações no meio do texto. Use referência cruzada para citá-la e construir sua discussão.}. Cada figura, tabela e equação merece um parágrafo de explicação própria.
+\subsection{Mapas de ilhas 2d com biomas}
 
-\begin{table}[!ht]
-	\centering
-	\caption{Exemplo de tabela}
-	\begin{tabular}{L{1.5cm} R{1.5cm}}
-		\toprule
-		\textbf{x}  & \textbf{y} \\
-		\midrule
-		-2  & 4 \\
-		-1  & 1 \\
-		0  & 0 \\
-		1  & 1 \\
-		2  & 4 \\
-		\bottomrule
-	\end{tabular}
-	\label{tab:exemplo}
-\end{table}
+\chapter{Desenvolvimento}
 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/figura.png}
-	\caption{Exemplo de figura}
-	\label{fig:exemplo}
-\end{figure}	
+% ----------------------------------------------------------
+% Finaliza a parte no bookmark do PDF
+% para que se inicie o bookmark na raiz
+% e adiciona espaço de parte no Sumário
+% ----------------------------------------------------------
+%\phantompart
 
-\begin{equation}
-	\label{eq:exemplo}
-	f(x) = x^2, x \in [-2,2]
-\end{equation}
+% ---
+% Conclusão (outro exemplo de capítulo sem numeração e presente no sumário)
+% ---
+\chapter*[Conclusão]{Conclusão}
+\addcontentsline{toc}{chapter}{Conclusão}
+% ---
 
-\chapter{Trabalhos Relacionados}
-\label{sec:trabalhos_relacionados}
-	\label{sec:trab_relacionados}
+\lipsum[31-33]
 
-Após a fundamentação teórica devem ser apresentados os trabalhos relacionados referente soluções semelhantes para o problema definido. Os trabalhos relacionados demonstram o estado da arte do tema do trabalho \citep{wazlawick_metodologia_2017}. Descrevemos, de forma resumida, os trabalhos e pesquisas já efetuados na área do tema do trabalho, indicando os estudos realizados e os resultados obtidos por seus autores. Esta elaboração deve ser obtida a partir de um mapa sistemático\footnote{Eventualmente esta seção pode ficar depois da avaliação experimental}. 
+% ----------------------------------------------------------
+% ELEMENTOS PÓS-TEXTUAIS
+% ----------------------------------------------------------
+\postextual
+% ----------------------------------------------------------
 
-\chapter{Método} 
-	\label{sec:metodologia}
-
-O desenvolvimento, juntamente com a avaliação experimental, é um dos núcleos do trabalho. O desenvolvimento compreende a modelagem e a elaboração da solução propriamente dita. Deve ser apresentado de forma ordenada e ampla, com o conteúdo relevante para a apresentação da solução a que o trabalho se propõe. Fica a cargo dos autores estabelecer a estrutura deste capítulo, bem como definir os elementos que devem ser utilizados para elaborar o desenvolvimento da solução. 
-
-A modelagem da solução para a elaboração dos artefatos computacionais define os principais elementos que fazem parte da solução proposta pelo trabalho. Em um sistema de informação, por exemplo, é natural a presença de um diagrama arquitetura, diagrama de caso de uso, um diagrama de classes. Na existência de um processo importante, pode-se fazer uso de um diagrama de atividades. Da mesma forma, na existência um procedimento computacional complexo, pode-se fazer valer de especificação de um algoritmo em pseudocódigo, de diagrama de sequência, dentre outros, para explicá-lo. É importante deixar claro que o foco não é volume de elementos de diagramação e diferentes tipos de modelo, mas sim a qualidade da explicação do solução.
-
-A qualidade da explicação está intimamente ligada ao bom encadeamento deste capítulo. Isso significa dizer que se um diagrama for incorporado neste capítulo, cada elemento do diagrama precisa ser explicado. Por exemplo, se for utilizado um diagrama de classe, as principais classes e atributos devem ser apresentados, uma vez que cada uma das classes e cada atributo deve ser explicado no texto.
-
-A elaboração da solução propriamente dita apresenta um detalhamento dos elementos da solução. Pode envolver a especificação da arquitetura da solução, projeto lógico e físico da base de dados, projeto de interface gráfica, linguagem de programação adotada como os seus respectivos \emph{frameworks}. Novamente, o nível de detalhamento dos elementos da solução deve estar condizente com a explicação textual. Não é necessário apresentar todos os elementos da solução. O importante é deixar claro os elementos que valorizem a contribuição do trabalho.
-
-\chapter{Resultados}
-\label{sec:aval_exp}
-
-A avaliação experimental compreende uma avaliação quantitativa ou qualitativa do trabalho a partir de critérios estabelecidos para comparação. Como em qualquer experimento, a capacidade de reprodução é fundamental para sua validade. Sendo assim, é importante descrever o processo de experimentação adotados, apresentar os resultados propriamente dito, com uma síntese explicativa dos principais resultados. Finalmente, devem ser apresentadas as ameaças ao estudo, \emph{i.e.}, qualquer coisa que possa tirar ou limitar a validade do experimento conduzido. 
-
-\chapter{Conclusão}
-	\label{sec:conclusao}
-
-	A conclusão é a finalização do trabalho e indica as conclusões obtidas com o desenvolvimento do trabalho, sejam elas positivas ou negativas. Nas conclusões, analisa-se o que era desejado (definido na introdução com os objetivos), comparando com o que foi alcançado pelo trabalho, descrevendo como os objetivos foram alcançados e o porquê de algum objetivo não ter sido alcançado. Destacam-se também as contribuições do trabalho, incluindo os benefícios e inovações trazidas pelo trabalho.
-
-Apresentam-se os pontos do trabalho que merecem um maior aprofundamento de estudos. Isso possibilita a criação de novos trabalhos com estudos nesses pontos apresentados, na forma de uma continuidade das pesquisas efetuadas pelo trabalho. Os trabalhos futuros indicam, ainda, uma maturidade de pesquisa do autor do trabalho e esses pontos podem ser trabalhados, posteriormente.
-
-\label{bibpage}
-\renewcommand\bibname{Referências}
-\addcontentsline{toc}{section}{Referências}
+% ----------------------------------------------------------
+% Referências bibliográficas
+% ----------------------------------------------------------
 \bibliography{references}
-%\bibliographystyle{plainnat}
-\bibliographystyle{apalike}
-\label{bibfinalpage}
 
-\label{lastpage}
+% ----------------------------------------------------------
+% Glossário
+% ----------------------------------------------------------
+%
+% Consulte o manual da classe abntex2 para orientações sobre o glossário.
+%
+%\glossary
+
+% ----------------------------------------------------------
+% Apêndices
+% ----------------------------------------------------------
+
+% ---
+% Inicia os apêndices
+% ---
+% \begin{apendicesenv}
+
+% % Imprime uma página indicando o início dos apêndices
+% \partapendices
+
+% % ----------------------------------------------------------
+% \chapter{Quisque libero justo}
+% % ----------------------------------------------------------
+
+% \lipsum[50]
+
+% % ----------------------------------------------------------
+% \chapter{Nullam elementum urna vel imperdiet sodales elit ipsum pharetra ligula
+% ac pretium ante justo a nulla curabitur tristique arcu eu metus}
+% % ----------------------------------------------------------
+% \lipsum[55-57]
+
+% \end{apendicesenv}
+% ---
+
+
+% ----------------------------------------------------------
+% Anexos
+% ----------------------------------------------------------
+
+% ---
+% Inicia os anexos
+% ---
+% \begin{anexosenv}
+
+% % Imprime uma página indicando o início dos anexos
+% \partanexos
+
+% % ---
+% \chapter{Morbi ultrices rutrum lorem.}
+% % ---
+% \lipsum[30]
+
+% % ---
+% \chapter{Cras non urna sed feugiat cum sociis natoque penatibus et magnis dis
+% parturient montes nascetur ridiculus mus}
+% % ---
+
+% \lipsum[31]
+
+% % ---
+% \chapter{Fusce facilisis lacinia dui}
+% % ---
+
+% \lipsum[32]
+
+% \end{anexosenv}
+
+%---------------------------------------------------------------------
+% INDICE REMISSIVO
+%---------------------------------------------------------------------
+%\phantompart
+\printindex
+%---------------------------------------------------------------------
+
 \end{document}
