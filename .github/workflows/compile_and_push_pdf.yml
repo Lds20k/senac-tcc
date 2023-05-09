@@ -16,7 +16,7 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@v3
       - name: Compile LaTeX document
-        run: (cd ./latex && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main && makeglossaries main && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main  && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main)
+        run: (cd ./latex && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main)
       - name: Test if pdf was compiled
         run: '(cd ./latex && test -f ./main.pdf && echo PDF exists) || (echo PDF does not exist && pwd && ls && exit 1)'
       - name: Change filename and path of pdf
