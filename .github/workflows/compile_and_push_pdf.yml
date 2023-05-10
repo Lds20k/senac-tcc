@@ -11,16 +11,37 @@ jobs:
   build_latex:
     runs-on: ubuntu-latest
     steps:
-      - name: Install latexmk
-        run: 'sudo apt-get update -y && sudo apt-get install -y latexmk && sudo apt install texlive-full -y'
+      - name: Install texlive dependencies
+        run: >
+              sudo apt-get update -y && 
+              sudo apt-get install -y latexmk &&
+              sudo apt install texlive -y &&
+              sudo apt-get install texlive-latex-extra -y &&
+              sudo apt-get install texlive-base perl-tk -y &&
+              sudo apt-get install texlive-lang-portuguese -y &&
+              sudo apt-get upgrade -y 
+      - name: Install abntex2
+        run: >
+              curl -O -L https://github.com/abntex/abntex2/archive/refs/tags/2018-11-24-v1.9.7-ctan.tar.gz &&
+              tar -xvf 2018-11-24-v1.9.7-ctan.tar.gz &&
+              cd abntex2-2018-11-24-v1.9.7-ctan &&
+              sudo make install &&
+              sudo texhash
       - name: Clone repo
         uses: actions/checkout@v3
       - name: Compile LaTeX document
-        run: (cd ./latex && pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main)
+        run: >
+              cd ./latex &&
+              pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main &&
+              pdflatex -synctex=1 -interaction=nonstopmode -file-line-error main
       - name: Test if pdf was compiled
-        run: '(cd ./latex && test -f ./main.pdf && echo PDF exists) || (echo PDF does not exist && pwd && ls && exit 1)'
+        run: >
+              (cd ./latex && test -f ./main.pdf && echo PDF exists) || 
+              (echo PDF does not exist && pwd && ls && exit 1)
       - name: Change filename and path of pdf
-        run: 'cp	./latex/main.pdf	./ && mv ./main.pdf ./tcc.pdf'
+        run: >
+              cp	./latex/main.pdf	./ &&
+              mv ./main.pdf ./tcc.pdf
       - uses: EndBug/add-and-commit@v9
         with:
           message: Adding pdf file

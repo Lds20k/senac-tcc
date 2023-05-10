@@ -15,7 +15,7 @@
 *.cb
 *.cb2
 .*.lb
-
+.actrc
 ## Intermediate documents:
 *.dvi
 *.xdv
