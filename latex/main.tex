@@ -59,6 +59,9 @@
 \usepackage{microtype} 			% para melhorias de justificação
 \usepackage[final]{pdfpages}
 \usepackage{url}
+\usepackage{cleveref}
+
+\crefname{figure}{Figura}{Figuras}
 % ---
 		
 % ---
@@ -464,23 +467,23 @@ Por este ramo se concentrar em uma representação cognitiva se torna complexo, 
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/areas_ia.jpg}
 	\caption{Áreas Relacionadas com IA \cite{aplicacoes_ia_vg}.}	
-	\label{fig:ia}
+	\label{fig:areas_ia}
 \end{figure}	
 
 \subsection{Aprendizado de Máquina}
 
-Segundo \cite{directions_ia_ml_dp}, aprendizado de máquina é uma subcategoria de inteligência artificial que refere-se a detecção de padrões importantes de uma base de dados. As ferramentas utilizadas aumentam a eficiência dos algoritmos para lidar com bases de dados grandes.
+Segundo \citeonline{directions_ia_ml_dp}, aprendizado de máquina é uma subcategoria de inteligência artificial que refere-se a detecção de padrões importantes de uma base de dados. As ferramentas utilizadas aumentam a eficiência dos algoritmos para lidar com bases de dados grandes.
 
 Portanto essa técnica permite ao computador melhorar os resultados com base na experiência, isso indica uma relação direta entre o quanto o programa consumiu de dados e qualidade da solução do problema \cite{ml_explicado}. 
 
 Dentro desse nicho existem outros como: redes nerurais, algoritmos evolucionários, algoritmos de busca, aprendizado por reforço, dentre outros. \cite{ml_oil_gas_industry}.
 
-Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na Figura 2. 
+Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na \cref{fig:diagrama_ia}. 
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/diagrama_ia.jpg}
 	\caption{Diagrama de aprendizado de máquina \cite{ml_oil_gas_industry}.}	
-	\label{fig:ia}
+	\label{fig:diagrama_ia}
 \end{figure}	
 
 \subsection{Aprendizado profundo}
