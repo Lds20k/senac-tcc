@@ -60,6 +60,7 @@
 \usepackage[final]{pdfpages}
 \usepackage{url}
 \usepackage{cleveref}
+\usepackage{float}
 
 \crefname{figure}{Figura}{Figuras}
 % ---
@@ -489,6 +490,16 @@ Existe relação direta de conceitos entre inteligência artificial, aprendizado
 \subsection{Aprendizado profundo}
 
 \subsection{Redes neurais convolucionais}
+Uma rede neural convolucional é analoga a rede neural artificial i.e. feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionaliidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}.
+
+Segundo \citeonline{computation11030052} as quatro principais camadas de uma rede neural convolucional são: convolução, pooling, função de ativação e totalmente conectada.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/fluxo_cnn.png}
+	\caption{Etapas básicas de uma rede neural convolucional \cite{computation11030052}.}	
+	\label{fig:fluxo_cnn}
+\end{figure}
 
 \subsection{Visão computacional}
 
