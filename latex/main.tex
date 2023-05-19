@@ -479,27 +479,47 @@ Portanto essa técnica permite ao computador melhorar os resultados com base na 
 
 Dentro desse nicho existem outros como: redes nerurais, algoritmos evolucionários, algoritmos de busca, aprendizado por reforço, dentre outros. \cite{ml_oil_gas_industry}.
 
-Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na \cref{fig:diagrama_ia}. 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/diagrama_ia.jpg}
-	\caption{Diagrama de aprendizado de máquina \cite{ml_oil_gas_industry}.}	
+Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na \cref{fig:diagrama_ia}.
+
+\begin{figure}[H]
+	\caption{Diagrama de aprendizado de máquina}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/diagrama_ia.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{ml_oil_gas_industry}}
 	\label{fig:diagrama_ia}
-\end{figure}	
+\end{figure}
 
 \subsection{Aprendizado profundo}
 
 \subsection{Redes neurais convolucionais}
-Uma rede neural convolucional é analoga a rede neural artificial i.e. feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionaliidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}.
+Uma rede neural convolucional é análoga a rede neural artificial i.e. feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionaliidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}.
 
 Segundo \citeonline{computation11030052} as quatro principais camadas de uma rede neural convolucional são: convolução, pooling, função de ativação e totalmente conectada.
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/fluxo_cnn.png}
-	\caption{Etapas básicas de uma rede neural convolucional \cite{computation11030052}.}	
+	\caption{Etapas básicas de uma rede neural convolucional}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/fluxo_cnn.png} % leia abaixo
+	\legend{Fonte: \citeonline{computation11030052}}
 	\label{fig:fluxo_cnn}
 \end{figure}
+
+Camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os pixels da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um pixel e os pixels ao redor. Os pesos começam de forma pseudo-aleatória e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características.
+
+O tamanho da saída será baseado na formúla abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída.
+
+$ \mathbf{I}x - \mathbf{F}x + 1 = \mathbf{S}x $
+
+$ \mathbf{I}y - \mathbf{F}y + 1 = \mathbf{S}y $
+
+\begin{figure}[H]
+	\caption{Exemplo de um filtro}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/exemplo_filtro.png} % leia abaixo
+	\legend{Fonte: \citeonline{computation11030052}}
+	\label{fig:exeplo_filtro}
+\end{figure}
+
 
 \subsection{Visão computacional}
 
