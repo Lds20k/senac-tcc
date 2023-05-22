@@ -58,6 +58,7 @@
 \usepackage{graphicx}			% Inclusão de gráficos
 \usepackage{microtype} 			% para melhorias de justificação
 \usepackage[final]{pdfpages}
+\usepackage{cleveref}
 \usepackage{url}
 % ---
 		
@@ -97,7 +98,7 @@
 % ---
 % Informações de dados para CAPA e FOLHA DE ROSTO
 % ---
-\titulo{Geração procedural de mapas de ilhas 2d com biomas através de visão computacional}
+\titulo{Geração procedural de mapas de ilhas 2d com biomas através de técnicas de segmentação de imagem.}
 \autor{Lucas da Silva Santos\\Matheus Zanivan Andrade\\ Rafael Nascimento Lourenço}
 \local{São Paulo - Brasil}
 \data{2023}
@@ -493,27 +494,23 @@ Existe relação direta de conceitos entre inteligência artificial, aprendizado
 
 \subsection{Visão computacional}
 A visão computacional avança cada vez mais, aproximando os computadores da capacidade visual humana.Segundo Horst Haußecker e Bernd Jähne no livro "Computer Vision and Applications" \cite{comp_vision_and_applications}, a visão computacional é uma área da computação que se dedica à interpretação de imagens por meio de algoritmos e técnicas de processamento de imagens. Essa área abrange a aquisição, processamento e análise de imagens, com o objetivo de extrair informações úteis para resolver problemas específicos.
-O conceito de visão computacional tem como base ensinar um computador a ver e entender o conteúdo de uma imagem, assim, permite com que o computador identifique as coisas ao seu redor, deixando a visão do computador semelhante com a de um humano.
+
+A visão é um elemento crucial para capacitar a inteligência artificial a realizar diversas tarefas. A fim de replicar a visão humana, é necessário que as máquinas sejam capazes de adquirir, processar, analisar e compreender imagens. \cite{como_funciona_visao_computacional}
+
+Na \cref{fig:comp_vision} podemos ver uma analogia entre a forma como uma imagem é processada pelo cérebro humano e a forma como é processada por um sistema computacional.
 
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width=0.6\textwidth]{figures/content_Human_Vision.jpg}
-	\caption{Comparação entre a forma de como o cérebro humando e um computador processam informações \cite{content_Human_Vision}.}	
-	\label{fig:compVision}
+	\includegraphics[width=0.6\textwidth]{figures/content_Human_Vision.png}
+	\caption{Comparação entre a forma de como o cérebro humando e um computador processam informações \cite{content_Human_Vision}.}
+	\label{fig:comp_vision}
 \end{figure}	
 
 \subsubsection{Pré-processamento de Imagens}
-Palmeiras
+
 \subsubsection{Detectação de objetos}
-Palmeiras
+
 \subsubsection{Segmentação de imagem}
-Palmeiras
-\subsubsection{Reconhecimento de padrões}
-Palmeiras
-\subsubsection{Aprendizado de máquina}
-Palmeiras
-\subsubsection{Aplicações de visão computacional}
-Palmeiras
 
 
 \section{Geração procedural}
