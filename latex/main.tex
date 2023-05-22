@@ -60,6 +60,10 @@
 \usepackage[final]{pdfpages}
 \usepackage{cleveref}
 \usepackage{url}
+\usepackage{cleveref}
+\usepackage{float}
+
+\crefname{figure}{Figura}{Figuras}
 % ---
 		
 % ---
@@ -463,29 +467,42 @@ Este capítulo tem objetivo de apresentar conceitos necessários para entendimen
 \section{Inteligência Artificial}
 Inteligência artificial é uma técnica científica que simula o pensamento humano de forma que possa ser executado em uma máquina, podendo ser utilizada para criar soluções com uma linha de progressão parecida ao raciocínio lógico como conhecemos. Isto permite ao computador reconhecer e interpretar o mundo ao redor com imagens e textos criando uma ampla área de atuação que otimiza tarefas antes só realizadas por seres humanos \space\cite{ia_aliada_ou_inimiga}.
 
-Por este ramo se concentrar em uma representação cognitiva se torna complexo, portanto usa uma base com diversas áreas científicas como psicologia, biologia, lógica matemática, linguística, engenharia, filosofia, entre outras. E pode ser usado para diversos problemas específicos como por exemplo definir as boas rotas para algum processo logístico. \space\cite{ia_conceitos_aplicacoes}.
+Este ramo é complexo por se tratar de uma representação cognitiva, se torna necessário usar uma base com diversas áreas científicas como psicologia, biologia, lógica matemática, linguística, engenharia, filosofia, entre outras. E pode ser usado para diversos problemas específicos como por exemplo definir as boas rotas para algum processo logístico \space\cite{ia_conceitos_aplicacoes}.
 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/areas_ia.jpg}
-	\caption{Áreas Relacionadas com IA \cite{aplicacoes_ia_vg}.}	
-	\label{fig:ia}
+\begin{figure}[H]
+	\caption{Diagrama de aprendizado de máquina}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/areas_ia.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{aplicacoes_ia_vg}}
+	\label{fig:areas_ia}
 \end{figure}	
 
 \subsection{Aprendizado de Máquina}
 
-Segundo \cite{directions_ia_ml_dp}, aprendizado de máquina é uma subcategoria de inteligência artificial que refere-se a detecção de padrões importantes de uma base de dados. As ferramentas utilizadas aumentam a eficiência dos algoritmos para lidar com bases de dados grandes.
+Segundo \citeonline{directions_ia_ml_dp}, aprendizado de máquina é uma subcategoria de inteligência artificial que se refere  a detecção de padrões importantes de uma base de dados. As ferramentas utilizadas aumentam a eficiência dos algoritmos para lidar com bases de dados grandes.
 
 Portanto essa técnica permite ao computador melhorar os resultados com base na experiência, isso indica uma relação direta entre o quanto o programa consumiu de dados e qualidade da solução do problema \cite{ml_explicado}. 
 
-Dentro desse nicho existem outros como: redes nerurais, algoritmos evolucionários, algoritmos de busca, aprendizado por reforço, dentre outros. \cite{ml_oil_gas_industry}.
+Dentro desse nicho existem outros como: redes neurais, algoritmos evolucionários, algoritmos de busca, aprendizado por reforço, dentre outros. \cite{ml_oil_gas_industry}.
 
-Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na Figura 2. 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/diagrama_ia.jpg}
-	\caption{Diagrama de aprendizado de máquina \cite{ml_oil_gas_industry}.}	
-	\label{fig:ia}
+Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na \cref{fig:diagrama_ia}.
+
+\begin{figure}[H]
+	\caption{Diagrama de aprendizado de máquina}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/diagrama_ia.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{ml_oil_gas_industry}}
+	\label{fig:diagrama_ia}
+\end{figure}
+
+É possível observar uma hierarquiia entre aprendizado de máquna e os principais termos sendo eles redes neurais artificiais e aprendizado profundo com base em \citeonline{ml_and_dp} mostrado no diagrama da \cref{fig:diagrama_ann}.
+
+\begin{figure}[H]
+	\caption{Diagrama de Venn sobre tópicos de aprendizado de máquina}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/diagrama_ann.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{ml_and_dp}}
+	\label{fig:diagrama_ann}
 \end{figure}	
 
 \subsection{Aprendizado profundo}
@@ -513,13 +530,19 @@ Na \cref{fig:comp_vision} podemos ver uma analogia entre a forma como uma imagem
 \subsubsection{Segmentação de imagem}
 
 
+\subsection{Algoritmos de segmentação}
+\subsubsection{}
+
+
+
+
 \section{Geração procedural}
 \subsection{Diagrama de Voronoi}
 
-O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space
+O diagrama de Voronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space
 \cite{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o 
-ponto mais proximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. O diagrama de 
-Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
+ponto mais próximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. O diagrama de 
+Voronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
 
 
 \subsection{Mapas de ilhas 2d com biomas}
