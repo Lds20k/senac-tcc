@@ -59,6 +59,8 @@
 \usepackage{microtype} 			% para melhorias de justificação
 \usepackage[final]{pdfpages}
 \usepackage{url}
+\usepackage{float}
+\usepackage{amsmath}
 % ---
 		
 % ---
@@ -483,6 +485,54 @@ Existe relação direta de conceitos entre inteligência artificial, aprendizado
 	\label{fig:ia}
 \end{figure}	
 
+\subsubsection{Modelo de um neurônio}
+
+Um neurônio é uma unidade de processamento fundamental para uma rede neural \cite{haykin1999neural}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/neuronio.png}
+	\caption{Modelo de um neurônio não-linear \cite{haykin1999neural}.}
+	\label{fig:neuronio}
+\end{figure}
+
+Observando a figura \ref{fig:neuronio} vemos o funcionamento de um neurônio $k$. Os sinais de entradas são partes de um vetor $x$ de tamanho $n$, sendo o vetor composto por $x_1, x_2 ... x_n$, essas componentes são combinadas em uma soma ponderada utilizando seus respectivos pesos, $w_{k1}, w_{k2}...w_{kn}$, formando assim a seguinte equação  \apud{marti2017aprendizado}{haykin1999neural}:
+
+$$\upsilon_k = \sum_{i=1}^n (x_i * w_{ki})$$
+
+O resultado dessa equação produz o potencial de ativação $\upsilon_k$, esse resultado é somado com o \textit{bias} ou viés $b_k$ para manipular a saída $y_k$ do neurônio, essa soma é posta em uma função não-linear nomeada de função de ativação $\varphi(.)$, essas funções mapeiam a saída em um intervalo $[0, 1]$ ou $[1, -1]$. A função de saída pode ser representada com a seguinte equação \apud{marti2017aprendizado}{haykin1999neural}:
+
+$$y_k = \varphi(\upsilon_k + b_k)$$
+
+O aprendizado ocorre na faze de treinamento onde é ajustando os pesos $w_k$ e o viés $b_k$ de cada neurônio $k$. Os pesos $w_k$ são utilizados para calcular a taxa de crescimento da função e o viés $b_k$ é necessário para descolar a saída da função. Com isso é possível modelar uma função linear $y=w^T*x+b$ \cite{marti2017aprendizado}.
+
+Para cada amostra o modelo compara os resultados dos valores atuais dos pesos $w_k$ e viés $b_k$ com o resultado esperado(alvo). Uma função custo(\textit{cost function}) é utilizada para gerar um vetor de gradientes e para quantificar o erro encontrado para a configuração atual do modelo. O modelo atualiza os pesos $w_k$ e os viés $b_k$ no sentido contrário do vetor de gradientes, buscando minimizar a função de custo de acordo com uma taxa de aprendizado(\textit{learning rate}) \cite{marti2017aprendizado}.
+
+Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a ultima camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e a seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
+
+\subsubsection{Funções de ativação}
+
+Existem três tipos básicos de função de ativação \cite{haykin1999neural}:
+
+1. Função de ativação com limite (\textit{threshold})
+
+$$\varphi(x) = 
+\begin{cases}
+1 \text{ se } x \geq 0\\
+0 \text{ se } x < \text{0}
+\end{cases}$$
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/threshold_grafico.png}
+	\caption{Grafico da função \textit{threshold} \cite{haykin1999neural}.}
+	\label{fig:threshold_grafico}
+\end{figure}
+
+AJUSTES E CONTINUA
+
+link das imagens http://www2.decom.ufop.br/imobilis/redes-neurais-funcoes-de-ativacao/
+
 \subsection{Aprendizado profundo}
 
 O aprendizado profundo é uma área do aprendizado de máquina caracterizada por utilizar dados brutos como entrada e descobrir as representações necessárias para permitir o mapeamento adequado e assim tornando as soluções mais simples \apud{marti2017aprendizado}{lecun2015deep}.
@@ -493,13 +543,13 @@ Dividindo um problema complexo em problemas menores torna os métodos especializ
 
 Utilizando o exemplo anterior, reconhecimento de imagem, cada um desses métodos especializados seria responsável por reconhecer uma parte da imagem, como bordas, objetos, tamanho, etc. E após a junção desse métodos é feito a predição da imagem \cite{marti2017aprendizado}.
 
-\subsubsection{Redes Neurais Profundas}
+\subsubsection{Redes neurais profundas}
 
-A principal diferença entre uma rede neural convencional e uma rede neural profunda é o fato de possuir mais camadas \cite{marti2017aprendizado}.
+A principal diferença entre uma rede neural convencional e uma rede neural profunda é a quantidade de camadas, uma rede neural profunda possui mais de uma camada de processamento \apud{marti2017aprendizado}{haykin1999neural}.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{figures/redes_neurais.png}
+	\includegraphics[width=0.8\textwidth]{figures/redes_neurais.png}
 	\caption{Comparação de uma rede neural convencional com uma rede neural profunda.}	
 	\label{fig:redes_neurais}
 \end{figure}
