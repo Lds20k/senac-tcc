@@ -58,10 +58,12 @@
 \usepackage{graphicx}			% Inclusão de gráficos
 \usepackage{microtype} 			% para melhorias de justificação
 \usepackage[final]{pdfpages}
+\usepackage{cleveref}
 \usepackage{url}
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{cleveref}
+\usepackage{float}
 
 \crefname{figure}{Figura}{Figuras}
 % ---
@@ -102,7 +104,7 @@
 % ---
 % Informações de dados para CAPA e FOLHA DE ROSTO
 % ---
-\titulo{Geração procedural de mapas de ilhas 2d com biomas através de visão computacional}
+\titulo{Geração procedural de mapas de ilhas 2d com biomas através de técnicas de segmentação de imagem.}
 \autor{Lucas da Silva Santos\\Matheus Zanivan Andrade\\ Rafael Nascimento Lourenço}
 \local{São Paulo - Brasil}
 \data{2023}
@@ -422,14 +424,18 @@ contribuirão para a evolução do \abnTeX.
 
 \section{Contexto}
 
-A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo(Santana, 2022) essa industria tende a ultrapassar em 2023 os US\$ 200,0 bilhões (aproximadamente R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente e somente na plataforma digital Steam, foram publicados 10.963 novos títulos em 2022(Clement, 2022).
+A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo \space\cite{quanto_games_vao_movimentar} essa indústria tende a ultrapassar em 2023 os US\$ 200,0 bilhões (aproximadamente R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente e somente na plataforma digital Steam, foram publicados 10.963 novos títulos em 2022\space
+\cite{numero_de_jogos_publicados_na_steam}.
 
 Por outro lado, as empresas de desenvolvimento de jogos continuam a trabalhar incessantemente para atender a uma demanda de mercado que cresceu 2,5\% no Brasil em 2022 
-(PGB - 2022). No entanto, para que um jogo chegue ao consumidor final é preciso passa por diversos processos de criação extremamente complexos e rigorosos. Uma equipe de desenvolvimento, composta por designers e programadores, precisa dedicar muitos recursos para a elaboração de mapas 2D e 3D, com o objetivo de garantir a melhor aparência e otimização do jogo.
+\space
+\cite{pesquisa_games_brasil}. No entanto, para que um jogo chegue ao consumidor final é preciso passa por diversos processos de criação extremamente complexos e rigorosos. Uma equipe de desenvolvimento, composta por designers e programadores, precisa dedicar muitos recursos para a elaboração de mapas 2D e 3D, com o objetivo de garantir a melhor aparência e otimização do jogo.
 
-O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto. Por exemplo, a empresa Rockstar Games revelou que o jogo "Grand Theft Auto V" custou cerca de 265 milhões de dólares para ser produzido e comercializado (referência). Isso destaca a importância de acelerar o processo de desenvolvimento e reduzir custos, sem comprometer a qualidade do produto final.
+O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto. Por exemplo, a empresa Rockstar Games revelou que o jogo \"Grand Theft Auto V\" custou cerca de 265 milhões de dólares para ser produzido e comercializado \space
+\cite{gta_quanto_custou}. Isso destaca a importância de acelerar o processo de desenvolvimento e reduzir custos, sem comprometer a qualidade do produto final.
 
-Uma solução para reduzir custos e economizar tempo é a utilização da geração procedural de conteúdo (PCG), que permite gerar mapas de forma automatizada. A PCG é uma técnica que trata da criação automática de conteúdos (Araújo,2018). Com a utilização da técnica PCG, as empresas conseguem gerar mapas de forma rápida e eficiente, sem a necessidade de investir em recursos humanos para criação manual de cada elemento. Além disso, a PCG permite a criação de conteúdo personalizado e variado, garantindo uma experiência única para cada usuário. Isso resulta em uma redução significativa de custos e em um aumento da eficiência operacional da empresa, uma vez que a criação de conteúdo manualmente é uma tarefa demorada e dispendiosa. Com a PCG, as empresas podem produzir uma grande quantidade de conteúdo de forma rápida e, portanto, podem lançar seus jogos mais rapidamente no mercado.
+Uma solução para reduzir custos e economizar tempo é a utilização da geração procedural de conteúdo (PCG), que permite gerar mapas de forma automatizada. A PCG é uma técnica que trata da criação automática de conteúdos \space
+\cite{geracao_procedural_conteudo}. Com a utilização da técnica PCG, as empresas conseguem gerar mapas de forma rápida e eficiente, sem a necessidade de investir em recursos humanos para criação manual de cada elemento. Além disso, a PCG permite a criação de conteúdo personalizado e variado, garantindo uma experiência única para cada usuário. Isso resulta em uma redução significativa de custos e em um aumento da eficiência operacional da empresa, uma vez que a criação de conteúdo manualmente é uma tarefa demorada e dispendiosa. Com a PCG, as empresas podem produzir uma grande quantidade de conteúdo de forma rápida e, portanto, podem lançar seus jogos mais rapidamente no mercado.
 
 "Bill Gates, um dos fundadores da Microsoft, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas"\space
 \cite{inteligencia_artificial_e_avanco_bbc}. É possível ver
@@ -463,29 +469,42 @@ Este capítulo tem objetivo de apresentar conceitos necessários para entendimen
 \section{Inteligência Artificial}
 Inteligência artificial é uma técnica científica que simula o pensamento humano de forma que possa ser executado em uma máquina, podendo ser utilizada para criar soluções com uma linha de progressão parecida ao raciocínio lógico como conhecemos. Isto permite ao computador reconhecer e interpretar o mundo ao redor com imagens e textos criando uma ampla área de atuação que otimiza tarefas antes só realizadas por seres humanos \space\cite{ia_aliada_ou_inimiga}.
 
-Por este ramo se concentrar em uma representação cognitiva se torna complexo, portanto usa uma base com diversas áreas científicas como psicologia, biologia, lógica matemática, linguística, engenharia, filosofia, entre outras. E pode ser usado para diversos problemas específicos como por exemplo definir as boas rotas para algum processo logístico. \space\cite{ia_conceitos_aplicacoes}.
+Este ramo é complexo por se tratar de uma representação cognitiva, se torna necessário usar uma base com diversas áreas científicas como psicologia, biologia, lógica matemática, linguística, engenharia, filosofia, entre outras. E pode ser usado para diversos problemas específicos como, por exemplo, definir as boas rotas para algum processo logístico \space\cite{ia_conceitos_aplicacoes}.
 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/areas_ia.jpg}
-	\caption{Áreas Relacionadas com IA \cite{aplicacoes_ia_vg}.}	
+\begin{figure}[H]
+	\caption{Diagrama de aprendizado de máquina}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/areas_ia.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{aplicacoes_ia_vg}}
 	\label{fig:areas_ia}
 \end{figure}
 
 \subsection{Aprendizado de Máquina}
 
-Segundo \citeonline{directions_ia_ml_dp}, aprendizado de máquina é uma subcategoria de inteligência artificial que refere-se a detecção de padrões importantes de uma base de dados. As ferramentas utilizadas aumentam a eficiência dos algoritmos para lidar com bases de dados grandes.
+Segundo \citeonline{directions_ia_ml_dp}, aprendizado de máquina é uma subcategoria de inteligência artificial que se refere  a detecção de padrões importantes de uma base de dados. As ferramentas utilizadas aumentam a eficiência dos algoritmos para lidar com bases de dados grandes.
 
-Portanto essa técnica permite ao computador melhorar os resultados com base na experiência, isso indica uma relação direta entre o quanto o programa consumiu de dados e qualidade da solução do problema \cite{ml_explicado}. 
+Portanto, essa técnica permite ao computador melhorar os resultados com base na experiência, isso indica uma relação direta entre o quanto o programa consumiu de dados e qualidade da solução do problema \cite{ml_explicado}. 
 
 Dentro desse nicho existem outros como: redes neurais, algoritmos evolucionários, algoritmos de busca, aprendizado por reforço, dentre outros. \cite{ml_oil_gas_industry}.
 
-Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na \cref{fig:diagrama_ia}. 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/diagrama_ia.jpg}
-	\caption{Diagrama de aprendizado de máquina \cite{ml_oil_gas_industry}.}	
+Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na \cref{fig:diagrama_ia}.
+
+\begin{figure}[H]
+	\caption{Diagrama de aprendizado de máquina}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/diagrama_ia.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{ml_oil_gas_industry}}
 	\label{fig:diagrama_ia}
+\end{figure}
+
+É possível observar uma hierarquia entre aprendizado de máquina e os principais termos sendo eles redes neurais artificiais e aprendizado profundo com base em \citeonline{ml_and_dp} mostrado no diagrama da \cref{fig:diagrama_ann}.
+
+\begin{figure}[H]
+	\caption{Diagrama de Venn sobre tópicos de aprendizado de máquina}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/diagrama_ann.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{ml_and_dp}}
+	\label{fig:diagrama_ann}
 \end{figure}	
 
 \subsubsection{Modelo de um neurônio}
@@ -558,16 +577,44 @@ A principal diferença entre uma rede neural convencional e uma rede neural prof
 \end{figure}
 
 \subsection{Redes neurais convolucionais}
+Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}.
+
+Camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características.
 
 \subsection{Visão computacional}
+A visão computacional avança cada vez mais, aproximando os computadores da capacidade visual humana.Segundo Horst Haußecker e Bernd Jähne no livro "Computer Vision and Applications" \cite{comp_vision_and_applications}, a visão computacional é uma área da computação que se dedica à interpretação de imagens por meio de algoritmos e técnicas de processamento de imagens. Essa área abrange a aquisição, processamento e análise de imagens, com o objetivo de extrair informações úteis para resolver problemas específicos.
+
+A visão é um elemento crucial para capacitar a inteligência artificial a realizar diversas tarefas. A fim de replicar a visão humana, é necessário que as máquinas sejam capazes de adquirir, processar, analisar e compreender imagens. \cite{como_funciona_visao_computacional}
+
+Na \cref{fig:comp_vision} podemos ver uma analogia entre a forma como uma imagem é processada pelo cérebro humano e a forma como é processada por um sistema computacional.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/content_Human_Vision.png}
+	\caption{Comparação entre a forma de como o cérebro humando e um computador processam informações \cite{content_Human_Vision}.}
+	\label{fig:comp_vision}
+\end{figure}	
+
+\subsubsection{Pré-processamento de Imagens}
+
+\subsubsection{Detectação de objetos}
+
+\subsubsection{Segmentação de imagem}
+
+
+\subsection{Algoritmos de segmentação}
+\subsubsection{}
+
+
+
 
 \section{Geração procedural}
 \subsection{Diagrama de Voronoi}
 
-O diagrama de Veronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space
+O diagrama de Voronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space
 \cite{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o 
-ponto mais proximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. O diagrama de 
-Veronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
+ponto mais próximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. O diagrama de 
+Voronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
 
 
 \subsection{Mapas de ilhas 2d com biomas}
