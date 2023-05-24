@@ -62,6 +62,22 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{cleveref}
+\usepackage{pgfplots}
+
+\DeclareMathOperator{\logsumexp}{logsumexp}
+\pgfmathdeclarefunction{sumexp}{3}{%
+  \begingroup%
+  \pgfkeys{/pgf/fpu}% "/pgf/fpu/output format=fixed" removed
+  \pgfmathsetmacro{\myx}{#1}%
+  \pgfmathtruncatemacro{\myxmin}{#2}%
+  \pgfmathtruncatemacro{\myxmax}{#3}%
+  \pgfmathsetmacro{\mysum}{0}%
+  \pgfplotsforeachungrouped\XX in {\myxmin,...,\myxmax}%
+    {\pgfmathsetmacro{\mysum}{\mysum+exp(\XX)}}%
+  \pgfmathparse{\mysum+exp(#1)}%
+  \pgfmathfloattofixed\pgfmathresult%  added
+  \pgfmathsmuggle\pgfmathresult\endgroup%
+}
 
 \crefname{figure}{Figura}{Figuras}
 % ---
@@ -539,30 +555,96 @@ O aprendizado ocorre na faze de treinamento onde é ajustando os pesos $w_k$ e o
 
 Para cada amostra o modelo compara os resultados dos valores atuais dos pesos $w_k$ e viés $b_k$ com o resultado esperado(alvo). Uma função custo(\textit{cost function}) é utilizada para gerar um vetor de gradientes e para quantificar o erro encontrado para a configuração atual do modelo. O modelo atualiza os pesos $w_k$ e os viés $b_k$ no sentido contrário do vetor de gradientes, buscando minimizar a função de custo de acordo com uma taxa de aprendizado(\textit{learning rate}) \cite{marti2017aprendizado}.
 
-Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a ultima camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e a seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
+Ao combinar diversos neurônios artificiais forma-se uma rede neural Artificial. Essas redes buscam simular o processamento de informação do cérebro humano \cite{ferneda2006redes}.
+
+Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a ultima camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e as seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
 
 \subsubsection{Funções de ativação}
 
-Existem três tipos básicos de função de ativação \cite{haykin1999neural}:
+A função de ativação retorna a saída de um neurônio \cite{haykin1999neural}, aqui podemos ver três tipos de funções de ativação:
 
-1. Função de ativação com limite (\textit{threshold})
+\begin{enumerate}
+	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \cite{gharat2019what}.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \frac{1}{1 + e^{-\upsilon}}$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-6, xmax=6,
+					ymin=0, ymax=1,
+				]
+					\addplot[
+						color=red,
+						domain=-6:6,
+					] {1/(1+exp(-x))};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\caption{Gráfico da função \textit{Sigmoid}.}
+	\label{fig:grafico_sigmoid}
+	\end{figure}
 
-$$\varphi(x) = 
-\begin{cases}
-1 \text{ se } x \geq 0\\
-0 \text{ se } x < \text{0}
-\end{cases}$$
+	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \cite{rizzo2020inteligencia}.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \max(0,\upsilon)$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-6, xmax=6,
+					ymin=0, ymax=5,
+				]
+					\addplot[red, domain=-5:0] {0};
+					\addplot[red, domain=0:5] {x};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\caption{Gráfico da função \textit{ReLu}.}
+	\label{fig:grafico_relu}
+	\end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/threshold_grafico.png}
-	\caption{Grafico da função \textit{threshold} \cite{haykin1999neural}.}
-	\label{fig:threshold_grafico}
-\end{figure}
+	\item Função \textit{Softmax}, calcula a distribuição de probabilidades de um evento em "n" eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica, geralmente usada na camada de saída \cite{gharat2019what}.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \frac{e^{\upsilon_i}}{\sum_{j=0} e^{\upsilon_i}}$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-10, xmax=10,
+					ymin=0, ymax=1,
+				]
+					\addplot[blue,domain=-10:10,samples=51] {exp(x)/sumexp(x,-4,0)};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\caption{Gráfico da função \textit{Softmax}.}
+	\label{fig:grafico_softmax}
+	\end{figure}
+\end{enumerate}
 
-AJUSTES E CONTINUA
 
-link das imagens http://www2.decom.ufop.br/imobilis/redes-neurais-funcoes-de-ativacao/
 
 \subsection{Aprendizado profundo}
 
@@ -573,8 +655,6 @@ Segundo \citeonline{lecun2015deep}, o aprendizado profundo são métodos de repr
 Dividindo um problema complexo em problemas menores torna os métodos especializados, viabilizando tarefas mais complexas, depois essas tarefas que foram dividias são recombinadas e é gerado uma solução do problema \cite{marti2017aprendizado}.
 
 Utilizando o exemplo anterior, reconhecimento de imagem, cada um desses métodos especializados seria responsável por reconhecer uma parte da imagem, como bordas, objetos, tamanho, etc. E após a junção desse métodos é feito a predição da imagem \cite{marti2017aprendizado}.
-
-\subsubsection{Redes neurais profundas}
 
 A principal diferença entre uma rede neural convencional e uma rede neural profunda é a quantidade de camadas, uma rede neural profunda possui mais de uma camada de processamento \apud{marti2017aprendizado}{haykin1999neural}.
 
