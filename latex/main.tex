@@ -420,30 +420,32 @@ contribuirão para a evolução do \abnTeX.
 \chapter[Introdução]{Introdução}
 % ----------------------------------------------------------
 
+% No entanto, para que um jogo chegue ao consumidor final é preciso passa por diversos processos de criação extremamente complexos e rigorosos. Uma equipe de desenvolvimento, composta por designers e programadores, precisa dedicar muitos recursos para a elaboração de mapas 2D e 3D, com o objetivo de garantir a melhor aparência e otimização do jogo.
+
+% Isso destaca a importância de acelerar o processo de desenvolvimento e reduzir custos, sem comprometer a qualidade do produto final.
+
+% Uma solução para reduzir custos e economizar tempo é a utilização da geração procedural de conteúdo (PCG), que permite gerar mapas de forma automatizada. A PCG é uma técnica que trata da criação automática de conteúdos \space
+% \cite{geracao_procedural_conteudo}. Com a utilização da técnica PCG, as empresas conseguem gerar mapas de forma rápida e eficiente, sem a necessidade de investir em recursos humanos para criação manual de cada elemento. Além disso, a PCG permite a criação de conteúdo personalizado e variado, garantindo uma experiência única para cada usuário. Isso resulta em uma redução significativa de custos e em um aumento da eficiência operacional da empresa, uma vez que a criação de conteúdo manualmente é uma tarefa demorada e dispendiosa. Com a PCG, as empresas podem produzir uma grande quantidade de conteúdo de forma rápida e, portanto, podem lançar seus jogos mais rapidamente no mercado.
+
 \section{Contexto}
 
-A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo \space\cite{quanto_games_vao_movimentar} essa indústria tende a ultrapassar em 2023 os US\$ 200,0 bilhões (aproximadamente R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente e somente na plataforma digital Steam, foram publicados 10.963 novos títulos em 2022\space
+A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo \space\cite{quanto_games_vao_movimentar} essa indústria tende a ultrapassar em 2023 os US\$ 200 bilhões (aproximadamente R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente e somente na plataforma digital Steam, foram publicados 10.963 novos títulos em 2022\space
 \cite{numero_de_jogos_publicados_na_steam}.
 
-Por outro lado, as empresas de desenvolvimento de jogos continuam a trabalhar incessantemente para atender a uma demanda de mercado que cresceu 2,5\% no Brasil em 2022 
+Ademais, as empresas de desenvolvimento de jogos continuam a trabalhar incessantemente para atender a uma demanda de mercado que cresceu 2,5\% no Brasil em 2022 
 \space
-\cite{pesquisa_games_brasil}. No entanto, para que um jogo chegue ao consumidor final é preciso passa por diversos processos de criação extremamente complexos e rigorosos. Uma equipe de desenvolvimento, composta por designers e programadores, precisa dedicar muitos recursos para a elaboração de mapas 2D e 3D, com o objetivo de garantir a melhor aparência e otimização do jogo.
+\cite{pesquisa_games_brasil}. O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto, \emph{e.g.}, a empresa Rockstar Games revelou que o jogo \"Grand Theft Auto V\" custou cerca de 265 milhões de dólares para ser produzido e comercializado \space
+\cite{gta_quanto_custou}.
 
-O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto. Por exemplo, a empresa Rockstar Games revelou que o jogo \"Grand Theft Auto V\" custou cerca de 265 milhões de dólares para ser produzido e comercializado \space
-\cite{gta_quanto_custou}. Isso destaca a importância de acelerar o processo de desenvolvimento e reduzir custos, sem comprometer a qualidade do produto final.
+Outro cenário que está crescendo muito nos últimos anos é o da inteligência artificial afirma \citeonline{Valente_2020} que no Brasil mais que dobrou o número contratações de desenvolvedores da área de 2015 até 2020. De acordo com \apud{johnson2023}{briggs2023} um relatório recente relata que 300 milhões de empregos podem ser afetados pela IA \emph{i.e.} 18\% ofício global pode ser automatizado. Outrossim \citeonline{europarl2020} diz que o tópico de inteligência artificial é uma prioridade para União Europeia por ser considerada primordial para transformação digital da sociedade.  Do mesmo modo, "Bill Gates, um dos fundadores da Microsoft — uma das maiores empresas de tecnologia —, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas"\space
+\cite{inteligencia_artificial_e_avanco_bbc}.
 
-Uma solução para reduzir custos e economizar tempo é a utilização da geração procedural de conteúdo (PCG), que permite gerar mapas de forma automatizada. A PCG é uma técnica que trata da criação automática de conteúdos \space
-\cite{geracao_procedural_conteudo}. Com a utilização da técnica PCG, as empresas conseguem gerar mapas de forma rápida e eficiente, sem a necessidade de investir em recursos humanos para criação manual de cada elemento. Além disso, a PCG permite a criação de conteúdo personalizado e variado, garantindo uma experiência única para cada usuário. Isso resulta em uma redução significativa de custos e em um aumento da eficiência operacional da empresa, uma vez que a criação de conteúdo manualmente é uma tarefa demorada e dispendiosa. Com a PCG, as empresas podem produzir uma grande quantidade de conteúdo de forma rápida e, portanto, podem lançar seus jogos mais rapidamente no mercado.
-
-"Bill Gates, um dos fundadores da Microsoft, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas"\space
-\cite{inteligencia_artificial_e_avanco_bbc}. É possível ver
-a relevância do tema e justamente por isso que este trabalho acompanhara o desenvolvimento
-de um modelo de inteligência artificial e utilizará os resultados em um diagrama de Veronoi.
 \section{Justificativa}
 
-Este trabalho foi concebido em busca de fazer a junção de um modelo de inteligência artificial convolucional com a decomposição de espaço do diagrama de Veronoi, bem como 
-disponibilizar mais uma forma de geração procedural de conteúdo que seja pratico, de baixo custo e possua
-facilidade na configuração de parâmetros.
+O mapa é um elemento que se destaca em jogos digitais e pode ser criado usando técnicas de geração procedural de conteúdo porém existe um desafio em criar cenários bonitos e diversificados \cite{geracao_procedural_jogos_2d}.
+
+Segundo \citeonline{diagrama_voronoi_jogos} a área de Geometria Computacional é um ramo da ciência da computação que estuda algoritmos e estruturas de dados para resolução computacional de problemas geométricos e o diagrama de Voronoi é um dos tópicos mais discutidos dessa área. O diagrama de Voronoi pode ser utilizado para resolver alguns problemas relacionados à jogos como por exemplo analisar regiões e a partir disso criar biomas para serem usados no algoritmo de geração procedural de conteúdo para criar mapas.
+
 \section{Objetivos}
 
 O objetivo geral deste trabalho explora técnicas e algoritmos que permeiam os ramos de inteligência artificial com foco em identificar contornos em imagens e computação 
