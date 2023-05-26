@@ -419,14 +419,6 @@ contribuirão para a evolução do \abnTeX.
 % ----------------------------------------------------------
 \chapter[Introdução]{Introdução}
 % ----------------------------------------------------------
-
-% No entanto, para que um jogo chegue ao consumidor final é preciso passa por diversos processos de criação extremamente complexos e rigorosos. Uma equipe de desenvolvimento, composta por designers e programadores, precisa dedicar muitos recursos para a elaboração de mapas 2D e 3D, com o objetivo de garantir a melhor aparência e otimização do jogo.
-
-% Isso destaca a importância de acelerar o processo de desenvolvimento e reduzir custos, sem comprometer a qualidade do produto final.
-
-% Uma solução para reduzir custos e economizar tempo é a utilização da geração procedural de conteúdo (PCG), que permite gerar mapas de forma automatizada. A PCG é uma técnica que trata da criação automática de conteúdos \space
-% \cite{geracao_procedural_conteudo}. Com a utilização da técnica PCG, as empresas conseguem gerar mapas de forma rápida e eficiente, sem a necessidade de investir em recursos humanos para criação manual de cada elemento. Além disso, a PCG permite a criação de conteúdo personalizado e variado, garantindo uma experiência única para cada usuário. Isso resulta em uma redução significativa de custos e em um aumento da eficiência operacional da empresa, uma vez que a criação de conteúdo manualmente é uma tarefa demorada e dispendiosa. Com a PCG, as empresas podem produzir uma grande quantidade de conteúdo de forma rápida e, portanto, podem lançar seus jogos mais rapidamente no mercado.
-
 \section{Contexto}
 
 A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo \space\cite{quanto_games_vao_movimentar} essa indústria tende a ultrapassar em 2023 os US\$ 200 bilhões (aproximadamente R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente e somente na plataforma digital Steam, foram publicados 10.963 novos títulos em 2022\space
@@ -526,8 +518,7 @@ Existe relação direta de conceitos entre inteligência artificial, aprendizado
 
 \subsubsection{Rede neural artificial}
 
-Um neurônio é uma unidade de processamento fundamental para uma rede neural \cite{haykin1999neural}.
-
+Uma rede neural artificial é uma representação matemática de unidades de processamento conectadas chamadas de neurônios artificiais . Essa arquitetura simula sinapses, cada sinal trocado entre os neurônios pode aumentar ou atenuar os sinais de outros durante o aprendizado\cite{ml_and_dp}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figures/neuronio.png}
@@ -547,7 +538,7 @@ O aprendizado ocorre na faze de treinamento onde é ajustando os pesos $w_k$ e o
 
 Para cada amostra o modelo compara os resultados dos valores atuais dos pesos $w_k$ e viés $b_k$ com o resultado esperado(alvo). Uma função custo(\textit{cost function}) é utilizada para gerar um vetor de gradientes e para quantificar o erro encontrado para a configuração atual do modelo. O modelo atualiza os pesos $w_k$ e os viés $b_k$ no sentido contrário do vetor de gradientes, buscando minimizar a função de custo de acordo com uma taxa de aprendizado(\textit{learning rate}) \cite{marti2017aprendizado}.
 
-Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a ultima camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e a seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
+Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a última camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e a seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
 
 \subsubsection{Funções de ativação}
 
@@ -580,7 +571,7 @@ Segundo \citeonline{lecun2015deep}, o aprendizado profundo são métodos de repr
 
 Dividindo um problema complexo em problemas menores torna os métodos especializados, viabilizando tarefas mais complexas, depois essas tarefas que foram dividias são recombinadas e é gerado uma solução do problema \cite{marti2017aprendizado}.
 
-Utilizando o exemplo anterior, reconhecimento de imagem, cada um desses métodos especializados seria responsável por reconhecer uma parte da imagem, como bordas, objetos, tamanho, etc. E após a junção desse métodos é feito a predição da imagem \cite{marti2017aprendizado}.
+Utilizando o exemplo anterior, reconhecimento de imagem, cada um desses métodos especializados seria responsável por reconhecer uma parte da imagem, como bordas, objetos, tamanho, etc. E após a junção desses métodos é feito a predição da imagem \cite{marti2017aprendizado}.
 
 \subsubsection{Redes neurais profundas}
 
@@ -632,7 +623,7 @@ Na \cref{fig:comp_vision} podemos ver uma analogia entre a forma como uma imagem
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/content_Human_Vision.png}
-	\caption{Comparação entre a forma de como o cérebro humando e um computador processam informações \cite{content_Human_Vision}.}
+	\caption{Comparação entre a forma de como o cérebro humano e um computador processam informações \cite{content_Human_Vision}.}
 	\label{fig:comp_vision}
 \end{figure}	
 
@@ -659,6 +650,13 @@ Voronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
 
 
 \subsection{Mapas de ilhas 2d com biomas}
+
+\section{Trabalhos relacionados}
+Esta seção destina-se a análise e discussão da metodologia e dos resultados prospostos por \citeonline{geracao_procedural_jogos_2d}. O algoritmo foi dividido em três partes sendo elas: geração recursiva de terrenos, validação de tamanho e correção da coesão. Os autores concluíram que não existe literatura sobre geração procedural de salas diversas e corredores distintos como o algoritmo proposto. Sugerem duas possibilidades para trabalhos futuros sendo elas: usar algoritmos genéticos para mensurar a qualidade dos mapas gerados e promover pela seleção natural e a outra possibilidade é mesclar o algoritmo proposto com técnicas de geração de salas interligadas por corredores, de forma a possibilitar a criação de mapas com algumas salas pré-definidas inseridas em um mapa aberto contínuo.
+
+\subsection{Geração Procedural de Mapas para Jogos 2D}
+
+No trabalho \citeonline{geracao_procedural_jogos_2d}, é apresentado uma solução simples para criar mapas de cavernas, calabouços e ilhas para jogos 2D. 
 
 \chapter{Desenvolvimento}
 
