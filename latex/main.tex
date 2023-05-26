@@ -261,7 +261,7 @@ as normas ABNT apresentado à comunidade de usuários \LaTeX.}
     \vspace*{\fill}
    \end{center}
         
-   Trabalho aprovado. \imprimirlocal, 24 de novembro de 2012:
+%    Trabalho aprovado. \imprimirlocal, 24 de novembro de 2012:
 
    \assinatura{\textbf{\imprimirorientador} \\ Orientador} 
    \assinatura{\textbf{Professor} \\ Convidado 1}
@@ -442,9 +442,15 @@ Outro cenário que está crescendo muito nos últimos anos é o da inteligência
 
 \section{Justificativa}
 
-O mapa é um elemento que se destaca em jogos digitais e pode ser criado usando técnicas de geração procedural de conteúdo porém existe um desafio em criar cenários bonitos e diversificados \cite{geracao_procedural_jogos_2d}.
+O mapa é um elemento que se destaca em jogos digitais e pode ser criado usando técnicas de geração procedural de conteúdo, porém existe um desafio em criar cenários bonitos e diversificados \cite{geracao_procedural_jogos_2d}.
 
-Segundo \citeonline{diagrama_voronoi_jogos} a área de Geometria Computacional é um ramo da ciência da computação que estuda algoritmos e estruturas de dados para resolução computacional de problemas geométricos e o diagrama de Voronoi é um dos tópicos mais discutidos dessa área. O diagrama de Voronoi pode ser utilizado para resolver alguns problemas relacionados à jogos como por exemplo analisar regiões e a partir disso criar biomas para serem usados no algoritmo de geração procedural de conteúdo para criar mapas.
+Segundo \citeonline{diagrama_voronoi_jogos}, a área de Geometria Computacional é um ramo da ciência da computação que estuda algoritmos e estruturas de dados para resolução computacional de problemas geométricos e o diagrama de Voronoi é um dos tópicos mais discutidos dessa área. O diagrama de Voronoi pode ser utilizado para resolver alguns problemas relacionados à jogos como por exemplo marcar pontos no mapa e desses pontos criar regiões, a partir dessas regiões criar biomas para serem usados no algoritmo de geração procedural de conteúdo para criar mapas.
+
+De acordo com \citeonline{jogo_procedural} é muito comum em jogos usar técnicas procedurais para otimizar o processo de criação além de ser comum o uso conjunto de inteligência artificial para melhorar ou personalizar como o jogo RimWorld que um simulador conduzido por uma IA que gera histórias no modo procedural.
+
+Dito isso, nosso projeto tem a ideia de fornecer recursos baseados em matemática aplicada dentro de ciência da computação que proporcione uma funcionalidade  de escolher o contorno do mapa no qual irá jogar através de imagens. Abordaremos a arquitetura de redes neurais convolucionais, que é muito utilizada para trabalhar com imagens. Mais especificamente, abordaremos uma arquitetura derivada da anteriormente citada, específica para segmentação de imagens, o que possibilita reconhecer contornos em imagens. Complementando que IA não é a única maneira de encontrar bordas em imagens, contemplaremos outras técnicas específicas de segmentação de imagem.
+
+Adicionando a isso por definição o conceito de ilha é terra cercada de água, logo a única diferença para um continente é o seu tamanho, baseando-se nisso, a escolha de ser uma ilha é porque é uma opção generalista utilizada em diversos jogos como Grand Theft Auto V, Just Cause 4, Fortnite, Pokémon Scarlet \& Violet, dentre outros. Acrescentando sobre a decisão de criar mapas 2D, é pontuado que há uma complexidade enorme entre mapas de 2D e 3D e que não é o foco proposto para o trabalho em questão. 
 
 \section{Objetivos}
 
@@ -590,7 +596,7 @@ A principal diferença entre uma rede neural convencional e uma rede neural prof
 \subsection{Redes neurais convolucionais}
 Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}.
 
-De acordo com \citeonline{dp_overview} uma arquitetura básica de uma rede neural convolucional tem as seguintes camadas: convolucional, pooling e totalmente conectada.
+De acordo com \citeonline{dp_overview}, uma arquitetura básica de uma rede neural convolucional tem as seguintes camadas: convolucional, pooling e totalmente conectada.
 
 \begin{figure}[H]
 	\caption{Camadas principais de uma rede neural convolucional}
