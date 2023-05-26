@@ -62,6 +62,23 @@
 \usepackage{float}
 \usepackage{amsmath}
 \usepackage{cleveref}
+\usepackage{pgfplots}
+\usepackage{amsfonts}
+
+\DeclareMathOperator{\logsumexp}{logsumexp}
+\pgfmathdeclarefunction{sumexp}{3}{%
+  \begingroup%
+  \pgfkeys{/pgf/fpu}% "/pgf/fpu/output format=fixed" removed
+  \pgfmathsetmacro{\myx}{#1}%
+  \pgfmathtruncatemacro{\myxmin}{#2}%
+  \pgfmathtruncatemacro{\myxmax}{#3}%
+  \pgfmathsetmacro{\mysum}{0}%
+  \pgfplotsforeachungrouped\XX in {\myxmin,...,\myxmax}%
+    {\pgfmathsetmacro{\mysum}{\mysum+exp(\XX)}}%
+  \pgfmathparse{\mysum+exp(#1)}%
+  \pgfmathfloattofixed\pgfmathresult%  added
+  \pgfmathsmuggle\pgfmathresult\endgroup%
+}
 
 \crefname{figure}{Figura}{Figuras}
 % ---
@@ -538,30 +555,99 @@ O aprendizado ocorre na faze de treinamento onde é ajustando os pesos $w_k$ e o
 
 Para cada amostra o modelo compara os resultados dos valores atuais dos pesos $w_k$ e viés $b_k$ com o resultado esperado(alvo). Uma função custo(\textit{cost function}) é utilizada para gerar um vetor de gradientes e para quantificar o erro encontrado para a configuração atual do modelo. O modelo atualiza os pesos $w_k$ e os viés $b_k$ no sentido contrário do vetor de gradientes, buscando minimizar a função de custo de acordo com uma taxa de aprendizado(\textit{learning rate}) \cite{marti2017aprendizado}.
 
-Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a última camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e a seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
+Ao combinar diversos neurônios artificiais forma-se uma rede neural Artificial. Essas redes buscam simular o processamento de informação do cérebro humano \cite{ferneda2006redes}.
+Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a última camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e as seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
 
 \subsubsection{Funções de ativação}
 
-Existem três tipos básicos de função de ativação \cite{haykin1999neural}:
+Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a ultima camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e as seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
 
-1. Função de ativação com limite (\textit{threshold})
+\subsubsection{Funções de ativação}
 
-$$\varphi(x) = 
-\begin{cases}
-1 \text{ se } x \geq 0\\
-0 \text{ se } x < \text{0}
-\end{cases}$$
+A função de ativação retorna a saída de um neurônio \cite{haykin1999neural}, aqui podemos ver três tipos de funções de ativação:
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/threshold_grafico.png}
-	\caption{Grafico da função \textit{threshold} \cite{haykin1999neural}.}
-	\label{fig:threshold_grafico}
-\end{figure}
+\begin{enumerate}
+	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \cite{gharat2019what}.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \frac{1}{1 + e^{-\upsilon}}$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-6, xmax=6,
+					ymin=0, ymax=1,
+				]
+					\addplot[
+						color=red,
+						domain=-6:6,
+					] {1/(1+exp(-x))};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\caption{Gráfico da função \textit{Sigmoid}.}
+	\label{fig:grafico_sigmoid}
+	\end{figure}
 
-AJUSTES E CONTINUA
+	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \cite{rizzo2020inteligencia}.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \max(0,\upsilon)$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-6, xmax=6,
+					ymin=0, ymax=5,
+				]
+					\addplot[red, domain=-5:0] {0};
+					\addplot[red, domain=0:5] {x};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\caption{Gráfico da função \textit{ReLu}.}
+	\label{fig:grafico_relu}
+	\end{figure}
 
-link das imagens http://www2.decom.ufop.br/imobilis/redes-neurais-funcoes-de-ativacao/
+	\item Função \textit{Softmax}, calcula a distribuição de probabilidades de um evento em "n" eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica, geralmente usada na camada de saída \cite{gharat2019what}.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \frac{e^{\upsilon_i}}{\sum_{j=0} e^{\upsilon_i}}$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-10, xmax=10,
+					ymin=0, ymax=1,
+				]
+					\addplot[red,domain=-10:10,samples=51] {exp(x)/sumexp(x,-4,0)};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\caption{Gráfico da função \textit{Softmax}.}
+	\label{fig:grafico_softmax}
+	\end{figure}
+\end{enumerate}
+
+
 
 \subsection{Aprendizado profundo}
 
@@ -572,8 +658,6 @@ Segundo \citeonline{lecun2015deep}, o aprendizado profundo são métodos de repr
 Dividindo um problema complexo em problemas menores torna os métodos especializados, viabilizando tarefas mais complexas, depois essas tarefas que foram dividias são recombinadas e é gerado uma solução do problema \cite{marti2017aprendizado}.
 
 Utilizando o exemplo anterior, reconhecimento de imagem, cada um desses métodos especializados seria responsável por reconhecer uma parte da imagem, como bordas, objetos, tamanho, etc. E após a junção desses métodos é feito a predição da imagem \cite{marti2017aprendizado}.
-
-\subsubsection{Redes neurais profundas}
 
 A principal diferença entre uma rede neural convencional e uma rede neural profunda é a quantidade de camadas, uma rede neural profunda possui mais de uma camada de processamento \apud{marti2017aprendizado}{haykin1999neural}.
 
@@ -633,23 +717,30 @@ Na \cref{fig:comp_vision} podemos ver uma analogia entre a forma como uma imagem
 
 \subsubsection{Segmentação de imagem}
 
-
 \subsection{Algoritmos de segmentação}
-\subsubsection{}
-
-
-
 
 \section{Geração procedural}
 \subsection{Diagrama de Voronoi}
 
 O diagrama de Voronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space
-\cite{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, \emph{e. g.}, estudar epidemias, encontrar o 
-ponto mais próximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. O diagrama de 
-Voronoi sera utilizado na geração de biomas com o algoritmo de Fortune.
+\cite{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, por exemplo, estudar epidemias, encontrar o 
+ponto mais próximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. 
+
+Seja um conjunto de índices $I_n = \{1, 2, 3, ..., n\}$ e $A = \{p_1, p_2, ..., p_n\} \subset \mathbb{R}^2$ um conjunto de pontos onde $2 \leq n < \infty$, definimos como região de Voronoi o conjunto de pontos associado a $p_i$, onde d é a distancia euclidiana
+
+$$V(p_i) = \{p|d(p_i,p) \leq d(p_i,p);i \neq j, i, j \in I_n\},$$
+
+temos o conjunto formado por essas regiões sendo $V(A) = {V(1), V(2), V(3), ..., V(n)}$ \cite{rodrigues_diagrama_2019}.
+
+Na figura \cref{fig:diagrama_voronoi} podemos ver a relação do conjuntos de pontos com o diagrama de Voronoi.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagrama_de_voronoi.png}
+	\caption{Diagrama de Voronoi \cite{thomazthz_diagrama_2014}.}	
+	\label{fig:diagrama_voronoi}
+\end{figure}
 
 
-\subsection{Mapas de ilhas 2d com biomas}
 
 \section{Trabalhos relacionados}
 Esta seção destina-se a análise e discussão da metodologia e dos resultados prospostos por \citeonline{geracao_procedural_jogos_2d}. 
