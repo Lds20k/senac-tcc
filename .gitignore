@@ -16,6 +16,7 @@
 *.cb2
 .*.lb
 .actrc
+latex/main.txt
 ## Intermediate documents:
 *.dvi
 *.xdv
