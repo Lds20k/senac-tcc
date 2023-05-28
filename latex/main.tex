@@ -685,9 +685,13 @@ Camada convolucional é essencial para esse tipo de arquitetura e usa um filtro 
 
 O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída.
 
-$ \mathbf{I}x - \mathbf{F}x + 1 = \mathbf{S}x $
+$$
+\begin{aligned}
+\mathbf{I}x - \mathbf{F}x + 1 &= \mathbf{S}x \\
+\mathbf{I}y - \mathbf{F}y + 1 &= \mathbf{S}y
+\end{aligned}
+$$
 
-$ \mathbf{I}y - \mathbf{F}y + 1 = \mathbf{S}y $
 
 \begin{figure}[H]
 	\caption{Exemplo de um filtro}
