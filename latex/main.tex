@@ -703,7 +703,11 @@ $$
 	\label{fig:exeplo_filtro}
 \end{figure}
 
-A camada de pooling tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características.
+A camada de pooling tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características porém preservando os padrões mais relevantes. Dentre os recursos essenciais dessa camada estão o tamanho do pooling e a operação que será realizada. Dentre vários tipos de pooling os mais utilizados são: pooling máximo, pooling médio e pooling global médio \cite{Alzubaidi2021}. 
+
+$\textbf{Pooling médio}$
+
+É definido o resultado final com base na média encontrada pelo tamanho do pooling, exemplo a seguir usando um mapa de características com tamanho 4x4 e pooling de tamanho 2x2.
 
 $$
 \begin{tikzpicture}[baseline=-0.5ex]
@@ -722,7 +726,45 @@ $$
    \end{bmatrix}
 $$
 
+$\textbf{Pooling máximo}$
 
+É definido o resultado final com base no máximo encontrado pelo tamanho do pooling, exemplo a seguir usando um mapa de características com tamanho 4x4 e pooling de tamanho 2x2.
+
+$$
+\begin{tikzpicture}[baseline=-0.5ex]
+    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+        4 & 25 & 44 & 10\\
+        8 & 14 & 8 & 33 \\
+        17 & 2 & 16 & 34 \\
+        5 & 13 & 24 & 7 \\
+    };
+    \draw (M-1-1.north west) rectangle (M-2-2.south east);
+\end{tikzpicture}
+= 
+\begin{bmatrix}
+	\boxed{25} & 44 \\
+	17 & 34 \\
+   \end{bmatrix}
+$$
+
+$\textbf{Pooling global médio}$
+
+É definido o resultado final com base na média geral do mapa o que sempre tem como saída uma matrix 1x1, exemplo a seguir usando um mapa de características com tamanho 4x4.
+
+$$
+\begin{tikzpicture}[baseline=-0.5ex]
+    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+        4 & 25 & 44 & 10\\
+        8 & 14 & 8 & 33 \\
+        17 & 2 & 16 & 34 \\
+        5 & 13 & 24 & 7 \\
+    };
+\end{tikzpicture}
+= 
+\begin{bmatrix}
+	16
+   \end{bmatrix}
+$$
 
 \subsection{Visão computacional}
 A visão computacional avança cada vez mais, aproximando os computadores da capacidade visual humana.Segundo Horst Haußecker e Bernd Jähne no livro "Computer Vision and Applications" \cite{comp_vision_and_applications}, a visão computacional é uma área da computação que se dedica à interpretação de imagens por meio de algoritmos e técnicas de processamento de imagens. Essa área abrange a aquisição, processamento e análise de imagens, com o objetivo de extrair informações úteis para resolver problemas específicos.
