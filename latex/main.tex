@@ -64,6 +64,9 @@
 \usepackage{cleveref}
 \usepackage{pgfplots}
 \usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
 
 \DeclareMathOperator{\logsumexp}{logsumexp}
 \pgfmathdeclarefunction{sumexp}{3}{%
@@ -685,9 +688,12 @@ Camada convolucional é essencial para esse tipo de arquitetura e usa um filtro 
 
 O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída.
 
-$ \mathbf{I}x - \mathbf{F}x + 1 = \mathbf{S}x $
-
-$ \mathbf{I}y - \mathbf{F}y + 1 = \mathbf{S}y $
+$$
+\begin{aligned}
+\mathbf{I}x - \mathbf{F}x + 1 &= \mathbf{S}x \\
+\mathbf{I}y - \mathbf{F}y + 1 &= \mathbf{S}y
+\end{aligned}
+$$
 
 \begin{figure}[H]
 	\caption{Exemplo de um filtro}
@@ -696,6 +702,27 @@ $ \mathbf{I}y - \mathbf{F}y + 1 = \mathbf{S}y $
 	\legend{Fonte: \citeonline{computation11030052}}
 	\label{fig:exeplo_filtro}
 \end{figure}
+
+A camada de pooling tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características.
+
+$$
+\begin{tikzpicture}[baseline=-0.5ex]
+    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+        4 & 25 & 44 & 10\\
+        8 & 14 & 8 & 33 \\
+        17 & 2 & 16 & 34 \\
+        5 & 13 & 24 & 7 \\
+    };
+    \draw (M-1-1.north west) rectangle (M-2-2.south east);
+\end{tikzpicture}
+= 
+\begin{bmatrix}
+	\boxed{12} & 23 \\
+	9 & 20 \\
+   \end{bmatrix}
+$$
+
+
 
 \subsection{Visão computacional}
 A visão computacional avança cada vez mais, aproximando os computadores da capacidade visual humana.Segundo Horst Haußecker e Bernd Jähne no livro "Computer Vision and Applications" \cite{comp_vision_and_applications}, a visão computacional é uma área da computação que se dedica à interpretação de imagens por meio de algoritmos e técnicas de processamento de imagens. Essa área abrange a aquisição, processamento e análise de imagens, com o objetivo de extrair informações úteis para resolver problemas específicos.
