@@ -66,7 +66,7 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{tikz}
-\usetikzlibrary{matrix}
+\usetikzlibrary{matrix, positioning}
 
 \DeclareMathOperator{\logsumexp}{logsumexp}
 \pgfmathdeclarefunction{sumexp}{3}{%
@@ -437,46 +437,14 @@ contribuirão para a evolução do \abnTeX.
 % ----------------------------------------------------------
 % Introdução (exemplo de capítulo sem numeração, mas presente no Sumário)
 % ----------------------------------------------------------
-\chapter[Introdução]{Introdução}
+\chapter{Introdução}
 % ----------------------------------------------------------
-\section{Contexto}
 
-A indústria de jogos digitais cresce mais a cada dia, segundo a consultora Newzoo \space\cite{quanto_games_vao_movimentar} essa indústria tende a ultrapassar em 2023 os US\$ 200 bilhões (aproximadamente R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente e somente na plataforma digital Steam, foram publicados 10.963 novos títulos em 2022\space
-\cite{numero_de_jogos_publicados_na_steam}.
+\input{contexto.tex}
 
-Ademais, as empresas de desenvolvimento de jogos continuam a trabalhar incessantemente para atender a uma demanda de mercado que cresceu 2,5\% no Brasil em 2022 
-\space
-\cite{pesquisa_games_brasil}. O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto, \emph{e.g.}, a empresa Rockstar Games revelou que o jogo \"Grand Theft Auto V\" custou cerca de 265 milhões de dólares para ser produzido e comercializado \space
-\cite{gta_quanto_custou}.
+\input{justificativa.tex}
 
-Outro cenário que está crescendo muito nos últimos anos é o da inteligência artificial afirma \citeonline{Valente_2020} que no Brasil mais que dobrou o número contratações de desenvolvedores da área de 2015 até 2020. De acordo com \apud{johnson2023}{briggs2023} um relatório recente relata que 300 milhões de empregos podem ser afetados pela IA \emph{i.e.} 18\% ofício global pode ser automatizado. Outrossim \citeonline{europarl2020} diz que o tópico de inteligência artificial é uma prioridade para União Europeia por ser considerada primordial para transformação digital da sociedade.  Do mesmo modo, "Bill Gates, um dos fundadores da Microsoft — uma das maiores empresas de tecnologia —, diz que o desenvolvimento da inteligência artificial (IA) é o avanço tecnológico mais importante em décadas"\space
-\cite{inteligencia_artificial_e_avanco_bbc}.
-
-\section{Justificativa}
-
-O mapa é um elemento que se destaca em jogos digitais e pode ser criado usando técnicas de geração procedural de conteúdo, porém existe um desafio em criar cenários bonitos e diversificados \cite{geracao_procedural_jogos_2d}.
-
-Segundo \citeonline{diagrama_voronoi_jogos}, a área de Geometria Computacional é um ramo da ciência da computação que estuda algoritmos e estruturas de dados para resolução computacional de problemas geométricos e o diagrama de Voronoi é um dos tópicos mais discutidos dessa área. O diagrama de Voronoi pode ser utilizado para resolver alguns problemas relacionados à jogos como por exemplo marcar pontos no mapa e desses pontos criar regiões, a partir dessas regiões criar biomas para serem usados no algoritmo de geração procedural de conteúdo para criar mapas.
-
-De acordo com \citeonline{jogo_procedural} é muito comum em jogos usar técnicas procedurais para otimizar o processo de criação além de ser comum o uso conjunto de inteligência artificial para melhorar ou personalizar como o jogo RimWorld que um simulador conduzido por uma IA que gera histórias no modo procedural.
-
-Dito isso, nosso projeto tem a ideia de fornecer recursos baseados em matemática aplicada dentro de ciência da computação que proporcione uma funcionalidade  de escolher o contorno do mapa no qual irá jogar através de imagens. Abordaremos a arquitetura de redes neurais convolucionais, que é muito utilizada para trabalhar com imagens. Mais especificamente, abordaremos uma arquitetura derivada da anteriormente citada, específica para segmentação de imagens, o que possibilita reconhecer contornos em imagens. Complementando que IA não é a única maneira de encontrar bordas em imagens, contemplaremos outras técnicas específicas de segmentação de imagem.
-
-Adicionando a isso por definição o conceito de ilha é terra cercada de água, logo a única diferença para um continente é o seu tamanho, baseando-se nisso, a escolha de ser uma ilha é porque é uma opção generalista utilizada em diversos jogos como Grand Theft Auto V, Just Cause 4, Fortnite, Pokémon Scarlet \& Violet, dentre outros. Acrescentando sobre a decisão de criar mapas 2D, é pontuado que há uma complexidade enorme entre mapas de 2D e 3D e que não é o foco proposto para o trabalho em questão. 
-
-\section{Objetivos}
-
-O objetivo geral deste trabalho explora técnicas e algoritmos que permeiam os ramos de inteligência artificial com foco em identificar contornos em imagens e computação 
-gráfica centrado em gerar mapas usando heurísticas.
-Ademais visto especificamente temos como objetivos:
-
-\begin{itemize}
-	\item Encontrar um dataset para treinar a inteligência artificial que irá identificar contornos em imagens
-	\item Treinar uma inteligência artificial para identificar contornos em imagens
-	\item Testar algoritmos de gerar ruídos para criar o mapa
-	\item Aplicar um algoritmo para reconhecer a imagem com o contorno e gerar como saída a imagem do mapa gerado
-\end{itemize}
-
+\input{objetivos.tex}
 
 \chapter{Fundamentação teórica}
 \label{sec:background}
@@ -484,57 +452,9 @@ Ademais visto especificamente temos como objetivos:
 
 Este capítulo tem objetivo de apresentar conceitos necessários para entendimento do trabalho.
 
-\section{Inteligência Artificial}
-Inteligência artificial é uma técnica científica que simula o pensamento humano de forma que possa ser executado em uma máquina, podendo ser utilizada para criar soluções com uma linha de progressão parecida ao raciocínio lógico como conhecemos. Isto permite ao computador reconhecer e interpretar o mundo ao redor com imagens e textos criando uma ampla área de atuação que otimiza tarefas antes só realizadas por seres humanos \space\cite{ia_aliada_ou_inimiga}.
+\input{inteligencia_artificial.tex}
 
-Este ramo é complexo por se tratar de uma representação cognitiva, se torna necessário usar uma base com diversas áreas científicas como psicologia, biologia, lógica matemática, linguística, engenharia, filosofia, entre outras. E pode ser usado para diversos problemas específicos como, por exemplo, definir as boas rotas para algum processo logístico \space\cite{ia_conceitos_aplicacoes}.
-
-\begin{figure}[H]
-	\caption{Diagrama de aprendizado de máquina}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=10cm]{figures/areas_ia.jpg} % leia abaixo
-	\legend{Fonte: \citeonline{aplicacoes_ia_vg}}
-	\label{fig:areas_ia}
-\end{figure}
-
-Segundo \citeonline{dp_overview} existe três tópicos sobre inteligência artificial muito populares sendo eles, inteligência artificial, aprendizado de máquina e aprendizado profundo como segue na imagem \cref{fig:diagrama_ia_ml_dp}.
-
-\begin{figure}[H]
-	\caption{Diagrama de Venn sobre relação entre os tópicos de inteligência artificial}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=10cm]{figures/diagrama_ia_ml_dp.png} % leia abaixo
-	\legend{Fonte: \citeonline{dp_overview}}
-	\label{fig:diagrama_ia_ml_dp}
-\end{figure}
-
-\subsection{Aprendizado de Máquina}
-
-
-Segundo \citeonline{directions_ia_ml_dp}, aprendizado de máquina é uma subcategoria de inteligência artificial que se refere  a detecção de padrões importantes de uma base de dados. As ferramentas utilizadas aumentam a eficiência dos algoritmos para lidar com bases de dados grandes.
-
-Portanto, essa técnica permite ao computador melhorar os resultados com base na experiência, isso indica uma relação direta entre o quanto o programa consumiu de dados e qualidade da solução do problema \cite{ml_explicado}. 
-
-Dentro desse nicho existem outros como: redes neurais, algoritmos evolucionários, algoritmos de busca, aprendizado por reforço, dentre outros. \cite{ml_oil_gas_industry}.
-
-Existe relação direta de conceitos entre inteligência artificial, aprendizado de máquina e ciência de dados conforme mostrado na \cref{fig:diagrama_ia}.
-
-\begin{figure}[H]
-	\caption{Diagrama de aprendizado de máquina}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=10cm]{figures/diagrama_ia.jpg} % leia abaixo
-	\legend{Fonte: \citeonline{ml_oil_gas_industry}}
-	\label{fig:diagrama_ia}
-\end{figure}
-
-É possível observar uma hierarquia entre aprendizado de máquina e os principais termos sendo eles redes neurais artificiais e aprendizado profundo com base em \citeonline{ml_and_dp} mostrado no diagrama da \cref{fig:diagrama_ann}.
-
-\begin{figure}[H]
-	\caption{Diagrama de Venn sobre tópicos de aprendizado de máquina}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=10cm]{figures/diagrama_ann.jpg} % leia abaixo
-	\legend{Fonte: \citeonline{ml_and_dp}}
-	\label{fig:diagrama_ann}
-\end{figure}
+\input{aprendizado_maquina.tex}
 
 \subsubsection{Rede neural artificial}
 
@@ -671,100 +591,9 @@ A principal diferença entre uma rede neural convencional e uma rede neural prof
 	\label{fig:redes_neurais}
 \end{figure}
 
-\subsection{Redes neurais convolucionais}
-Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}.
+\input{redes_neurais_convolucionais.tex}
 
-De acordo com \citeonline{dp_overview}, uma arquitetura básica de uma rede neural convolucional tem as seguintes camadas: convolucional, pooling e totalmente conectada.
-
-\begin{figure}[H]
-	\caption{Camadas principais de uma rede neural convolucional}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=15cm]{figures/arquitetura_cnn.png} % leia abaixo
-	\legend{Fonte: \citeonline{dp_overview}}
-	\label{fig:arquitetura_cnn}
-\end{figure}
-
-Camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características.
-
-O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída.
-
-$$
-\begin{aligned}
-\mathbf{I}x - \mathbf{F}x + 1 &= \mathbf{S}x \\
-\mathbf{I}y - \mathbf{F}y + 1 &= \mathbf{S}y
-\end{aligned}
-$$
-
-\begin{figure}[H]
-	\caption{Exemplo de um filtro}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=10cm]{figures/exemplo_filtro.png} % leia abaixo
-	\legend{Fonte: \citeonline{computation11030052}}
-	\label{fig:exeplo_filtro}
-\end{figure}
-
-A camada de pooling tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características porém preservando os padrões mais relevantes. Dentre os recursos essenciais dessa camada estão o tamanho do pooling e a operação que será realizada. Dentre vários tipos de pooling os mais utilizados são: pooling máximo, pooling médio e pooling global médio \cite{Alzubaidi2021}. 
-
-$\textbf{Pooling médio}$
-
-É definido o resultado final com base na média encontrada pelo tamanho do pooling, exemplo a seguir usando um mapa de características com tamanho 4x4 e pooling de tamanho 2x2.
-
-$$
-\begin{tikzpicture}[baseline=-0.5ex]
-    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
-        4 & 25 & 44 & 10\\
-        8 & 14 & 8 & 33 \\
-        17 & 2 & 16 & 34 \\
-        5 & 13 & 24 & 7 \\
-    };
-    \draw (M-1-1.north west) rectangle (M-2-2.south east);
-\end{tikzpicture}
-= 
-\begin{bmatrix}
-	\boxed{12} & 23 \\
-	9 & 20 \\
-   \end{bmatrix}
-$$
-
-$\textbf{Pooling máximo}$
-
-É definido o resultado final com base no máximo encontrado pelo tamanho do pooling, exemplo a seguir usando um mapa de características com tamanho 4x4 e pooling de tamanho 2x2.
-
-$$
-\begin{tikzpicture}[baseline=-0.5ex]
-    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
-        4 & 25 & 44 & 10\\
-        8 & 14 & 8 & 33 \\
-        17 & 2 & 16 & 34 \\
-        5 & 13 & 24 & 7 \\
-    };
-    \draw (M-1-1.north west) rectangle (M-2-2.south east);
-\end{tikzpicture}
-= 
-\begin{bmatrix}
-	\boxed{25} & 44 \\
-	17 & 34 \\
-   \end{bmatrix}
-$$
-
-$\textbf{Pooling global médio}$
-
-É definido o resultado final com base na média geral do mapa o que sempre tem como saída uma matrix 1x1, exemplo a seguir usando um mapa de características com tamanho 4x4.
-
-$$
-\begin{tikzpicture}[baseline=-0.5ex]
-    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
-        4 & 25 & 44 & 10\\
-        8 & 14 & 8 & 33 \\
-        17 & 2 & 16 & 34 \\
-        5 & 13 & 24 & 7 \\
-    };
-\end{tikzpicture}
-= 
-\begin{bmatrix}
-	16
-   \end{bmatrix}
-$$
+\input{segmentacao.tex}
 
 \subsection{Visão computacional}
 A visão computacional avança cada vez mais, aproximando os computadores da capacidade visual humana.Segundo Horst Haußecker e Bernd Jähne no livro "Computer Vision and Applications" \cite{comp_vision_and_applications}, a visão computacional é uma área da computação que se dedica à interpretação de imagens por meio de algoritmos e técnicas de processamento de imagens. Essa área abrange a aquisição, processamento e análise de imagens, com o objetivo de extrair informações úteis para resolver problemas específicos.
@@ -811,14 +640,10 @@ Na figura \cref{fig:diagrama_voronoi} podemos ver a relação do conjuntos de po
 
 
 
-\section{Trabalhos relacionados}
-Esta seção destina-se a análise e discussão da metodologia e dos resultados prospostos por \citeonline{geracao_procedural_jogos_2d}. 
-
-\subsection{Geração Procedural de Mapas para Jogos 2D}
-
-No trabalho \citeonline{geracao_procedural_jogos_2d}, é apresentado uma solução simples para criar mapas de cavernas, calabouços e ilhas para jogos 2D. O algoritmo foi dividido em três partes sendo elas: geração recursiva de terrenos, validação de tamanho e correção da coesão. Os autores concluíram que não existe literatura sobre geração procedural de salas diversas e corredores distintos como o algoritmo proposto. Sugerem duas possibilidades para trabalhos futuros sendo elas: usar algoritmos genéticos para mensurar a qualidade dos mapas gerados e promover pela seleção natural e a outra possibilidade é mesclar o algoritmo proposto com técnicas de geração de salas interligadas por corredores, de forma a possibilitar a criação de mapas com algumas salas pré-definidas inseridas em um mapa aberto contínuo.
+\input{trabalhos_relacionados.tex}
 
 \chapter{Desenvolvimento}
+
 
 % ----------------------------------------------------------
 % Finaliza a parte no bookmark do PDF
