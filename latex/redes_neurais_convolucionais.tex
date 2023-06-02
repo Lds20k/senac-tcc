@@ -178,7 +178,7 @@ A função de perda é calculada na camada de saída e serve para mensurar o suc
 \subsubsection*{Softmax ou entropia cruzada ou logarítmica}
 Muito utilizada para medir a performace de uma rede neural convolucional principalmente quando o resultado final têm várias classes. Antes dessa função de perda é necessário usar a função de ativação softmax descrita na \cref{fig:grafico_softmax} pois precisa de uma saída dentro de uma distribuição de probabilidade. Sendo N o número de classes ou o número de neurônios na camada de saída.
 
-$$p_i = \frac{e^{a_i}}{\sum_{k=1}^N e_k^a} \qquad H(p,y) = -\sum_{i=1}^N y_i \log(p_i)$$
+$$H(p,y) = -\sum_{i=1}^N y_i \log(p_i)$$
 
 \subsubsection*{Euclidiana ou erro quadrático médio}
 Muito utilizada para problemas de regressão.
@@ -191,7 +191,7 @@ Muito utilizado para classificação binária.
 $$H(p,y) = \sum_{i=1}^N max(0, m - (2y_i - 1) p_i)$$
 
 \subsection*{Regularização}
-Quando se monta uma arquitetura de redes neurais convolucional pode se chegar em três casos sendo eles: sobreajuste (overfit), subajuste ( underfit) e balanceado (optimal). O sobreajuste é quando no treinamento o modelo acerta as classes porém nos testes não, isso mostra uma dificuldade em generalizar as características. Já o subajuste não consegue pontuar bem em nenhum caso mostrando que o conjunto de dados de treinamento está pequeno para detectar padrões. Por outro lado o balanceado é quando produz resultados bons tanto no conjunto de dados de treinamento quanto no de testes \cite{Alzubaidi2021, computation11030052}.
+Quando se monta uma arquitetura de redes neurais convolucional pode se chegar em três casos sendo eles: sobreajuste (overfit), subajuste (underfit) e balanceado (optimal). O sobreajuste é quando no treinamento o modelo acerta as classes porém nos testes não, isso mostra uma dificuldade em generalizar as características. Já o subajuste não consegue pontuar bem em nenhum caso mostrando que o conjunto de dados de treinamento está pequeno para detectar padrões. Por outro lado o balanceado é quando produz resultados bons tanto no conjunto de dados de treinamento quanto no de testes \cite{Alzubaidi2021, computation11030052}.
 
 \begin{figure}[H]
 	\caption{Gráficos mostrando subajuste, balanceado e sobreajuste respectivamente}
@@ -200,3 +200,42 @@ Quando se monta uma arquitetura de redes neurais convolucional pode se chegar em
 	\legend{Fonte: \citeonline{educative2022overfitting}}
 	\label{fig:arquitetura_cnn}
 \end{figure}
+
+Segundo \citeonline{Alzubaidi2021} existem algumas alternativas para evitar o sobreajuste e o subajuste, dentre alguma estão:
+
+\begin{itemize}
+    \item Dropout: Muito utilizada para evitar sobreajuste pois está técnica irá desligar um neurônio aleatoriamente colocando a saída dele como zero no processo de treinamento e portanto forçara o modelo a aprender a indentificar características diferentes em outros neurônios possibilitando a generalização do modelo.
+    \item Aumentar o tamanho do conjunto de dados: caso não seja possível criar ou encontrar um maior existem técnicas para aumentar artificialmente acrescentando pequenas mudanças nas imagens existentes, algumas são rotacionar, recortar e inverter horizontamente ou verticalmente.
+\end{itemize}
+
+\subsection*{Retropropagação}
+De acordo com \citeonline{brilliant2023backpropagation} o algoritmo geral de retropropagação é:
+
+\begin{enumerate}
+    \item Propagação: calcular os pares de entrada-saída $(\overrightarrow{x_d}, y_d)$ — $\overrightarrow{x_d}$ é o vetor de entrada e $y_d$ a saída verdadeira — e guardar os resultados $\hat{y_d}$ — a saída encontrada no treinamento —, $a_j^k$, $o_j^k$ para cada neurônio $j$ na camada $k$, indo da camada de entrada para camada de saída.
+    
+    \item Retropropagação: Calcular os pares de entrada-saída $(\overrightarrow{x_d}, y_d)$, chegando na fórmula $\frac{\partial{E_d}}{\partial{w_{ij}^k}}$ que é a derivada parcial do erro total. Na representação $E_d$ é a função de perda e $w_{ij}^k$ é o peso  conectado em um neurônio de $k - 1$. Outra forma de representar é $\delta_j^k o_i^{k - 1}$ e suas variáveis são: $\delta_j^k$ representa o erro do neurônio e $o_i^{k - 1}$ representa a saída do neurônio na camada $k -1$. Essa técnica começa na camada de saída e propaga até a última camada escondida.
+    
+    $$ \frac{\partial{E_d}}{\partial{w_{ij}^k}} = \delta_j^k o_i^{k - 1} $$
+    
+    \item Combinar gradientes individuais: Uma média simples é feita com todos resultados de $\frac{\partial{E_d}}{\partial{w_{ij}^k}}$ formando assim o gradiente total representado como $\frac{\partial{E(X, \theta)}}{\partial{w_{ij}^k}}$.
+    
+    $$ \frac{\partial{E(X,\theta)}}{\partial{w_{ij}^k}} = \frac{1}{N} \sum_{d=1}^{N} \frac{\partial{E_d}}{\partial{w_{ij}^k}} $$
+    \item Atualiza os pesos: usando $\alpha$ como taxa de aprendizado e o gradiente total $\frac{\partial{E(X, \theta)}}{\partial{w_{ij}^k}}$ temos a seguinte equação.
+    
+    $$ \Delta w_{ij}^k = -\alpha \frac{\partial{E(X,\theta)}}{\partial{w_{ij}^k}} $$
+\end{enumerate}
+
+Observação: basta trocar $w_{ij}^k$ para $b_{ij}^k$ — trocar o peso pelo viés — em todo algoritmo para ajustar o viés do modelo com a tecnica de retropropagação.
+
+\subsection*{Melhorar performace}
+
+Com base em testes de aplicações do trabalho \citeonline{Alzubaidi2021} existem algumas maneiras de melhorar a qualidade do resultado final do modelo sendo elas:
+
+\begin{itemize}
+    \item Aumentar o conjunto de dados
+    \item Aumentar o tempo de treinamento
+    \item Aumentar a profundidade ou largura da arquitetura
+    \item Regularizar o modelo
+    \item Ajustar os hiperparâmetros
+\end{itemize}
