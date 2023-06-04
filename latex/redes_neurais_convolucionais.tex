@@ -45,7 +45,7 @@ $$
 \hspace{0.8cm}=\hspace{0.8cm}
 \begin{tikzpicture}[baseline=(M.center)]
  \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
-    \boxed{-1} & - & - \\
+    \boxed{1} & - & - \\
  };
  \node[above=10pt of M.north] {Resultado};
 \end{tikzpicture}
@@ -68,7 +68,7 @@ $$
 \end{tikzpicture}
 \hspace{0.8cm}=\hspace{0.8cm}
 \begin{bmatrix}
- -1 & \boxed{-2} & - \\
+ 1 & \boxed{1} & - \\
  \end{bmatrix}
 $$
 
@@ -90,7 +90,7 @@ $$
 \end{tikzpicture}
 \hspace{0.8cm}=\hspace{0.8cm}
 \begin{bmatrix}
- -1 & -2 &  \boxed{1} \\
+ 1 & 1 &  \boxed{2} \\
  \end{bmatrix}
 $$
 
@@ -102,7 +102,7 @@ O preenchimento — ou padding — é uma técnica utilizada para manter o mesmo
 
 \subsection*{Camada de agrupamento}
 
-A camada de agrupamento — ou pooling — tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características porém preservando os padrões mais relevantes. Dentre os recursos essenciais dessa camada estão o tamanho do agrupamento e a operação que será realizada. O maior problema dessa camada é pelo fato dela apenas identificar aonde essas características estão e não se tem ou não, \emph{i.e.}, dependendo de qual operação e a quantidade de camadas pode não ser possível guardar as principais características de forma integra causando uma redução no desempenho final da predição \cite{dp_overview}.
+A camada de agrupamento — ou pooling — tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características, porém preservando os padrões mais relevantes. Dentre os recursos essenciais dessa camada estão o tamanho do agrupamento e a operação que será realizada. O maior problema dessa camada é pelo fato dela apenas identificar aonde essas características estão e não se tem ou não, \emph{i.e.}, dependendo de qual operação e a quantidade de camadas pode não ser possível guardar as principais características de forma integra causando uma redução no desempenho final da predição \cite{dp_overview}.
 
 Existem vários tipos de agrupamento, os mais utilizados são: agrupamento máximo, agrupamento médio e agrupamento global médio que estão explicados abaixo em exemplos baseados em \citeonline{Alzubaidi2021}.
 
@@ -169,7 +169,7 @@ $$
 
 \subsection*{Camada totalmente conectada}
 
-A camada totalmente conectada geralmente é utilizada no final da arquitetura e cria a partir de cada neurônio uma ligação direta para cada etiqueta final. Isso torna essa camada extremamente pesada computacionalmente \cite{Alzubaidi2021, computation11030052}.
+A camada totalmente conectada geralmente é utilizada no final da arquitetura e cria a partir de cada neurônio uma ligação direta para cada etiqueta final. Isso torna essa camada extremamente pesada computacionalmente. O número de neurônios dessa camada é equivalente ao número de classes propostas. Além disso é quando chega nessa camada que a função de perda é calculada e se inicia a retropropagação \cite{Alzubaidi2021, computation11030052}.
 
 \subsection*{Função de perda}
 A função de perda é calculada na camada de saída e serve para mensurar o sucesso obtido comparando com fórmulas o resultado da arquitetura com o resultado real do conjunto de dados. O resultado dessa função irá ajudar na retropropagação, \emph{i.e.}, servirá para ajustar os pesos e viéses da conexão entre os neurônios para minimizar o erro. A seguir algumas funções de perda, pontuando que todo esse subtópico é baseado em 
@@ -230,7 +230,7 @@ Observação: basta trocar $w_{ij}^k$ para $b_{ij}^k$ — trocar o peso pelo vi�
 
 \subsection*{Melhorar performace}
 
-Com base em testes de aplicações do trabalho \citeonline{Alzubaidi2021} existem algumas maneiras de melhorar a qualidade do resultado final do modelo sendo elas:
+Com base em testes de aplicações existem algumas maneiras de melhorar a qualidade do resultado final do modelo sendo elas \cite{Alzubaidi2021}:
 
 \begin{itemize}
     \item Aumentar o conjunto de dados
