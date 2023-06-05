@@ -4,7 +4,15 @@ A indústria de jogos digitais cresce mais a cada dia, de acordo com a consultor
 Ademais, o mercado de jogos no Brasil teve um aumento de 2,5\% em 2022, conforme apontado por uma pesquisa sobre o crescimento da demanda \space \cite{pesquisa_games_brasil}. O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto, \emph{e.g.}, a empresa Rockstar Games revelou que o jogo Grand Theft Auto V custou cerca de 265 milhões de dólares para ser produzido e comercializado \space
 \cite{gta_quanto_custou}.
 
-Ainda, os mapas desempenham um papel fundamental nos jogos, fornecendo orientação aos jogadores e criando a sensação de escala em uma área. Os mapas enriquecem a experiência geral do jogo, mas criar cenários pode ser um desafio especialmente levando em consideração o orçamento disponível \cite{video-game-maps}.
+Ainda, os mapas desempenham um papel fundamental nos jogos, fornecendo orientação aos jogadores e criando a sensação de escala em uma área. Por exemplo o jogo de aventura pirata chamado Sea of Thieves, os mapas revelam locais de interesse, como tesouros escondidos, missões e áreas perigosas. Eles ajudam os jogadores a planejar suas estratégias, explorar o mundo virtual e tomar decisões com base em informações espaciais. Além disso, os mapas podem transmitir a sensação de escala e proporção, dando aos jogadores uma compreensão visual da extensão do mundo do jogo. Portanto os mapas enriquecem a experiência geral do jogo, mas criar cenários pode ser um desafio especialmente levando em consideração o orçamento disponível \cite{video-game-maps, lecafedugeek}.
+
+\begin{figure}[H]
+	\caption{Mapa de tesouro do jogo Sea of Thieves}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/Treasure_Map.jpg} % leia abaixo
+	\legend{Fonte: \citeonline{seaofthieves}}
+	\label{fig:treasureMap}
+\end{figure}
 
 Uma abordagem eficiente para resolver o problema é a geração procedural de mapas, que consiste em criar mapas usando algoritmos, tornando o jogo mais dinâmico e menos repetitivo. No entanto, a criação de cenários visualmente atraentes e diversos usando esse método ainda é um desafio \cite{geracao_procedural_jogos_2d}.
 
@@ -13,7 +21,9 @@ Contextualizando, a área de Geometria Computacional é um ramo da ciência da c
 
 De acordo com \citeonline{jogo_procedural} é muito comum em jogos usar técnicas procedurais para otimizar o processo de criação combinado com inteligência artificial para melhorar ou personalizar a experiência do jogador. Por exemplo, o jogo RimWorld é um simulador de colônia que utiliza uma IA para gerar histórias de forma procedural, abrangendo aspectos como psicologia, ecologia, combate e diplomacia, dentre outros \cite{jogo_procedural}.
 
-Dito isso, nosso projeto tem a ideia de fornecer recursos baseados em matemática aplicada dentro de ciência da computação que proporcione uma funcionalidade  de escolher o contorno do mapa no qual irá jogar através de imagens. Abordaremos a arquitetura de redes neurais convolucionais, que é muito utilizada para trabalhar com imagens. Mais especificamente, abordaremos uma arquitetura derivada da anteriormente citada, específica para segmentação de imagens, o que possibilita classificar contornos em imagens.
+A aplicação da IA em jogos não se limita apenas à jogabilidade. Ela também é usada em áreas como animação de personagens, reconhecimento de fala e expressões faciais, tradução automática de idiomas nos diálogos do jogo e muito mais. A IA está impulsionando a inovação e a evolução dos jogos, proporcionando experiências cada vez mais envolventes e cativantes para os jogadores \cite{exameNvidia, omniverseace}.
+
+Ao explorar a relação entre IA e jogos no contexto da geração procedural de mapas, este trabalho contribuirá para a compreensão e o avanço dessa importante área de pesquisa, oferecendo aos jogadores experiências mais ricas e variadas. Dito isso, nosso projeto tem a ideia de fornecer recursos baseados em matemática aplicada dentro de ciência da computação que proporcione uma funcionalidade  de escolher o contorno do mapa no qual irá jogar através de imagens. Abordaremos a arquitetura de redes neurais convolucionais, que é muito utilizada para trabalhar com imagens. Mais especificamente, abordaremos uma arquitetura derivada da anteriormente citada, específica para segmentação de imagens, o que possibilita classificar contornos em imagens.
 
 \section{Objetivos}
 
