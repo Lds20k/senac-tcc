@@ -1,0 +1,93 @@
+\subsubsection{Funções de ativação}
+
+Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a ultima camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e as seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
+
+A função de ativação retorna a saída de um neurônio \cite{haykin1999neural}, aqui podemos ver três tipos de funções de ativação:
+
+\begin{enumerate}
+	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \cite{gharat2019what}.
+	\begin{figure}[H]
+	\caption{Gráfico da função \textit{Sigmoid}.}
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \frac{1}{1 + e^{-\upsilon}}$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-6, xmax=6,
+					ymin=0, ymax=1,
+				]
+					\addplot[
+						color=red,
+						domain=-6:6,
+					] {1/(1+exp(-x))};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\legend{Fonte: Criação propria}
+	\label{fig:grafico_sigmoid}
+	\end{figure}
+	Segundo \citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e para valores muito extremos causa problemas na previsão.
+
+	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \cite{rizzo2020inteligencia}.
+	\begin{figure}[H]
+	\caption{Gráfico da função \textit{ReLu}.}
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \max(0,\upsilon)$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-6, xmax=6,
+					ymin=0, ymax=5,
+				]
+					\addplot[red, domain=-5:0] {0};
+					\addplot[red, domain=0:5] {x};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\legend{Fonte: Criação propria}
+	\label{fig:grafico_relu}
+	\end{figure}
+	A função \textit{ReLu} é computacionalmente eficiente e converge rapidamente, porem quando a entrada da função se aproxima de zero não a rede neural não consegue executar o back-propagation, sendo assim não há aprendizado. cite{gharat2019what}.
+
+	\item Função \textit{Softmax}, calcula a distribuição de probabilidades de um evento em "n"\space eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica, geralmente usada na camada de saída \cite{gharat2019what}.
+	\begin{figure}[H]
+	\caption{Gráfico da função \textit{Softmax}.}
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			$$\varphi(\upsilon) = \frac{e^{\upsilon_i}}{\sum_{j=0} e^{\upsilon_i}}$$
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xlabel={$\upsilon$},
+					xmin=-10, xmax=10,
+					ymin=0, ymax=1,
+				]
+					\addplot[red,domain=-10:10,samples=51] {exp(x)/sumexp(x,-4,0)};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\legend{Fonte: Criação propria}
+	\label{fig:grafico_softmax}
+	\end{figure}
+\end{enumerate}
+
+Com a função \textit{Softmax} é possível normalizar a saída para valores entre 0 e 1, bem como calcular a probabilidade da entrada, e por causa dessas características é utilizada na camada de saída da rede neural \cite{gharat2019what}.
