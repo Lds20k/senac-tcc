@@ -1,17 +1,17 @@
 \subsection{Segmentação}
 
+O estudo de segmentação dentro da área de redes neurais convolucionais começou a partir de redes totalmente convolucionais que descarta a camada totalmente conectada visto que a saída deverá ser uma imagem e não uma classificação. Uma arquitetura muito utilizada em modelos de segmentação é a Encoder-Decoder, que separa em dois passos: o primeiro para convergir no mapa de características e o segundo para reverter em uma imagem usando camadas desconvolucionais e desagrupamento. Existem três principais nichos sendo eles: segmentação semântica que é a classifiicação por pixels, a segmentação de instância que atribui um id para cada objeto encontrado de uma classe e a segmentação panóptica que junta as duas anteriores para criar uma imagem semelhante a saída de segmentação semântica porém separando objetos de mesma classe sendo essa a mais recente, exemplificando com \cref{fig:segentacoes} \cite{dp_semantic_segmantation, lapix}. 
+
+\begin{figure}[H]
+	\caption{Tipos de segmentação em redes neurais convolucionais}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/segmantations.png} % leia abaixo
+	\legend{Fonte: \citeonline{kirillov2019panoptic}}
+	\label{fig:segentacoes}
+\end{figure}
+
+Com base na imagem acima percebemos que segmentação panóptica é a melhor opção para nossa aplicação além do fato de ser a mais nova. Portanto abordaremos métricas para escolher um modelo dentro dessa área de estudo.
 
 
-\begin{table}[H]
-    \begin{tabularx}{\textwidth}{|X|X|X|X|}
-    \hline
-    Modelos & Tipos de CNN & Vantagens & Limitações \\ \hline
-    Fast R-CNN {[}2015{]} & Detecção de objetos Estrutura de duas etapas & As propriedades da CNN são calculadas em um único loop, tornando a detecção de objetos 25 vezes mais rápida do que a abordagem RCNN (em média, 20 s são necessários para estudar uma imagem). & Usar um gerador de região candidata externo retarda o procedimento de detecção. \\ \hline
-    Faster R-CNN {[}2015{]} & Detecção de objetos Estrutura de duas etapas & A abordagem RPN permite a detecção de objetos em tempo quase real, cerca de 0,12 s por imagem. & Apesar da eficácia do algoritmo, ele é muito lento para ser usado em aplicações que exigem tempo real, como veículos autônomos. \\ \hline
-    Mask R-CNN {[}2017{]} & Detecção de objetos Estrutura de duas etapas & Ao segmentar os objetos em uma imagem, a localização dos objetos se torna mais exata. & Seu tempo de execução é maior do que o da abordagem Faster-RCNN; portanto, não pode ser implementado em aplicações em tempo real. \\ \hline
-    YOLO {[}2015{]} & Detecção de objetos Estrutura de uma etapa & A eficiência na localização de objetos permite seu uso em aplicações em tempo real. & A técnica tem dificuldade em detectar com precisão itens pequenos. \\ \hline
-    SSD {[}2016{]} & Detecção de objetos Estrutura de uma etapa & As vantagens do YOLO e do Faster R-CNN são equilibradas com alta velocidade de detecção e alta taxa de detecção de objetos. & Em comparação com os algoritmos Fast-RCNN e Faster-RCNN, a precisão na detecção de objetos é menos precisa. \\ \hline
-    FCN {[}2014{]} & Segmentação semântica & Obtenção de uma camada convolucional completa (sem camada conectada). & Precisão ruim dos mapas de recursos e uso significativo da GPU. \\ \hline
-    UNet {[}2015{]} & Segmentação semântica & A estrutura tem menos parâmetros e é basicamente como a letra U. Adequado para detecção de objetos em amostras limitadas de imagens médicas. & É difícil adquirir padrões uniformes de subamostragem e superamostragem. \\ \hline
-    \end{tabularx}
-\end{table}
+
+Variações de arquiteturas
