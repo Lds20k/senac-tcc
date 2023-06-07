@@ -453,140 +453,11 @@ Este capítulo tem objetivo de apresentar conceitos necessários para entendimen
 
 \input{aprendizado_maquina.tex}
 
-\subsubsection{Rede neural artificial}
+\input{rede_neural_artificial.tex}
 
-Uma rede neural artificial é uma representação matemática de unidades de processamento conectadas chamadas de neurônios artificiais . Essa arquitetura simula sinapses, cada sinal trocado entre os neurônios pode aumentar ou atenuar os sinais de outros durante o aprendizado\cite{ml_and_dp}.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/neuronio.png}
-	\caption{Modelo de um neurônio não-linear \cite{haykin1999neural}.}
-	\label{fig:neuronio}
-\end{figure}
+\input{funcoes_de_ativacao.tex}
 
-Observando a figura \ref{fig:neuronio} vemos o funcionamento de um neurônio $k$. Os sinais de entradas são partes de um vetor $x$ de tamanho $n$, sendo o vetor composto por $x_1, x_2 ... x_n$, essas componentes são combinadas em uma soma ponderada utilizando seus respectivos pesos, $w_{k1}, w_{k2}...w_{kn}$, formando assim a seguinte equação  \apud{marti2017aprendizado}{haykin1999neural}:
-
-$$\upsilon_k = \sum_{i=1}^n (x_i * w_{ki})$$
-
-O resultado dessa equação produz o potencial de ativação $\upsilon_k$, esse resultado é somado com o \textit{bias} ou viés $b_k$ para manipular a saída $y_k$ do neurônio, essa soma é posta em uma função não-linear nomeada de função de ativação $\varphi(.)$, essas funções mapeiam a saída em um intervalo $[0, 1]$ ou $[1, -1]$. A função de saída pode ser representada com a seguinte equação \apud{marti2017aprendizado}{haykin1999neural}:
-
-$$y_k = \varphi(\upsilon_k + b_k)$$
-
-O aprendizado ocorre na faze de treinamento onde é ajustando os pesos $w_k$ e o viés $b_k$ de cada neurônio $k$. Os pesos $w_k$ são utilizados para calcular a taxa de crescimento da função e o viés $b_k$ é necessário para descolar a saída da função. Com isso é possível modelar uma função linear $y=w^T*x+b$ \cite{marti2017aprendizado}.
-
-Para cada amostra o modelo compara os resultados dos valores atuais dos pesos $w_k$ e viés $b_k$ com o resultado esperado(alvo). Uma função custo(\textit{cost function}) é utilizada para gerar um vetor de gradientes e para quantificar o erro encontrado para a configuração atual do modelo. O modelo atualiza os pesos $w_k$ e os viés $b_k$ no sentido contrário do vetor de gradientes, buscando minimizar a função de custo de acordo com uma taxa de aprendizado(\textit{learning rate}) \cite{marti2017aprendizado}.
-
-Ao combinar diversos neurônios artificiais forma-se uma rede neural Artificial. Essas redes buscam simular o processamento de informação do cérebro humano \cite{ferneda2006redes}.
-Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a última camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e as seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
-
-\subsubsection{Funções de ativação}
-
-Nas redes neurais os neurônios são organizados em grupos de unidade de processamento chamados camadas. A primeira e a ultima camada são nomeadas de camada de entrada e camada de saída e as demais de camadas ocultas. As camadas mais próximas da entrada são responsáveis por identificar características mais primitivas e as seguintes combinam essas informações para identificar padrões mais complexos \cite{marti2017aprendizado}.
-
-\subsubsection{Funções de ativação}
-
-A função de ativação retorna a saída de um neurônio \cite{haykin1999neural}, aqui podemos ver três tipos de funções de ativação:
-
-\begin{enumerate}
-	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \cite{gharat2019what}.
-	\begin{figure}[H]
-	\begin{center}
-		\begin{minipage}{0.45\textwidth}
-			$$\varphi(\upsilon) = \frac{1}{1 + e^{-\upsilon}}$$
-		\end{minipage}
-		\hfill
-		\begin{minipage}{0.45\textwidth}
-			\begin{tikzpicture}
-				\begin{axis}[
-					width=0.9\textwidth,
-					height=0.7\textwidth,
-					xlabel={$\upsilon$},
-					xmin=-6, xmax=6,
-					ymin=0, ymax=1,
-				]
-					\addplot[
-						color=red,
-						domain=-6:6,
-					] {1/(1+exp(-x))};
-				\end{axis}
-			\end{tikzpicture}
-		\end{minipage}
-	\end{center}
-	\caption{Gráfico da função \textit{Sigmoid}.}
-	\label{fig:grafico_sigmoid}
-	\end{figure}
-
-	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \cite{rizzo2020inteligencia}.
-	\begin{figure}[H]
-	\begin{center}
-		\begin{minipage}{0.45\textwidth}
-			$$\varphi(\upsilon) = \max(0,\upsilon)$$
-		\end{minipage}
-		\hfill
-		\begin{minipage}{0.45\textwidth}
-			\begin{tikzpicture}
-				\begin{axis}[
-					width=0.9\textwidth,
-					height=0.7\textwidth,
-					xlabel={$\upsilon$},
-					xmin=-6, xmax=6,
-					ymin=0, ymax=5,
-				]
-					\addplot[red, domain=-5:0] {0};
-					\addplot[red, domain=0:5] {x};
-				\end{axis}
-			\end{tikzpicture}
-		\end{minipage}
-	\end{center}
-	\caption{Gráfico da função \textit{ReLu}.}
-	\label{fig:grafico_relu}
-	\end{figure}
-
-	\item Função \textit{Softmax}, calcula a distribuição de probabilidades de um evento em "n" eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica, geralmente usada na camada de saída \cite{gharat2019what}.
-	\begin{figure}[H]
-	\begin{center}
-		\begin{minipage}{0.45\textwidth}
-			$$\varphi(\upsilon) = \frac{e^{\upsilon_i}}{\sum_{j=0} e^{\upsilon_i}}$$
-		\end{minipage}
-		\hfill
-		\begin{minipage}{0.45\textwidth}
-			\begin{tikzpicture}
-				\begin{axis}[
-					width=0.9\textwidth,
-					height=0.7\textwidth,
-					xlabel={$\upsilon$},
-					xmin=-10, xmax=10,
-					ymin=0, ymax=1,
-				]
-					\addplot[red,domain=-10:10,samples=51] {exp(x)/sumexp(x,-4,0)};
-				\end{axis}
-			\end{tikzpicture}
-		\end{minipage}
-	\end{center}
-	\caption{Gráfico da função \textit{Softmax}.}
-	\label{fig:grafico_softmax}
-	\end{figure}
-\end{enumerate}
-
-
-
-\subsection{Aprendizado profundo}
-
-O aprendizado profundo é uma área do aprendizado de máquina caracterizada por utilizar dados brutos como entrada e descobrir as representações necessárias para permitir o mapeamento adequado e assim tornando as soluções mais simples \apud{marti2017aprendizado}{lecun2015deep}.
-
-Segundo \citeonline{lecun2015deep}, o aprendizado profundo são métodos de representação de aprendizado com vários níveis, obtidos por meio da decomposição de módulos simples e lineares, que transformam a representação de um nível em uma representação mais alta e abstrata. Por exemplo a representação de uma imagem é transformada em informações que identificam objetos.
-
-Dividindo um problema complexo em problemas menores torna os métodos especializados, viabilizando tarefas mais complexas, depois essas tarefas que foram dividias são recombinadas e é gerado uma solução do problema \cite{marti2017aprendizado}.
-
-Utilizando o exemplo anterior, reconhecimento de imagem, cada um desses métodos especializados seria responsável por reconhecer uma parte da imagem, como bordas, objetos, tamanho, etc. E após a junção desses métodos é feito a predição da imagem \cite{marti2017aprendizado}.
-
-A principal diferença entre uma rede neural convencional e uma rede neural profunda é a quantidade de camadas, uma rede neural profunda possui mais de uma camada de processamento \apud{marti2017aprendizado}{haykin1999neural}.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/redes_neurais.png}
-	\caption{Comparação de uma rede neural convencional com uma rede neural profunda.}	
-	\label{fig:redes_neurais}
-\end{figure}
+\input{aprendizado_profundo.tex}
 
 \input{redes_neurais_convolucionais.tex}
 
@@ -615,32 +486,16 @@ Na \cref{fig:comp_vision} podemos ver uma analogia entre a forma como uma imagem
 \subsection{Algoritmos de segmentação}
 
 \section{Geração procedural}
-\subsection{Diagrama de Voronoi}
 
-O diagrama de Voronoi é gerado a partir das distancias euclidianas entre os vizinhos mais próximos de um conjunto de pontos do plano\space
-\cite{diagrama_de_voronoi:_uma_exploracao_nas_distancias_euclidiana_e_do_taxi}. Esse diagrama possui uma gama de utilizações, por exemplo, estudar epidemias, encontrar o 
-ponto mais próximo, calcular a precipitação de uma área, estudar os padrões de crescimento das florestas, etc,\space\cite{poligonos_de_thiessen_ou_voronoi}. 
-
-Seja um conjunto de índices $I_n = \{1, 2, 3, ..., n\}$ e $A = \{p_1, p_2, ..., p_n\} \subset \mathbb{R}^2$ um conjunto de pontos onde $2 \leq n < \infty$, definimos como região de Voronoi o conjunto de pontos associado a $p_i$, onde d é a distancia euclidiana
-
-$$V(p_i) = \{p|d(p_i,p) \leq d(p_i,p);i \neq j, i, j \in I_n\},$$
-
-temos o conjunto formado por essas regiões sendo $V(A) = {V(1), V(2), V(3), ..., V(n)}$ \cite{rodrigues_diagrama_2019}.
-
-Na figura \cref{fig:diagrama_voronoi} podemos ver a relação do conjuntos de pontos com o diagrama de Voronoi.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/diagrama_de_voronoi.png}
-	\caption{Diagrama de Voronoi \cite{thomazthz_diagrama_2014}.}	
-	\label{fig:diagrama_voronoi}
-\end{figure}
-
-
+\input{diagrama_de_voronoi.tex}
 
 \input{trabalhos_relacionados.tex}
 
 \chapter{Desenvolvimento}
 
+\input{proposta.tex}
+
+\input{cronograma.tex}
 
 % ----------------------------------------------------------
 % Finaliza a parte no bookmark do PDF
