@@ -63,6 +63,7 @@
 \usepackage{cleveref}
 \usepackage{float}
 
+
 \crefname{figure}{Figura}{Figuras}
 % ---
 		
@@ -464,6 +465,9 @@ Ademais visto especificamente temos como objetivos:
 
 Este capítulo tem objetivo de apresentar conceitos necessários para entendimento do trabalho;
 
+\input{visaoComputacional.tex}
+\input{segmentacaoDeImagem.tex}
+
 \section{Inteligência Artificial}
 Inteligência artificial é uma técnica científica que simula o pensamento humano de forma que possa ser executado em uma máquina, podendo ser utilizada para criar soluções com uma linha de progressão parecida ao raciocínio lógico como conhecemos. Isto permite ao computador reconhecer e interpretar o mundo ao redor com imagens e textos criando uma ampla área de atuação que otimiza tarefas antes só realizadas por seres humanos \space\cite{ia_aliada_ou_inimiga}.
 
@@ -472,7 +476,7 @@ Este ramo é complexo por se tratar de uma representação cognitiva, se torna n
 \begin{figure}[H]
 	\caption{Diagrama de aprendizado de máquina}
 	\centering % para centralizarmos a figura
-	\includegraphics[width=10cm]{figures/areas_ia.jpg} % leia abaixo
+	\includegraphics[width=10cm]{figures/areas_ia.png} % leia abaixo
 	\legend{Fonte: \citeonline{aplicacoes_ia_vg}}
 	\label{fig:areas_ia}
 \end{figure}	
@@ -511,35 +515,6 @@ Existe relação direta de conceitos entre inteligência artificial, aprendizado
 Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}.
 
 Camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características.
-
-\subsection{Visão computacional}
-A visão computacional avança cada vez mais, aproximando os computadores da capacidade visual humana.Segundo Horst Haußecker e Bernd Jähne no livro "Computer Vision and Applications" \cite{comp_vision_and_applications}, a visão computacional é uma área da computação que se dedica à interpretação de imagens por meio de algoritmos e técnicas de processamento de imagens. Essa área abrange a aquisição, processamento e análise de imagens, com o objetivo de extrair informações úteis para resolver problemas específicos.
-
-A visão é um elemento crucial para capacitar a inteligência artificial a realizar diversas tarefas. A fim de replicar a visão humana, é necessário que as máquinas sejam capazes de adquirir, processar, analisar e compreender imagens. \cite{como_funciona_visao_computacional}
-
-Na \cref{fig:comp_vision} podemos ver uma analogia entre a forma como uma imagem é processada pelo cérebro humano e a forma como é processada por um sistema computacional.
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/content_Human_Vision.png}
-	\caption{Comparação entre a forma de como o cérebro humando e um computador processam informações \cite{content_Human_Vision}.}
-	\label{fig:comp_vision}
-\end{figure}	
-
-\subsubsection{Pré-processamento de Imagens}
-
-% https://files.cercomp.ufg.br/weby/up/615/o/O_que_e_segmentacao_de_imagens.pdf?1481557289
-
-% \subsubsection{Detectação de objetos}
-
-
-\subsection{Segmentação de imagem}
-% uma breve explicacao do que é segmentacao de imagens 
-
-
-\subsubsection{Chan-Vese}
-\subsubsection{Método Snake}
-\subsubsection{ Region Splitting}
 
 
 \section{Geração procedural}
