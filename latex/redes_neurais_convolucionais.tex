@@ -1,0 +1,242 @@
+\subsection{Redes neurais convolucionais}
+Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \cite{oshea2015introduction}. 
+
+Uma arquitetura básica de uma rede neural convolucional tem as seguintes camadas: convolucional, agrupamento e totalmente conectada \cite{dp_overview}.
+
+\begin{figure}[H]
+	\caption{Camadas principais de uma rede neural convolucional}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=15cm]{figures/arquitetura_cnn.png} % leia abaixo
+	\legend{Fonte: \citeonline{dp_overview}}
+	\label{fig:arquitetura_cnn}
+\end{figure}
+
+\subsection*{Camada convolucional}
+
+Segundo \citeonline{computation11030052} camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características. O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída \cite{computation11030052}.
+
+$$
+\begin{aligned}
+\mathbf{I}x - \mathbf{F}x + 1 &= \mathbf{S}x \\
+\mathbf{I}y - \mathbf{F}y + 1 &= \mathbf{S}y
+\end{aligned}
+$$
+
+A seguir um exemplo dos passos para construir a matriz resultante baseado em \citeonline{Alzubaidi2021}.
+
+$$
+\hspace{0.4cm}
+\begin{tikzpicture}[baseline=(M.center)]
+ \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+ 0 & 2 & 1 & 0 \\
+ 1 & 0 & 0 & 1 \\
+ };
+ \draw (M-1-1.north west) rectangle (M-2-2.south east);
+ \node[above=10pt of M.north] {Matriz 2x4};
+\end{tikzpicture}
+\hspace{0.8cm}\bigotimes\hspace{0.8cm}
+\begin{tikzpicture}[baseline=(M.center)]
+ \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+  0 & 1 \\
+ -1 & 2 \\
+ };
+ \node[above=10pt of M.north] {Filtro 2x2};
+\end{tikzpicture}
+\hspace{0.8cm}=\hspace{0.8cm}
+\begin{tikzpicture}[baseline=(M.center)]
+ \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+    \boxed{1} & - & - \\
+ };
+ \node[above=10pt of M.north] {Resultado};
+\end{tikzpicture}
+$$
+
+$$
+\begin{tikzpicture}[baseline=(M.center)]
+ \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+    0 & 2 & 1 & 0 \\
+    1 & 0 & 0 & 1 \\
+ };
+ \draw (M-1-2.north west) rectangle (M-2-3.south east);
+\end{tikzpicture}
+\hspace{0.8cm}\bigotimes\hspace{0.8cm}
+\begin{tikzpicture}[baseline=(M.center)]
+ \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+  0 & 1 \\
+  -1 & 2 \\
+ };
+\end{tikzpicture}
+\hspace{0.8cm}=\hspace{0.8cm}
+\begin{bmatrix}
+ 1 & \boxed{1} & - \\
+ \end{bmatrix}
+$$
+
+$$
+\hspace{0.2cm}
+\begin{tikzpicture}[baseline=(M.center)]
+ \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+    0 & 2 & 1 & 0 \\
+    1 & 0 & 0 & 1 \\
+ };
+ \draw (M-1-3.north west) rectangle (M-2-4.south east);
+\end{tikzpicture}
+\hspace{1cm}\bigotimes\hspace{0.9cm}
+\begin{tikzpicture}[baseline=(M.center)]
+ \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+  0 & 1 \\
+  -1 & 2 \\
+ };
+\end{tikzpicture}
+\hspace{0.8cm}=\hspace{0.8cm}
+\begin{bmatrix}
+ 1 & 1 &  \boxed{2} \\
+ \end{bmatrix}
+$$
+
+\subsection*{Tamanho do passo e preenchimento}
+
+O Tamanho do passo — ou stride — serve para especificar a distancia de pixels entre os passos da camada.  No exemplo acima esse parâmetro é definido como 1, por isso a matriz selecionada pula 1 pixel para direita entre os passos. Esse valor altera o tamanho da matriz resultante \cite{dp_overview}.
+
+O preenchimento — ou padding — é uma técnica utilizada para manter o mesmo tamanho da entrada, adicionando bordas com zeros antes das operações da camada para ter como saída uma matriz do mesma dimensão da matriz original. Isso é usado devido a desvantagem em perder os detalhes nas bordas das imagens no processamento de uma camada \cite{dp_overview}.
+
+\subsection*{Camada de agrupamento}
+
+A camada de agrupamento — ou pooling — tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características, porém preservando os padrões mais relevantes. Dentre os recursos essenciais dessa camada estão o tamanho do agrupamento e a operação que será realizada. O maior problema dessa camada é pelo fato dela apenas identificar aonde essas características estão e não se tem ou não, \emph{i.e.}, dependendo de qual operação e a quantidade de camadas pode não ser possível guardar as principais características de forma integra causando uma redução no desempenho final da predição \cite{dp_overview}.
+
+Existem vários tipos de agrupamento, os mais utilizados são: agrupamento máximo, agrupamento médio e agrupamento global médio que estão explicados abaixo em exemplos baseados em \citeonline{Alzubaidi2021}.
+
+\subsubsection*{Agrupamento máximo}
+
+É definido o resultado final com base no máximo encontrado pelo tamanho do agrupamento, exemplo a seguir usando um mapa de características com tamanho 4x4 e agrupamento de tamanho 2x2.
+
+$$
+\begin{tikzpicture}[baseline=-0.5ex]
+    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+        4 & 25 & 44 & 10\\
+        8 & 14 & 8 & 33 \\
+        17 & 2 & 16 & 34 \\
+        5 & 13 & 24 & 7 \\
+    };
+    \draw (M-1-1.north west) rectangle (M-2-2.south east);
+\end{tikzpicture}
+= 
+\begin{bmatrix}
+	\boxed{25} & 44 \\
+	17 & 34 \\
+   \end{bmatrix}
+$$
+
+\subsubsection*{Agrupamento médio}
+
+É definido o resultado final com base na média encontrada pelo tamanho do agrupamento, exemplo a seguir usando um mapa de características com tamanho 4x4 e agrupamento de tamanho 2x2.
+
+$$
+\begin{tikzpicture}[baseline=-0.5ex]
+    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+        4 & 25 & 44 & 10\\
+        8 & 14 & 8 & 33 \\
+        17 & 2 & 16 & 34 \\
+        5 & 13 & 24 & 7 \\
+    };
+    \draw (M-1-1.north west) rectangle (M-2-2.south east);
+\end{tikzpicture}
+= 
+\begin{bmatrix}
+	\boxed{12} & 23 \\
+	9 & 20 \\
+   \end{bmatrix}
+$$
+
+\subsubsection*{Agrupamento global médio}
+
+É definido o resultado final com base na média geral do mapa o que sempre tem como saída uma matrix 1x1, exemplo a seguir usando um mapa de características com tamanho 4x4.
+
+$$
+\begin{tikzpicture}[baseline=-0.5ex]
+    \matrix (M) [matrix of math nodes,left delimiter={[},right delimiter={]}] {
+        4 & 25 & 44 & 10\\
+        8 & 14 & 8 & 33 \\
+        17 & 2 & 16 & 34 \\
+        5 & 13 & 24 & 7 \\
+    };
+\end{tikzpicture}
+= 
+\begin{bmatrix}
+	16
+   \end{bmatrix}
+$$
+
+\subsection*{Camada totalmente conectada}
+
+A camada totalmente conectada geralmente é utilizada no final da arquitetura e cria a partir de cada neurônio uma ligação direta para cada etiqueta final. Isso torna essa camada extremamente pesada computacionalmente. O número de neurônios dessa camada é equivalente ao número de classes propostas. Além disso é quando chega nessa camada que a função de perda é calculada e se inicia a retropropagação \cite{Alzubaidi2021, computation11030052}.
+
+\subsection*{Função de perda}
+A função de perda é calculada na camada de saída e serve para mensurar o sucesso obtido comparando com fórmulas o resultado da arquitetura com o resultado real do conjunto de dados. O resultado dessa função irá ajudar na retropropagação, \emph{i.e.}, servirá para ajustar os pesos e viéses da conexão entre os neurônios para minimizar o erro. A seguir algumas funções de perda, pontuando que todo esse subtópico é baseado em 
+\citeonline{Alzubaidi2021}.
+
+\subsubsection*{Softmax ou entropia cruzada ou logarítmica}
+Muito utilizada para medir a performace de uma rede neural convolucional principalmente quando o resultado final têm várias classes. Antes dessa função de perda é necessário usar a função de ativação softmax descrita na \cref{fig:grafico_softmax} pois precisa de uma saída dentro de uma distribuição de probabilidade. Sendo N o número de classes ou o número de neurônios na camada de saída.
+
+$$H(p,y) = -\sum_{i=1}^N y_i \log(p_i)$$
+
+\subsubsection*{Euclidiana ou erro quadrático médio}
+Muito utilizada para problemas de regressão.
+
+$$H(p,y) = \frac{1}{2N} \sum_{i=1}^N (p_i - y_i)^2$$
+
+\subsubsection*{Hinge}
+Muito utilizado para classificação binária.
+
+$$H(p,y) = \sum_{i=1}^N max(0, m - (2y_i - 1) p_i)$$
+
+\subsection*{Regularização}
+Quando se monta uma arquitetura de redes neurais convolucional pode se chegar em três casos sendo eles: sobreajuste (overfit), subajuste (underfit) e balanceado (optimal). O sobreajuste é quando no treinamento o modelo acerta as classes porém nos testes não, isso mostra uma dificuldade em generalizar as características. Já o subajuste não consegue pontuar bem em nenhum caso mostrando que o conjunto de dados de treinamento está pequeno para detectar padrões. Por outro lado o balanceado é quando produz resultados bons tanto no conjunto de dados de treinamento quanto no de testes \cite{Alzubaidi2021, computation11030052}.
+
+\begin{figure}[H]
+	\caption{Gráficos mostrando subajuste, balanceado e sobreajuste respectivamente}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=15cm]{figures/fittings.png} % leia abaixo
+	\legend{Fonte: \citeonline{educative2022overfitting}}
+	\label{fig:arquitetura_cnn}
+\end{figure}
+
+Segundo \citeonline{Alzubaidi2021} existem algumas alternativas para evitar o sobreajuste e o subajuste, dentre alguma estão:
+
+\begin{itemize}
+    \item Dropout: Muito utilizada para evitar sobreajuste pois está técnica irá desligar um neurônio aleatoriamente colocando a saída dele como zero no processo de treinamento e portanto forçara o modelo a aprender a indentificar características diferentes em outros neurônios possibilitando a generalização do modelo.
+    \item Aumentar o tamanho do conjunto de dados: caso não seja possível criar ou encontrar um maior existem técnicas para aumentar artificialmente acrescentando pequenas mudanças nas imagens existentes, algumas são rotacionar, recortar e inverter horizontamente ou verticalmente.
+\end{itemize}
+
+\subsection*{Retropropagação}
+De acordo com \citeonline{brilliant2023backpropagation} o algoritmo geral de retropropagação é:
+
+\begin{enumerate}
+    \item Propagação: calcular os pares de entrada-saída $(\overrightarrow{x_d}, y_d)$ — $\overrightarrow{x_d}$ é o vetor de entrada e $y_d$ a saída verdadeira — e guardar os resultados $\hat{y_d}$ — a saída encontrada no treinamento —, $a_j^k$, $o_j^k$ para cada neurônio $j$ na camada $k$, indo da camada de entrada para camada de saída.
+    
+    \item Retropropagação: Calcular os pares de entrada-saída $(\overrightarrow{x_d}, y_d)$, chegando na fórmula $\frac{\partial{E_d}}{\partial{w_{ij}^k}}$ que é a derivada parcial do erro total. Na representação $E_d$ é a função de perda e $w_{ij}^k$ é o peso  conectado em um neurônio de $k - 1$. Outra forma de representar é $\delta_j^k o_i^{k - 1}$ e suas variáveis são: $\delta_j^k$ representa o erro do neurônio e $o_i^{k - 1}$ representa a saída do neurônio na camada $k -1$. Essa técnica começa na camada de saída e propaga até a última camada escondida.
+    
+    $$ \frac{\partial{E_d}}{\partial{w_{ij}^k}} = \delta_j^k o_i^{k - 1} $$
+    
+    \item Combinar gradientes individuais: Uma média simples é feita com todos resultados de $\frac{\partial{E_d}}{\partial{w_{ij}^k}}$ formando assim o gradiente total representado como $\frac{\partial{E(X, \theta)}}{\partial{w_{ij}^k}}$.
+    
+    $$ \frac{\partial{E(X,\theta)}}{\partial{w_{ij}^k}} = \frac{1}{N} \sum_{d=1}^{N} \frac{\partial{E_d}}{\partial{w_{ij}^k}} $$
+    \item Atualiza os pesos: usando $\alpha$ como taxa de aprendizado e o gradiente total $\frac{\partial{E(X, \theta)}}{\partial{w_{ij}^k}}$ temos a seguinte equação.
+    
+    $$ \Delta w_{ij}^k = -\alpha \frac{\partial{E(X,\theta)}}{\partial{w_{ij}^k}} $$
+\end{enumerate}
+
+Observação: basta trocar $w_{ij}^k$ para $b_{ij}^k$ — trocar o peso pelo viés — em todo algoritmo para ajustar o viés do modelo com a tecnica de retropropagação.
+
+\subsection*{Melhorar performace}
+
+Com base em testes de aplicações existem algumas maneiras de melhorar a qualidade do resultado final do modelo sendo elas \cite{Alzubaidi2021}:
+
+\begin{itemize}
+    \item Aumentar o conjunto de dados
+    \item Aumentar o tempo de treinamento
+    \item Aumentar a profundidade ou largura da arquitetura
+    \item Regularizar o modelo
+    \item Ajustar os hiperparâmetros
+\end{itemize}
+    
