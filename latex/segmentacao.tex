@@ -34,9 +34,11 @@ A segmentação semântica começou a ter resultados satisfatórios a partir de 
 
 \subsubsection*{Segmentação de instância}
 
+% Mask R-CNN
 
 \subsubsection*{Segmentação panóptica}
 
+% https://www.v7labs.com/blog/panoptic-segmentation-guide#:~:text=In%20computer%20vision%2C%20the%20task%20of%20panoptic%20segmentation,a%20different%20color%E2%80%94%20labeling.%203%20Classifying%20the%20objects.
 
 \subsubsection*{Modelo escolhido}
 
@@ -44,12 +46,70 @@ Com base no contexto acima percebemos que a segmentação panóptica é a mais c
 
 \subsubsubsection*{União sobre intersecção}
 
+A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utlizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados, segue a fôrmula \cite{dp_semantic_segmantation, lapix, kirillov2019panoptic}:
+
+$$ 
+IoU = \frac{\text{Área de intersecção}}{\text{Área de união}} \quad IoU(p_i, g) = \frac{p_i \cap g}{ p_i \cup g}
+$$
+
 % https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks
 % https://lapix.ufsc.br/ensino/reconhecimento-de-padroes/avaliando-validando-e-testando-o-seu-modelo-metodologias-de-avaliacao-de-performance/
 
 \subsubsubsection*{Qualidade panóptica}
 
-% https://arxiv.org/abs/1801.00868
+A qualidade panóptica — ou Panoptic Quality (PQ) — foi definido pela primeira vez no artigo \citeonline{kirillov2019panoptic}, e se resume na formula:
+
+\begin{equation}
+\label{eq:pq_metric}
+PQ = \frac{\sum_{(p,g)\in TP}IoU(p,g)}{ |TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
+\end{equation}
+
+Sendo TP True Positives ou Positivos Verdadeiros — quando existe intersecção significativa entre classes iguais, \emph{i.e.} IoU > 0.5 —,  FP é False Positives ou Falso Positivos — quando um objeto não é correspondido na imagem de predição — e FN é False Negatives ou Falso Negativos — quando um objeto não é correspondido na imagem do conjunto de dados — , podemos obsevar esses conceitos de conjuntos na \cref{fig:conjuntos}.
+\begin{figure}[H]
+	\caption{Exeplo da classificação dos conjuntos usados nas métricas de segmentação}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/pan_metric.png} % leia abaixo
+	\legend{Fonte: \citeonline{slidesKirillov}}
+	\label{fig:conjuntos}
+\end{figure}
+
+Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ temos:
+
+\begin{equation*}
+	PQ = \underbrace{\frac{\sum_{(p,g)\in TP}IoU(p,g)}{|TP|}}_{\text{Segmentation Quality (SQ)}} 
+	\times
+	\underbrace{\frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}}_{\text{Recognition Quality (RQ)}}
+\end{equation*}
 
 \subsubsubsection*{Resultados}
+
+Os resultados são de uma competição em aberto criada pela Cytyscapes Dataset, essa competição tem várias modalidades e esses são referentes ao nicho de segmentação panóptica utilizando a métrica PG na classe de pessoas \cite{datasetResults}.
+\begin{table}[H]
+	\centering
+	\caption{Top 15 modelos que melhor classificam pessoas}
+	\label{tab:resultados-cityscapes}
+	\begin{tabular}{|l|c|}
+	  \hline
+	  Nome do modelo & Precisão (\%) \\
+	  \hline
+	  EfficientPS [Mapillary Vistas] & 61,6 \\
+	  EfficientPS [Cityscapes-fine] & 60,9 \\
+	  Panoptic-DeepLab w/ SWideRNet [Mapillary Vistas + Pseudo-labels] & 60,6 \\
+	  hri\_panoptic & 60,6 \\
+	  Naive-Student (iterative semi-supervised learning with Panoptic-DeepLab) & 60,2 \\
+	  Panoptic-DeepLab w/ SWideRNet [Mapillary Vistas] & 59,8 \\
+	  iFLYTEK-CV & 59,2 \\
+	  Panoptic-DeepLab [Mapillary Vistas] & 58,5 \\
+	  Panoptic-DeepLab w/ SWideRNet [Cityscapes-fine] & 58,4 \\
+	  Seamless Scene Segmentation & 57,7 \\
+	  Axial-DeepLab-XL [Mapillary Vistas] & 57,2 \\
+	  Unifying Training and Inference for Panoptic Segmentation [COCO] & 56,5 \\
+	  kMaX-DeepLab [Cityscapes-fine] & 56 \\
+	  Axial-DeepLab-L [Mapillary Vistas] & 55,9 \\
+	  TASCNet-enhanced & 55,2 \\
+	  \hline
+	\end{tabular}
+  \end{table}
+  
+  
 
