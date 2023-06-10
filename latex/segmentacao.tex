@@ -42,7 +42,7 @@ A segmentação semântica começou a ter resultados satisfatórios a partir de 
 
 \subsubsection*{Modelo escolhido}
 
-Com base no contexto acima percebemos que a segmentação panóptica é a mais completa e por efeito de estudos utilizaremos o mesmo para concluir o trabalho. Como nesse nicho existem várias alternativas abordaremos algumas métricas e resultados para selecionar o modelo.
+Com base no contexto acima percebemos que a segmentação panóptica é a mais completa e por efeito de estudos utilizaremos o mesmo para concluir o trabalho. Como nesse nicho existem várias alternativas abordaremos algumas métricas, técnicas e resultados para selecionar o modelo.
 
 \subsubsubsection*{União sobre intersecção}
 
@@ -52,8 +52,16 @@ $$
 IoU = \frac{\text{Área de intersecção}}{\text{Área de união}} \quad IoU(p_i, g) = \frac{p_i \cap g}{ p_i \cup g}
 $$
 
-% https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks
-% https://lapix.ufsc.br/ensino/reconhecimento-de-padroes/avaliando-validando-e-testando-o-seu-modelo-metodologias-de-avaliacao-de-performance/
+\subsubsubsection*{Classificação de conjuntos}
+
+A classificação de conjuntos é uma técnica para criar relações entre a imagem de predição e a imagem do conjunto de dados. Ela se divide em três classificações sendo elas: Positivos Verdadeiros — ou True Positives(TP) — sendo o requisito ter uma intersecção significativa entre classes iguais, \emph{i.e.}, IoU > 0.5, Falso Positivos — ou False Positives(FP) — quando um objeto não é correspondido na imagem de predição e por fim Falso Negativos — False Negatives(FN) — quando um objeto não é correspondido na imagem do conjunto de dados, podemos obsevar esses conceitos de conjuntos na \cref{fig:conjuntos} \cite{kirillov2019panoptic}.
+\begin{figure}[H]
+	\caption{Exeplo da classificação dos conjuntos usados nas métricas de segmentação}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/pan_metric.png} % leia abaixo
+	\legend{Fonte: \citeonline{slidesKirillov}}
+	\label{fig:conjuntos}
+\end{figure}
 
 \subsubsubsection*{Qualidade panóptica}
 
@@ -64,15 +72,6 @@ A qualidade panóptica — ou Panoptic Quality (PQ) — foi definido pela primei
 PQ = \frac{\sum_{(p,g)\in TP}IoU(p,g)}{ |TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}
 \end{equation}
 
-Sendo TP True Positives ou Positivos Verdadeiros — quando existe intersecção significativa entre classes iguais, \emph{i.e.} IoU > 0.5 —,  FP é False Positives ou Falso Positivos — quando um objeto não é correspondido na imagem de predição — e FN é False Negatives ou Falso Negativos — quando um objeto não é correspondido na imagem do conjunto de dados — , podemos obsevar esses conceitos de conjuntos na \cref{fig:conjuntos}.
-\begin{figure}[H]
-	\caption{Exeplo da classificação dos conjuntos usados nas métricas de segmentação}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=10cm]{figures/pan_metric.png} % leia abaixo
-	\legend{Fonte: \citeonline{slidesKirillov}}
-	\label{fig:conjuntos}
-\end{figure}
-
 Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ temos:
 
 \begin{equation*}
@@ -80,6 +79,8 @@ Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ temos:
 	\times
 	\underbrace{\frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}}_{\text{Recognition Quality (RQ)}}
 \end{equation*}
+
+Portanto podemos concluir que PQ é apenas uma simplificação para uma fôrmula que contém uma relação entre métricas de segmentação semântica e de instância.
 
 \subsubsubsection*{Resultados}
 
