@@ -12,7 +12,7 @@ O estudo de segmentação semântica dentro da área de redes neurais convolucio
 
 \subsubsection*{Segmentação semântica}
 
-A segmentação semântica começou a ter resultados satisfatórios a partir de redes totalmente convolucionais, um modelo que descarta a camada totalmente conectada pois a saída deverá ser uma imagem e não uma classificação — isso a torna mais rápida para treinar do que as redes neurais convolucionais —, logo usa camadas deconvolucionais para transformar a matriz de características em uma imagem de qualquer dimensão na saída. A RTC criou a arquitetura chamada de salto (ou conexões) que serve para evitar perdas em camadas de agrupamento criando conexões entre camadas não consecutivas — geralmente entre camadas convolucionais e deconvolucionais — como apresentado na \cref{fig:rtc}, a arquitetura de salto evolui para arquitetura codificador-decodificador, o objetivo da RTC é segmentar imagens classificando pixels.
+A segmentação semântica começou a ter resultados satisfatórios a partir de redes totalmente convolucionais, com o objetivo de segmentar imagens classificando pixels, esse modelo descarta a camada totalmente conectada pois a saída deverá ser uma imagem e não uma classificação — isso a torna mais rápida para treinar do que as redes neurais convolucionais —, logo usa camadas deconvolucionais para transformar a matriz de características em uma imagem de qualquer dimensão na saída. A RTC criou a arquitetura chamada de salto (ou conexões) que serve para evitar perdas em camadas de agrupamento criando conexões entre camadas não consecutivas — geralmente entre camadas convolucionais e deconvolucionais — como apresentado na \cref{fig:rtc}, a arquitetura de salto evoluiu para arquitetura codificador-decodificador.
 \begin{figure}[H]
 	\caption{Exeplo de arquitetura de rede totalmente convolucional}
 	\centering % para centralizarmos a figura
@@ -21,24 +21,25 @@ A segmentação semântica começou a ter resultados satisfatórios a partir de 
 	\label{fig:rtc}
 \end{figure}
 
-% A arquitetura codificador-decodificador — ou Encoder-Decoder — , que separa em dois passos: o primeiro para convergir no mapa de características — o modelo de redes totalmente convolucionais — e o segundo para reverter em uma imagem usando camadas deconvolucionais e de desagrupamento, como por exemplo a arquitetura UNet que foi a primeira a implementar o padrão Encoder-Decoder. Na \cref{} podemos observar que tem formato da letra U, sendo a descida a parte de Encoder e subida Decoder \cite{dp_semantic_segmantation, lapix}.
+A arquitetura codificador-decodificador — ou Encoder-Decoder —, é separada em dois passos: o primeiro para convergir no mapa de características — chamado de codificador — e o segundo para reverter — chamado de decodificador — as camadas de agrupamento para aumentar a dimensão da saída, usando camadas deconvolucionais e de desagrupamento, outra característica importante é a conexão entre camadas de mesmo nível, como por exemplo a arquitetura UNet que foi a primeira a implementar o padrão Codificador-Decodificador. Na \cref{fig:unet} podemos observar que tem formato da letra U, sendo a descida a parte de codificação e subida decodificação \cite{dp_semantic_segmantation, lapix, unetArq}.
 
-% \begin{figure}[H]
-% 	\caption{Tipos de segmentação em redes neurais convolucionais}
-% 	\centering % para centralizarmos a figura
-% 	\includegraphics[width=10cm]{figures/segmantations.png} % leia abaixo
-% 	\legend{Fonte: \citeonline{kirillov2019panoptic}}
-% 	\label{fig:segentacoes}
-% \end{figure}
-
+\begin{figure}[H]
+	\caption{Arquitetura codificador-decodificador UNet}
+	\centering % para centralizarmos a figura
+	\includegraphics[width=10cm]{figures/unet.png} % leia abaixo
+	\legend{Fonte: \citeonline{unetArq}}
+	\label{fig:unet}
+\end{figure}
 
 \subsubsection*{Segmentação de instância}
 
-% Mask R-CNN
+Outro problema dentro da área de visão computacional é a detecção de objetos, a primeira solução foi com Características de regiões com RNC — Regions with CNN features (R-CNN) — que se resume em dividir a imagem de entrada em regiões de interesse e nessas regiões aplicar uma RNC. A arquitetura que seleciona essas regiões é chamada de Rede de proposta de região — ou Region Proposal Network (RPN) — o que auxilia na detecção por caixas delimitadoras. Essa ideia inicial foi extendida para segmentação de instância criando também máscara nos objetos, como por exemplo a arquitetura Mask R-CNN \cite{dp_semantic_segmantation, lapix}.
+
+A arquitetura Mask R-CNN é derivado do Fast R-CNN — aprimoramento do R-CNN aplicando conceito RoIPool para classificar — onde há uma segmentação de máscara em cada RoI — ou Região de interresse — paralela com a classificação da caixa delimitadora. A máscara é classificada com uma pequena FCN — ou rede totalmente convolucional — em cada RoI. Além de ter uma pequena melhoria na RoIPool, pois havia um problema de alinhamento nas localizações espaciais exatas, essa camada é chamada de RoIAlign \cite{maskRCNN}.
 
 \subsubsection*{Segmentação panóptica}
 
-% https://www.v7labs.com/blog/panoptic-segmentation-guide#:~:text=In%20computer%20vision%2C%20the%20task%20of%20panoptic%20segmentation,a%20different%20color%E2%80%94%20labeling.%203%20Classifying%20the%20objects.
+Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados igual na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc.
 
 \subsubsection*{Modelo escolhido}
 
