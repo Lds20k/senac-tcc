@@ -68,7 +68,7 @@
 \usepackage{tikz}
 \usetikzlibrary{matrix, positioning}
 \usepackage{tabularx}
-
+\usepackage{mathtools}
 \DeclareMathOperator{\logsumexp}{logsumexp}
 \pgfmathdeclarefunction{sumexp}{3}{%
   \begingroup%
@@ -86,6 +86,7 @@
 
 
 \crefname{figure}{Figura}{Figuras}
+\crefname{equation}{Equação}{Equações}
 % ---
 		
 % ---
@@ -460,11 +461,19 @@ Este capítulo tem objetivo de apresentar conceitos necessários para entendimen
 
 \input{funcoes_de_ativacao.tex}
 
+\input{funcao_de_perda.tex}
+
+\input{retropropagacao.tex}
+
+\input{regularzacao.tex}
+
 \input{aprendizado_profundo.tex}
 
 \input{redes_neurais_convolucionais.tex}
 
 \input{segmentacao.tex}
+
+\input{EfficientPS.tex}
 
 \section{Geração procedural}
 
