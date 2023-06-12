@@ -1,6 +1,6 @@
 \subsection{Segmentação}
 
-O estudo de segmentação semântica dentro da área de redes neurais convolucionais têm três principais nichos, sendo eles: segmentação semântica que é a classifiicação por pixel, a segmentação de instância que atribui um id para cada objeto encontrado de uma classe, e a segmentação panóptica que junta as duas anteriores para criar uma imagem semelhante a saída de segmentação semântica porém separando objetos de mesma classe sendo essa a mais recente e completa, a diferença entre esses três tipos está ilustrado na \cref{fig:segentacoes} \cite{dp_semantic_segmantation, lapix}. 
+O estudo de segmentação semântica dentro da área de redes neurais convolucionais têm três principais nichos, sendo eles: segmentação semântica que é a classificação por pixel, a segmentação de instância que atribui um id para cada objeto encontrado de uma classe, e a segmentação panóptica que junta as duas anteriores para criar uma imagem semelhante a saída de segmentação semântica porém separando objetos de mesma classe sendo essa a mais recente e completa, a diferença entre esses três tipos está ilustrado na \cref{fig:segentacoes} \cite{dp_semantic_segmantation, lapix}. 
 
 \begin{figure}[H]
 	\caption{Tipos de segmentação em redes neurais convolucionais}
@@ -14,7 +14,7 @@ O estudo de segmentação semântica dentro da área de redes neurais convolucio
 
 A segmentação semântica começou a ter resultados satisfatórios a partir de redes totalmente convolucionais, com o objetivo de segmentar imagens classificando pixels, esse modelo descarta a camada totalmente conectada pois a saída deverá ser uma imagem e não uma classificação — isso a torna mais rápida para treinar do que as redes neurais convolucionais —, logo usa camadas deconvolucionais para transformar a matriz de características em uma imagem de qualquer dimensão na saída. A RTC criou a arquitetura chamada de salto (ou conexões) que serve para evitar perdas em camadas de agrupamento criando conexões entre camadas não consecutivas — geralmente entre camadas convolucionais e deconvolucionais — como apresentado na \cref{fig:rtc}, a arquitetura de salto evoluiu para arquitetura codificador-decodificador.
 \begin{figure}[H]
-	\caption{Exeplo de arquitetura de rede totalmente convolucional}
+	\caption{Exemplo de arquitetura de rede totalmente convolucional}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=10cm]{figures/redes_totalmente_convolucionais.jpeg} % leia abaixo
 	\legend{Fonte: \citeonline{dp_semantic_segmantation}}
@@ -47,7 +47,7 @@ Com base no contexto acima percebemos que a segmentação panóptica é a mais c
 
 \subsubsubsection*{União sobre intersecção}
 
-A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utlizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados, segue a fôrmula \cite{dp_semantic_segmantation, lapix, kirillov2019panoptic}:
+A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utilizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados, segue a fôrmula \cite{dp_semantic_segmantation, lapix, kirillov2019panoptic}:
 
 $$ 
 IoU = \frac{\text{Área de intersecção}}{\text{Área de união}} \quad IoU(p_i, g) = \frac{p_i \cap g}{ p_i \cup g}
@@ -55,9 +55,9 @@ $$
 
 \subsubsubsection*{Classificação de conjuntos}
 
-A classificação de conjuntos é uma técnica para criar relações entre a imagem de predição e a imagem do conjunto de dados. Ela se divide em três classificações sendo elas: Positivos Verdadeiros — ou True Positives(TP) — sendo o requisito ter uma intersecção significativa entre classes iguais, \emph{i.e.}, IoU > 0.5, Falso Positivos — ou False Positives(FP) — quando um objeto não é correspondido na imagem de predição e por fim Falso Negativos — False Negatives(FN) — quando um objeto não é correspondido na imagem do conjunto de dados, podemos obsevar esses conceitos de conjuntos na \cref{fig:conjuntos} \cite{kirillov2019panoptic}.
+A classificação de conjuntos é uma técnica para criar relações entre a imagem de predição e a imagem do conjunto de dados. Ela se divide em três classificações sendo elas: Positivos Verdadeiros — ou True Positives(TP) — sendo o requisito ter uma intersecção significativa entre classes iguais, \emph{i.e.}, IoU > 0.5, Falso Positivos — ou False Positives(FP) — quando um objeto não é correspondido na imagem de predição e por fim Falso Negativos — False Negatives(FN) — quando um objeto não é correspondido na imagem do conjunto de dados, podemos observar esses conceitos de conjuntos na \cref{fig:conjuntos} \cite{kirillov2019panoptic}.
 \begin{figure}[H]
-	\caption{Exeplo da classificação dos conjuntos usados nas métricas de segmentação}
+	\caption{Exemplo da classificação dos conjuntos usados nas métricas de segmentação}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=10cm]{figures/pan_metric.png} % leia abaixo
 	\legend{Fonte: \citeonline{slidesKirillov}}
