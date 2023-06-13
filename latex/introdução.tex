@@ -1,11 +1,9 @@
-
+% introduzindo a jogos, por que é um mercado que está tao em alta
 A indústria de jogos digitais cresce cada vez mais a cada dia, de acordo com a consultoria Newzoo \space\cite{quanto_games_vao_movimentar}, essa indústria tende a ultrapassar em 2023, os US\$ 200 bilhões (aproximadamente, R\$ 1 trilhão). Novos jogos são produzidos e publicados diariamente, e somente na plataforma digital Steam, foram 10.963 novos títulos em 2022\space
 \cite{numero_de_jogos_publicados_na_steam}.
 
-Ademais, o mercado de jogos no Brasil teve um aumento de 2,5\% em 2022, como apontado por uma pesquisa sobre o crescimento da demanda \space \cite{pesquisa_games_brasil}. O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto, \emph{e.g.}, a empresa Rockstar Games revelou que o jogo \textit{Grand Theft Auto V} custou cerca de 265 milhões de dólares para ser desenvolvido e comercializado \space
-\cite{gta_quanto_custou}.
-
-Ainda, os mapas desempenham um papel fundamental nos jogos, fornecendo orientação aos jogadores e criando a sensação de escala em uma área. Por exemplo o jogo de aventura pirata chamado Sea of Thieves, os mapas revelam locais de interesse, como tesouros escondidos, missões e áreas perigosas. Na \cref{fig:treasureMap} temos um exemplo de mapa dentro do jogo. Eles ajudam os jogadores a planejar suas estratégias, explorar o mundo virtual e tomar decisões com base em informações espaciais. Além disso, os mapas podem transmitir a sensação de escala e proporção, dando aos jogadores uma compreensão visual da extensão do mundo do jogo. Portanto os mapas enriquecem a experiência geral do jogo, mas criar cenários pode ser um desafio, especialmente levando em consideração o orçamento disponível \cite{video-game-maps, lecafedugeek}.
+% aqui a gente aproveita que falou de jogos para introduzir MAPAS que é o 'tema' do tcc
+Os mapas desempenham um papel fundamental nos jogos, fornecendo orientação aos jogadores e criando a sensação de escala em uma área. Por exemplo o jogo de aventura pirata chamado Sea of Thieves, os mapas revelam locais de interesse, como tesouros escondidos, missões e áreas perigosas. Na \cref{fig:treasureMap} temos um exemplo de mapa dentro do jogo. Eles ajudam os jogadores a planejar suas estratégias, explorar o mundo virtual e tomar decisões com base em informações espaciais. Além disso, os mapas podem transmitir a sensação de escala e proporção, dando aos jogadores uma compreensão visual da extensão do mundo do jogo. Portanto os mapas enriquecem a experiência geral do jogo, mas cria-los pode ser um desafio, especialmente levando em consideração o orçamento disponível ,uma vez que um jogo para chegar no consumidaor final ele passa por diversos processos de criação e esse processo demanda muito tempo e dinheiro \cite{video-game-maps, lecafedugeek}.
 
 \begin{figure}[H]
 	\caption{Mapa de tesouro do jogo Sea of Thieves}
@@ -15,7 +13,16 @@ Ainda, os mapas desempenham um papel fundamental nos jogos, fornecendo orientaç
 	\label{fig:treasureMap}
 \end{figure}
 
-Uma abordagem eficiente para resolver o problema é a geração procedural de mapas, que consiste em criar mapas usando algoritmos, tornando o jogo mais dinâmico e menos repetitivo. No entanto, a criação de cenários visualmente atraentes e diversos usando esse método ainda é um problema \cite{geracao_procedural_jogos_2d}.
+% aqui a gente faz um adendo e a demanda de jogos tende a crescer, então da a entender que voce tem que produzir cada vez mais
+% e tambem fala o quanto custa para produzir um jogo
+Ademais, o mercado de jogos no Brasil teve um aumento de 2,5\% em 2022, como apontado por uma pesquisa sobre o crescimento da demanda \space \cite{pesquisa_games_brasil}. O custo de produção de jogos varia bastante, dependendo do tamanho e da complexidade do projeto, \emph{e.g.}, a empresa Rockstar Games revelou que o jogo \textit{Grand Theft Auto V} custou cerca de 265 milhões de dólares para ser desenvolvido e comercializado \space
+\cite{gta_quanto_custou}.
+
+%solucao para o problema 
+Uma abordagem eficiente para reduzir os custos de produção de um jogo é utilizar a geração procedural de conteúdo. Essa técnica envolve o uso de um software de computador capaz de criar conteúdo de jogos por conta própria \cite{procedural_centent_book}. Esse software permite a geração automatizada de mapas, tornando o processo de desenvolvimento mais fácil.
+
+% No entanto, a criação de mapas usando esse método ainda encontram dificuldades, sendo elas, variedade e autenticidade \cite{geracao_procedural_jogos_2d}.
+% aqui adicionar uma explicação do porque é um desafio a geração procedeural de conteudo 
 
 De acordo com \citeonline{jogo_procedural} é muito comum usar técnicas procedurais em jogos para otimizar o processo de criação combinado com inteligência artificial para melhorar ou personalizar a experiência do jogador. Por exemplo, o jogo RimWorld é um simulador de colônia que utiliza uma IA para gerar histórias de forma procedural, abrangendo aspectos como psicologia, ecologia, combate e diplomacia, dentre outros \cite{jogo_procedural}.
 
@@ -36,7 +43,6 @@ Ademais visto especificamente temos como objetivos:
 
 \begin{itemize}
 	\item Encontrar um conjunto de dados para treinar a inteligência artificial que irá identificar contornos em imagens
-	\item Segmentar imagens utilizando uma arquitetura de rede neural convolucional para identificar e extrair objetos selecionados.
 	\item Treinar uma inteligência artificial para identificar contornos em imagens
 	\item Testar algoritmos de gerar ruídos para criar o mapa
 	\item Aplicar um algoritmo para reconhecer a imagem com o contorno e gerar como saída a imagem do mapa gerado
