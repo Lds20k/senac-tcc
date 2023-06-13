@@ -1,8 +1,8 @@
 \section{Proposta}
 
-Este trabalho tem como proposta a utilização de um modelo de inteligência artificial para segmentação de imagem e permitir os usuários gerarem mapas a partir da seleção de um dos segmentos da imagem.
+Este trabalho tem como proposta a utilização de um modelo de inteligência artificial para segmentação panóptica que irá classificar os pixeis na imagem e permitir que os usuários gerem mapas a partir da seleção de um dos segmentos da imagem.
 
-Utilizando o modelo de rede neural totalmente convolucional é possível fazer a segmentação panóptico da imagem da seguinte forma:
+Utilizando o modelo EfficientPS é possível fazer a segmentação panóptica, segue um exemplo na \cref{fig:segmantations_1} e na \cref{fig:segmantations_2}. O modelo citado está disponível no GitHub dos próprios autores \citeonline{mohan2020efficientps} e será treinado com a combinação de pelo menos dois conjuntos de dados citados anteriormente, no resultado apenas será identificado os pixeis de classes contidas nos conjuntos de dados escolhidos, portanto é possível que em uma imagem não seja identificado nada:
 
 \begin{figure}[!ht]
 	\centering
@@ -14,21 +14,21 @@ Utilizando o modelo de rede neural totalmente convolucional é possível fazer a
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Imagem segmentada de saída da rede neural totalmente convolucional de segmentação panóptico.}
+    \caption{Imagem saída de um modelo de segmentação panóptica de segmentação panóptica.}
 	\includegraphics[width=0.6\textwidth]{figures/segmantations_2.png}
     \legend{Fonte: \citeonline{kirillov2019panoptic}}
 	\label{fig:segmantations_2}
 \end{figure}
 
-Após a segmentação da imagem o usuários poderá selecionar qual parte da imagem será utilizada para gerar a ilha.
+Após a segmentação da imagem o usuário poderá selecionar qual parte da imagem será utilizada para gerar a ilha.
 
-Feito a seleção será gerado um diagrama de Voronoi que irá funcionar como um filtro em cima dessa imagem e assim gerando a ilha e os biomas.
+Feito a seleção será gerado um diagrama de Voronoi que funcionará como um filtro em cima dessa imagem, assim gerando a ilha e os biomas.
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Ilha gerada a partir da segmentação de imagem e aplicando um filtro com o diagrama de Voronoi, azul representa oceano, verde floresta, cinza montanhas.}
+    \caption{Ilha gerada a partir da segmentação panóptica e aplicando um filtro com o diagrama de Voronoi, azul representa oceano, verde floresta, cinza montanhas.}
 	\includegraphics[width=0.6\textwidth]{figures/segmantations_pnl.png}
-    \legend{Fonte: Criação própia}
+    \legend{Fonte: Criação própria}
 	\label{fig:segmantations_pnl}
 \end{figure}
 
