@@ -39,7 +39,8 @@ A arquitetura Mask R-CNN é derivado do Fast R-CNN — aprimoramento do R-CNN ap
 
 \subsubsection*{Segmentação panóptica}
 
-Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados igual na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc.
+Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados igual na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc. 
+Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Cityscapes, Mapillary Vistas, ADE20K, Indian Driving Dataset. Cada conjunto de dados possui diversas classes para o modelo aprender \cite{v7labs2022panoptic}.
 
 \subsubsection*{Modelo escolhido}
 
@@ -47,11 +48,12 @@ Com base no contexto acima percebemos que a segmentação panóptica é a mais c
 
 \subsubsubsection*{União sobre intersecção}
 
-A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utilizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados, segue a fôrmula \cite{dp_semantic_segmantation, lapix, kirillov2019panoptic}:
+A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utilizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados, segue a fórmula\cite{dp_semantic_segmantation, lapix, kirillov2019panoptic}:
 
-$$ 
-IoU = \frac{\text{Área de intersecção}}{\text{Área de união}} \quad IoU(p_i, g) = \frac{p_i \cap g}{ p_i \cup g}
-$$
+\begin{equation}	
+	IoU = \frac{\text{Área de intersecção}}{\text{Área de união}} \quad IoU(p_i, g) = \frac{p_i \cap g}{ p_i \cup g}
+\end{equation}
+
 
 \subsubsubsection*{Classificação de conjuntos}
 
@@ -66,7 +68,7 @@ A classificação de conjuntos é uma técnica para criar relações entre a ima
 
 \subsubsubsection*{Qualidade panóptica}
 
-A qualidade panóptica — ou Panoptic Quality (PQ) — foi definido pela primeira vez no artigo \citeonline{kirillov2019panoptic}, e se resume na formula:
+A qualidade panóptica — ou Panoptic Quality (PQ) — foi definido pela primeira vez no artigo \citeonline{kirillov2019panoptic}, e se resume na fórmula:
 
 \begin{equation}
 \label{eq:pq_metric}
@@ -75,20 +77,21 @@ PQ = \frac{\sum_{(p,g)\in TP}IoU(p,g)}{ |TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|
 
 Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ temos:
 
-\begin{equation*}
+\begin{equation}
+	\label[]{eq:pg_metric}
 	PQ = \underbrace{\frac{\sum_{(p,g)\in TP}IoU(p,g)}{|TP|}}_{\text{Segmentation Quality (SQ)}} 
 	\times
 	\underbrace{\frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}}_{\text{Recognition Quality (RQ)}}
-\end{equation*}
+\end{equation}
 
-Portanto podemos concluir que PQ é apenas uma simplificação para uma fôrmula que contém uma relação entre métricas de segmentação semântica e de instância.
+Portanto podemos concluir que PQ é apenas uma simplificação para uma fórmulaque contém uma relação entre métricas de segmentação semântica e de instância.
 
-\subsubsubsection*{Resultados}
+\subsubsubsection*{Resultados de modelos do nicho de segmentação panóptica}
 
 Os resultados são de uma competição em aberto criada pela Cytyscapes Dataset, essa competição tem várias modalidades e esses são referentes ao nicho de segmentação panóptica utilizando a métrica PG na classe de pessoas \cite{datasetResults}.
 \begin{table}[H]
 	\centering
-	\caption{Top 15 modelos que melhor classificam pessoas}
+	\caption{Top 15 modelos que melhor classificam pessoas com métrica PG em segmentação panóptica}
 	\label{tab:resultados-cityscapes}
 	\begin{tabular}{|l|c|}
 	  \hline
