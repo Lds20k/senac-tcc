@@ -129,18 +129,17 @@
 \autor{Lucas da Silva dos Santos\\Matheus Zanivan Andrade\\ Rafael Nascimento Lourenço}
 \local{São Paulo - Brasil}
 \data{2023}
-\orientador{Lauro César Araujo}
-\coorientador{Equipe \abnTeX}
+\orientador{Ainda não definido}
+% \coorientador{Equipe \abnTeX}
 \instituicao{%
-  Senac: Serviço Nacional de Aprendizagem Comercial
+  Centro Universitário Senac - Santo Amaro
   \par
-  Bacharelado em ciência da computação
+  Bacharelado em Ciência da Computação
 }
 \tipotrabalho{Trabalho de Conclusão de Curso (TCC)}
 % O preambulo deve conter o tipo do trabalho, o objetivo, 
 % o nome da instituição e a área de concentração 
-\preambulo{Modelo canônico de trabalho monográfico acadêmico em conformidade com
-as normas ABNT apresentado à comunidade de usuários \LaTeX.}
+\preambulo{Monografia apresentada na disciplina Trabalho de Conclusão de Curso, como parte dos requisitos para obtenção do título de Bacharel em Ciência da Computação.}
 % ---
 
 
@@ -318,40 +317,40 @@ as normas ABNT apresentado à comunidade de usuários \LaTeX.}
 % ---
 % Agradecimentos
 % ---
-\begin{agradecimentos}
-Os agradecimentos principais são direcionados à Gerald Weber, Miguel Frasson,
-Leslie H. Watter, Bruno Parente Lima, Flávio de Vasconcellos Corrêa, Otavio Real
-Salvador, Renato Machnievscz\footnote{Os nomes dos integrantes do primeiro
-projeto abn\TeX\ foram extraídos de
-\url{http://codigolivre.org.br/projects/abntex/}} e todos aqueles que
-contribuíram para que a produção de trabalhos acadêmicos conforme
-as normas ABNT com \LaTeX\ fosse possível.
+% \begin{agradecimentos}
+% Os agradecimentos principais são direcionados à Gerald Weber, Miguel Frasson,
+% Leslie H. Watter, Bruno Parente Lima, Flávio de Vasconcellos Corrêa, Otavio Real
+% Salvador, Renato Machnievscz\footnote{Os nomes dos integrantes do primeiro
+% projeto abn\TeX\ foram extraídos de
+% \url{http://codigolivre.org.br/projects/abntex/}} e todos aqueles que
+% contribuíram para que a produção de trabalhos acadêmicos conforme
+% as normas ABNT com \LaTeX\ fosse possível.
 
-Agradecimentos especiais são direcionados ao Centro de Pesquisa em Arquitetura
-da Informação\footnote{\url{http://www.cpai.unb.br/}} da Universidade de
-Brasília (CPAI), ao grupo de usuários
-\emph{latex-br}\footnote{\url{http://groups.google.com/group/latex-br}} e aos
-novos voluntários do grupo
-\emph{\abnTeX}\footnote{\url{http://groups.google.com/group/abntex2} e
-\url{http://abntex2.googlecode.com/}}~que contribuíram e que ainda
-contribuirão para a evolução do \abnTeX.
+% Agradecimentos especiais são direcionados ao Centro de Pesquisa em Arquitetura
+% da Informação\footnote{\url{http://www.cpai.unb.br/}} da Universidade de
+% Brasília (CPAI), ao grupo de usuários
+% \emph{latex-br}\footnote{\url{http://groups.google.com/group/latex-br}} e aos
+% novos voluntários do grupo
+% \emph{\abnTeX}\footnote{\url{http://groups.google.com/group/abntex2} e
+% \url{http://abntex2.googlecode.com/}}~que contribuíram e que ainda
+% contribuirão para a evolução do \abnTeX.
 
-\end{agradecimentos}
+% \end{agradecimentos}
 % ---
 
 % ---
 % Epígrafe
 % ---
-\begin{epigrafe}
-    \vspace*{\fill}
-	\begin{flushright}
-		\textit{``Não vos amoldeis às estruturas deste mundo, \\
-		mas transformai-vos pela renovação da mente, \\
-		a fim de distinguir qual é a vontade de Deus: \\
-		o que é bom, o que Lhe é agradável, o que é perfeito.\\
-		(Bíblia Sagrada, Romanos 12, 2)}
-	\end{flushright}
-\end{epigrafe}
+% \begin{epigrafe}
+%     \vspace*{\fill}
+% 	\begin{flushright}
+% 		\textit{``Não vos amoldeis às estruturas deste mundo, \\
+% 		mas transformai-vos pela renovação da mente, \\
+% 		a fim de distinguir qual é a vontade de Deus: \\
+% 		o que é bom, o que Lhe é agradável, o que é perfeito.\\
+% 		(Bíblia Sagrada, Romanos 12, 2)}
+% 	\end{flushright}
+% \end{epigrafe}
 % ---
 
 % ---
@@ -359,66 +358,52 @@ contribuirão para a evolução do \abnTeX.
 % ---
 
 % resumo em português
-% \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
-% \begin{resumo}
-%  Segundo a \citeonline[3.1-3.2]{NBR6028:2003}, o resumo deve ressaltar o
-%  objetivo, o método, os resultados e as conclusões do documento. A ordem e a extensão
-%  destes itens dependem do tipo de resumo (informativo ou indicativo) e do
-%  tratamento que cada item recebe no documento original. O resumo deve ser
-%  precedido da referência do documento, com exceção do resumo inserido no
-%  próprio documento. (\ldots) As palavras-chave devem figurar logo abaixo do
-%  resumo, antecedidas da expressão Palavras-chave:, separadas entre si por
-%  ponto e finalizadas também por ponto.
+\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+\begin{resumo}
+  Esta monografia descreve o desenvolvimento de uma ferramenta para jogos que oferece uma nova funcionalidade. A ferramenta começa com a seleção de uma foto, que é processada por um modelo de inteligência artificial especializado em segmentação panóptica. Isso permite a segmentação da imagem, incluindo a separação de objetos da mesma classe, como pessoas e carros. Após o modelo gerar uma saída, é possível selecionar um contorno detectado e, a partir disso, gerar um mapa 2D de ilha de forma procedural, combinado com o diagrama de Voronoi para criar os biomas do mapa.
 
-%  \textbf{Palavras-chaves}: latex. abntex. editoração de texto.
-% \end{resumo}
+ \textbf{Palavras-chaves}: segmentação panóptica, geração procedural, diagrama de Voronoi, mapas, jogos.
+\end{resumo}
 
 % resumo em inglês
-% \begin{resumo}[Abstract]
-%  \begin{otherlanguage*}{english}
-%    This is the english abstract.
+\begin{resumo}[Abstract]
+ \begin{otherlanguage*}{english}
+  This monograph describes the development of a tool for games that offers new functionality. The tool starts with the selection of a photo, which is processed by an artificial intelligence model specialized in panoptic segmentation. This allows the segmentation of the image, including the separation of objects of the same class, such as people and cars. After the model generates an output, it is possible to select a detected contour and, from that, generate a 2D island map procedurally, combined with the Voronoi diagram to create the biomes of the map.
 
-%    \vspace{\onelineskip}
- 
-%    \noindent 
-%    \textbf{Key-words}: latex. abntex. text editoration.
-%  \end{otherlanguage*}
-% \end{resumo}
+   \textbf{Key-words}: panoptic segmentation, procedural generation, voronoi diagram, maps, games.
+ \end{otherlanguage*}
+\end{resumo}
 % ---
 
 % ---
 % inserir lista de ilustrações
 % ---
-% \pdfbookmark[0]{\listfigurename}{lof}
-% \listoffigures*
-% \cleardoublepage
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
 % ---
 
 % ---
 % inserir lista de tabelas
 % ---
-% \pdfbookmark[0]{\listtablename}{lot}
-% \listoftables*
-% \cleardoublepage
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
 % ---
 
 % ---
 % inserir lista de abreviaturas e siglas
 % ---
-% \begin{siglas}
-%   \item[ABNT] Associação Brasileira de Normas Técnicas
-%   \item[abnTeX] ABsurdas Normas para TeX
-% \end{siglas}
+\begin{siglas}
+  \item[IA] inteligência Artificial
+\end{siglas}
 % ---
 
 % ---
 % inserir lista de símbolos
 % ---
 % \begin{simbolos}
-%   \item[$ \Gamma $] Letra grega Gama
-%   \item[$ \Lambda $] Lambda
-%   \item[$ \zeta $] Letra grega minúscula zeta
-%   \item[$ \in $] Pertence
+%   \item[IA] inteligência Artificial
 % \end{simbolos}
 % ---
 
@@ -449,7 +434,7 @@ contribuirão para a evolução do \abnTeX.
 \label{sec:background}
 	\label{sec:fund_teorica}
 
-Este capítulo tem objetivo de apresentar conceitos necessários para entendimento do trabalho.
+  Este capítulo apresenta os conceitos fundamentais necessários para a realização dos objetivos propostos na monografia. Os tópicos foram organizados na ordem em que são utilizados na ferramenta final. Primeiro, será apresentado o conceito geral de visão computacional. Em seguida, abordaremos o tópico de inteligência artificial, tanto em um contexto amplo quanto em relação ao conteúdo proposto, que é a segmentação panóptica. Por fim, serão apresentados os conceitos de geração procedural para gerar o mapa requerido e o diagrama de Voronoi para criar os biomas.
 
 \input{visaoComputacional.tex}
 
@@ -499,11 +484,11 @@ Este capítulo tem objetivo de apresentar conceitos necessários para entendimen
 % ---
 % Conclusão (outro exemplo de capítulo sem numeração e presente no sumário)
 % ---
-\chapter*[Conclusão]{Conclusão}
-\addcontentsline{toc}{chapter}{Conclusão}
+% \chapter*[Conclusão]{Conclusão}
+% \addcontentsline{toc}{chapter}{Conclusão}
 % ---
 
-\lipsum[31-33]
+% \lipsum[31-33]
 
 % ----------------------------------------------------------
 % ELEMENTOS PÓS-TEXTUAIS

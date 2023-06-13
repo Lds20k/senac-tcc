@@ -1,13 +1,14 @@
 \section{Cronograma}
 
-O processo de desenvolvimento será separado em 3 tópicos principais, inteligencia artificial, diagrama de Voronoi e interface de usuário. O desenvolvimento de cada tópico do software será feito em paralelo, pois os tópicos não possuem acoplamento.
+O processo de desenvolvimento será separado em 3 tópicos principais, inteligência artificial, diagrama de Voronoi e interface de usuário. O desenvolvimento de cada tópico do software será feito em paralelo, pois os tópicos não possuem acoplamento.
 
-\subsection*{Inteligencia Artificial}
+\subsection*{inteligência Artificial}
 
-Primeiro será necessário desenvolver o código da rede neural utilizando \textit{TensorFlow}, especificar a quantidade de camadas e definir o tamanho de entrada e saída das imagens.
-O proximo passo será buscar um dataset para fazer o treinamento desse modelo e em seguida validar as saídas.
+Será necessário decidir quais conjuntos de dados utilizar, o modelo está pronto e disponível no GitHb \cite{mohan2020efficientps} portanto será necessário treinar o modelo e avalia-lo com base na métrica PQ \cref{eq:pg_metric}.
 
-O tempo estimado para o desenvolvimento é de 1 a 2 meses, a maior parte será para validar o resultado do treinamento.
+As especificações do modelo proposto são: Linux, Python 3.7, PyTorch 1.7, CUDA 10.2, GCC 7 ou 8 além dos pacotes inseridos no arquivo requirements.txt.
+
+O tempo estimado para o desenvolvimento é de 1 a 2 meses, a maior parte será para treinar e validar o resultado.
 
 \subsection*{Diagrama de Voronoi}
 
@@ -17,15 +18,15 @@ O tempo estimado para o desenvolvimento é de 1 mes.
 
 \subsection*{Interface de Usuário}
 
-A interface de usuário tera 5 telas principais, inicio, processamento da segmentação, seleção, processamento de seleção, resultado. 
+A interface de usuário terá 5 telas principais, inicio, processamento da segmentação, seleção, processamento de seleção, resultado. 
 
 As telas terão o seguinte fluxo:
 
 \begin{figure}[H]
 	\centering
-    \caption{Tela de inicio, botões de carregar imagem e carregar projeto, menu de contexto arquivos com 3 botões, carregar imagem, carregar projeto e salvar.}
+    \caption{Tela de início, botões de carregar imagem e carregar projeto, menu de contexto arquivos com 3 botões, carregar imagem, carregar projeto e salvar.}
 	\includegraphics[width=0.55\textwidth]{figures/tela_novo.png}
-    \legend{Fonte: Criação própia}
+    \legend{Fonte: Criação própria}
 	\label{fig:tela_novo}
 \end{figure}
 
@@ -34,7 +35,7 @@ As telas terão o seguinte fluxo:
 	\centering
     \caption{Tela de processamento da segmentação}
 	\includegraphics[width=0.55\textwidth]{figures/tela_processando_1.png}
-    \legend{Fonte: Criação própia}
+    \legend{Fonte: Criação própria}
 	\label{fig:tela_processando_1}
 \end{figure}
 
@@ -43,7 +44,7 @@ As telas terão o seguinte fluxo:
 	\centering
     \caption{Tela de seleção de segmentação da imagem.}
 	\includegraphics[width=0.8\textwidth]{figures/tela_carregado.png}
-    \legend{Fonte: Criação própia}
+    \legend{Fonte: Criação própria}
 	\label{fig:tela_carregado}
 \end{figure}
 
@@ -52,7 +53,7 @@ As telas terão o seguinte fluxo:
 	\centering
     \caption{Tela de processamento para geração do mapa com a seleção do segmento.}
 	\includegraphics[width=0.8\textwidth]{figures/tela_processando_2.png}
-    \legend{Fonte: Criação própia}
+    \legend{Fonte: Criação própria}
 	\label{fig:tela_processando_2}
 \end{figure}
 
@@ -61,10 +62,10 @@ As telas terão o seguinte fluxo:
 	\centering
     \caption{Tela de resultado com o mapa gerado após processamento.}
 	\includegraphics[width=0.6\textwidth]{figures/tela_mapa.png}
-    \legend{Fonte: Criação própia}
+    \legend{Fonte: Criação própria}
 	\label{fig:tela_mapa}
 \end{figure}
 
-Após isso a interface permitira o usuário salvar o projeto bem como exportar o resultado.
+Após isso a interface permitirá o usuário salvar o projeto bem como exportar o resultado.
 
 O tempo de desenvolvimento será em torno de 1 mês.
