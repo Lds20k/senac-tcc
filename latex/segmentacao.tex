@@ -78,7 +78,7 @@ PQ = \frac{\sum_{(p,g)\in TP}IoU(p,g)}{ |TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|
 Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ tem-se:
 
 \begin{equation}
-	\label[]{eq:pq_metric}
+	\label[]{eq:pq_metric_mult}
 	PQ = \underbrace{\frac{\sum_{(p,g)\in TP}IoU(p,g)}{|TP|}}_{\text{Segmentation Quality (SQ)}} 
 	\times
 	\underbrace{\frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}}_{\text{Recognition Quality (RQ)}}
@@ -95,7 +95,7 @@ Os resultados são de uma competição em aberto criada pela Cytyscapes Dataset,
 	\label{tab:resultados-cityscapes}
 	\begin{tabular}{|l|c|}
 	  \hline
-	  Nome do modelo & Precisão (\%) \\
+	  Nome do modelo & PQ (\%) \\
 	  \hline
 	  EfficientPS [Mapillary Vistas] & 61,6 \\
 	  EfficientPS [Cityscapes-fine] & 60,9 \\
