@@ -16,10 +16,11 @@ Uma arquitetura básica de uma rede neural convolucional tem as seguintes camada
 
 Segundo \citeonline{computation11030052} camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características. O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída \cite{computation11030052}.
 
-\begin{equation}
-    \mathbf{I}x - \mathbf{F}x + 1 = \mathbf{S}x \\
+\begin{gather}
+    \mathbf{I}x - \mathbf{F}x + 1 = \mathbf{S}x \notag \\
     \mathbf{I}y - \mathbf{F}y + 1 = \mathbf{S}y
-\end{equation}
+\end{gather}
+
     
 A seguir um exemplo dos passos para construir a matriz resultante baseado em \citeonline{Alzubaidi2021}.
 
