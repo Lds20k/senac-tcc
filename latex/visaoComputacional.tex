@@ -9,17 +9,18 @@ Nas figuras \cref{fig:imagem_a} e \cref{fig:imagem_b}, evidencia-se a notável c
 \begin{figure}[H]
     \centering
     \begin{minipage}[H]{0.49\textwidth}
+      \caption{Algoritmos de detecção facial e de roupas/cabelos por cor localizam e reconhecem pessoas nesta imagem}
       \centering
       \includegraphics[width=0.6\textwidth]{figures/detectacao_de_faces_exemplo.JPG}
-      \caption{Algoritmos de detecção facial e de roupas/cabelos por cor localizam e reconhecem pessoas nesta imagem \cite{computer_vision_richard}}
+	    \legend{Fonte: \citeonline{computer_vision_richard}}
       \label{fig:imagem_a}
     \end{minipage}
     \hfill
     \begin{minipage}[H]{0.49\textwidth}
+      \caption{Segmentação de instâncias de objetos pode-se delinear cada pessoa e objeto em uma cena complexa}
       \centering
       \includegraphics[width=0.6\textwidth]{figures/semantic_intance.JPG}
-        \caption{Segmentação de instâncias de objetos pode delinear cada pessoa e objeto em uma cena complexa. 
-        \cite{instance_segmentation}}
+	    \legend{Fonte: \citeonline{instance_segmentation}}
       \label{fig:imagem_b}
     \end{minipage}
   \end{figure}
@@ -38,18 +39,19 @@ A visão é um elemento crucial para capacitar a inteligência artificial a real
 % 	\label{fig:comp_vision}
 % \end{figure}	
 
-No processamento de computação visual, as imagens são adquiridas e representadas como uma matriz 2D de pixels. Cada pixel corresponde a um ponto na imagem e é representado por um valor numérico que varia de 0 a 255. Esses valores de pixel descrevem a intensidade da cor em uma escala de cinza. Dessa forma, um computador interpreta uma imagem como uma matriz de números, permitindo que ele analise e compreenda os detalhes visuais presentes na imagem, como no caso da \cref{fig:comp_vision} do presidente dos Estados Unidos, Abraham Lincoln\cite{mit_video}.
+No processamento de computação visual, as imagens são adquiridas e representadas como uma matriz 2D de pixels. Cada pixel corresponde a um ponto na imagem e é representado por um valor numérico que varia de 0 a 255. Esses valores de pixel descrevem a intensidade da cor em uma escala de cinza caso a imagem de entrada esteja em preto e branco, pois se a imagem ter cores do espectro RGB o computador identificará três matrizes de canais referente as cores correspondentes. Dessa forma, um computador interpreta uma imagem como uma ou mais matrizes de números, permitindo que seja analisado e compreendido os detalhes visuais presentes na imagem Um exemplo dessa matriz exemplificado na \cref{fig:comp_vision} do presidente dos Estados Unidos, Abraham Lincoln\cite{mit_video}.
+
+\begin{figure}[H]
+	\caption{Diagrama de dados de pixels. À esquerda, uma imagem de Lincoln; no centro, os pixels rotulados com números de 0 a 255, representando sua luminosidade; e à direita, apenas esses números.}
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/lincoln_pixel_values.png}
+	\legend{Fonte: \citeonline{content_Human_Vision}}
+  \label{fig:comp_vision}
+\end{figure}
 
 Os algoritmos de visão computacional utilizados atualmente são fundamentados em reconhecimento de padrões. O procedimento consiste em treinar computadores por meio de uma vasta quantidade de dados visuais. Os computadores processam imagens, rotulam os objetos nelas contidos e identificam padrões entre esses objetos \cite{content_Human_Vision}.
 
 Esse processo de treinamento e reconhecimento de padrões permite que os computadores identifiquem objetos e compreendam seu contexto visual. Com essa capacidade, o computador consegue realizar tarefas como, por exemplo, reconhecimento facial \cref{fig:imagem_a}.
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/lincoln_pixel_values.png}
-	\caption{Diagrama de dados de pixels. À esquerda, nossa imagem de Lincoln; no centro, os pixels rotulados com números de 0 a 255, representando sua luminosidade; e à direita, apenas esses números \cite{content_Human_Vision}.}
-	\label{fig:comp_vision}
-\end{figure}
 
 
 

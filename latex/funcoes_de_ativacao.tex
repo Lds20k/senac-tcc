@@ -1,6 +1,6 @@
 \subsubsection*{Função de ativação}
 
-A função de ativação retorna a saída de um neurônio \cite{haykin1999neural}, aqui pode-se ver três tipos de funções de ativação:
+A função de ativação retorna a saída de um neurônio \cite{haykin1999neural}, aqui pode-se ver quatro tipos de funções de ativação:
 
 \begin{enumerate}
 	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \cite{gharat2019what}.
@@ -42,6 +42,7 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 	\begin{center}
 		\begin{minipage}{0.45\textwidth}
 			\begin{equation}
+				\label{eq:relu_func}
 				\varphi(\upsilon) = \max(0,\upsilon)
 			\end{equation}
 		\end{minipage}
@@ -76,6 +77,7 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 	\begin{center}
 		\begin{minipage}{0.45\textwidth}
 			\begin{gather}
+				\label{eq:relu_leaky_func}
 				\varphi(\upsilon) =
 				\begin{cases}
 				\upsilon & \text{if } \upsilon_k \geq 0 \\
