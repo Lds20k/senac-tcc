@@ -18,14 +18,15 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 				\begin{axis}[
 					width=0.9\textwidth,
 					height=0.7\textwidth,
+					xmin=-10, xmax=10,
+					ymin=-0.2, ymax=1,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
 					xlabel={$\upsilon$},
-					xmin=-6, xmax=6,
-					ymin=0, ymax=1,
+					ylabel={$y$},
 				]
-					\addplot[
-						color=red,
-						domain=-6:6,
-					] {1/(1+exp(-x))};
+					\addplot[blue,domain=-10:10,samples=51] {1/(1+exp(-x))};
 				\end{axis}
 			\end{tikzpicture}
 		\end{minipage}
@@ -50,12 +51,16 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 				\begin{axis}[
 					width=0.9\textwidth,
 					height=0.7\textwidth,
+					xmin=-2, xmax=2,
+					ymin=-0.5, ymax=2,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
 					xlabel={$\upsilon$},
-					xmin=-6, xmax=6,
-					ymin=0, ymax=5,
+        			ylabel={$y$},
 				]
-					\addplot[red, domain=-5:0] {0};
-					\addplot[red, domain=0:5] {x};
+					\addplot[line width=1pt,color=blue,domain=-2:0] plot(\x,{0});
+					\addplot[line width=1pt,color=blue,domain=0:2] plot(\x,{\x});
 				\end{axis}
 			\end{tikzpicture}
 		\end{minipage}
@@ -63,7 +68,45 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 	\legend{Fonte: Criação própria}
 	\label{fig:grafico_relu}
 	\end{figure}
-	A função \textit{ReLu} é computacionalmente eficiente e converge rapidamente, porém quando a entrada da função se aproxima de zero não a rede neural não consegue executar o retropropagação, sendo assim não há aprendizado. cite{gharat2019what}.
+	A função \textit{ReLu} é computacionalmente eficiente e converge rapidamente, porém quando a entrada da função se aproxima de zero a rede neural não consegue executar o retropropagação, sendo assim não há aprendizado \cite{gharat2019what}.
+	
+	\item Função \textit{Leaky ReLU} (Unidade Linear Retificada com Vazamento), função não-linear variante da \textit{ReLU} que retorna um valor positivo ou $\upsilon/a_i$, sendo $a_i$ um valor na faixa $(1,\infty)$ \cite{xu2015empirical}.
+	\begin{figure}[H]
+	\caption{Gráfico da função \textit{ReLu}.}
+	\begin{center}
+		\begin{minipage}{0.45\textwidth}
+			\begin{gather}
+				\varphi(\upsilon) =
+				\begin{cases}
+				\upsilon & \text{if } \upsilon_k \geq 0 \\
+				\frac{\upsilon}{a_k} & \text{if } \upsilon_k < 0
+				\end{cases}    
+			\end{gather}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xmin=-2, xmax=2,
+					ymin=-0.5, ymax=2,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
+					xlabel={$\upsilon$},
+        			ylabel={$y$},
+				]
+					\addplot[line width=1pt,color=blue,domain=-2:0] plot(\x,{0.3*\x});
+					\addplot[line width=1pt,color=blue,domain=0:2] plot(\x,{\x});
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+	\legend{Fonte: Criação própria}
+	\label{fig:grafico_relu_leaky}
+	\end{figure}
+	Possui as mesmas características da função \textit{ReLU}, mas sem o problema da retropropagação. \cite{gharat2019what}.
 
 	\item Função \textit{Softmax}, calcula a distribuição de probabilidades de um evento em "n"\space eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica, geralmente usada na camada de saída \cite{gharat2019what}.
 	\begin{figure}[H]
@@ -71,7 +114,7 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 	\begin{center}
 		\begin{minipage}{0.45\textwidth}
 			\begin{equation}
-				\varphi(\upsilon) = \frac{e^{\upsilon_i}}{\sum_{j=0} e^{\upsilon_i}}
+				\varphi(\upsilon) = \frac{e^{\upsilon_i}}{\sum_{j=0} e^{\upsilon_j}}
 			\end{equation}
 		\end{minipage}
 		\hfill
@@ -80,11 +123,15 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 				\begin{axis}[
 					width=0.9\textwidth,
 					height=0.7\textwidth,
-					xlabel={$\upsilon$},
 					xmin=-10, xmax=10,
-					ymin=0, ymax=1,
+					ymin=-0.2, ymax=1,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
+					xlabel={$\upsilon$},
+        			ylabel={$y$},
 				]
-					\addplot[red,domain=-10:10,samples=51] {exp(x)/sumexp(x,-4,0)};
+					\addplot[blue,domain=-10:10,samples=51] {exp(x)/sumexp(x,-4,0)};
 				\end{axis}
 			\end{tikzpicture}
 		\end{minipage}
