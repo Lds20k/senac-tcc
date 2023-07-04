@@ -1,8 +1,8 @@
-\subsection{Segmentação}
+\subsubsubsection*{Segmentação}
 
 O estudo de segmentação semântica dentro da área de redes neurais convolucionais têm três principais nichos, sendo eles: segmentação semântica que é a classificação por pixel, a segmentação de instância que atribui um id para cada objeto encontrado de uma classe, e a segmentação panóptica que junta as duas anteriores para criar uma imagem semelhante a saída de segmentação semântica porém separando objetos de mesma classe sendo essa a mais recente e completa, a diferença entre esses três tipos está ilustrado na \cref{fig:segentacoes} \cite{dp_semantic_segmantation, lapix}. 
 
-\begin{figure}[H]
+\begin{figure}[ht]
 	\caption{Tipos de segmentação em redes neurais convolucionais}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=10cm]{figures/segmantations.png} % leia abaixo
@@ -10,10 +10,10 @@ O estudo de segmentação semântica dentro da área de redes neurais convolucio
 	\label{fig:segentacoes}
 \end{figure}
 
-\subsubsection*{Segmentação semântica}
+\subsubsubsection*{Segmentação semântica}
 
 A segmentação semântica começou a ter resultados satisfatórios a partir de redes totalmente convolucionais, com o objetivo de segmentar imagens classificando pixels, esse modelo descarta a camada totalmente conectada pois a saída deverá ser uma imagem e não uma classificação — isso a torna mais rápida para treinar do que as redes neurais convolucionais —, logo usa camadas deconvolucionais para transformar a matriz de características em uma imagem de qualquer dimensão na saída. A RTC criou a arquitetura chamada de salto (ou conexões) que serve para evitar perdas em camadas de agrupamento criando conexões entre camadas não consecutivas — geralmente entre camadas convolucionais e deconvolucionais — como apresentado na \cref{fig:rtc}, a arquitetura de salto evoluiu para arquitetura codificador-decodificador.
-\begin{figure}[H]
+\begin{figure}[ht]
 	\caption{Exemplo de arquitetura de rede totalmente convolucional}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=10cm]{figures/redes_totalmente_convolucionais.jpeg} % leia abaixo
@@ -23,7 +23,7 @@ A segmentação semântica começou a ter resultados satisfatórios a partir de 
 
 A arquitetura codificador-decodificador — ou Encoder-Decoder —, é separada em dois passos: o primeiro para convergir no mapa de características — chamado de codificador — e o segundo para reverter — chamado de decodificador — as camadas de agrupamento para aumentar a dimensão da saída, usando camadas deconvolucionais e de desagrupamento, outra característica importante é a conexão entre camadas de mesmo nível, como por exemplo a arquitetura UNet que foi a primeira a implementar o padrão Codificador-Decodificador. Na \cref{fig:unet} pode-se observar que tem formato da letra U, sendo a descida a parte de codificação e subida decodificação \cite{dp_semantic_segmantation, lapix, unetArq}.
 
-\begin{figure}[H]
+\begin{figure}[ht]
 	\caption{Arquitetura codificador-decodificador UNet}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=10cm]{figures/unet.png} % leia abaixo
@@ -31,18 +31,18 @@ A arquitetura codificador-decodificador — ou Encoder-Decoder —, é separada 
 	\label{fig:unet}
 \end{figure}
 
-\subsubsection*{Segmentação de instância}
+\subsubsubsection*{Segmentação de instância}
 
 Outro problema dentro da área de visão computacional é a detecção de objetos, a primeira solução foi com Características de regiões com RNC — Regions with CNN features (R-CNN) — que se resume em dividir a imagem de entrada em regiões de interesse e nessas regiões aplicar uma RNC. A arquitetura que seleciona essas regiões é chamada de Rede de proposta de região — ou Region Proposal Network (RPN) — o que auxilia na detecção por caixas delimitadoras. Essa ideia inicial foi extendida para segmentação de instância criando também máscara nos objetos, como por exemplo a arquitetura Mask R-CNN \cite{dp_semantic_segmantation, lapix}.
 
 A arquitetura Mask R-CNN é derivado do Fast R-CNN — aprimoramento do R-CNN aplicando conceito RoIPool para classificar — onde há uma segmentação de máscara em cada RoI — ou Região de interresse — paralela com a classificação da caixa delimitadora. A máscara é classificada com uma pequena RTC em cada RoI. Além de ter uma pequena melhoria na RoIPool, pois havia um problema de alinhamento nas localizações espaciais exatas, essa camada é chamada de RoIAlign \cite{maskRCNN}.
 
-\subsubsection*{Segmentação panóptica}
+\subsubsubsection*{Segmentação panóptica}
 
 Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados igual na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc. 
 Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Cityscapes, Mapillary Vistas, ADE20K, Indian Driving Dataset. Cada conjunto de dados possui diversas classes para o modelo aprender \cite{v7labs2022panoptic}.
 
-\subsubsection*{Métricas, técnicas e resultados}
+\subsubsubsection*{Métricas, técnicas e resultados}
 
 Com base no contexto acima percebe-se que a segmentação panóptica é a mais completa e por efeito de estudos será utilizado o mesmo para concluir o trabalho. Como nesse nicho existem várias alternativas será abordado algumas métricas, técnicas e resultados para selecionar o modelo.
 
@@ -59,7 +59,7 @@ A união sobre intersecção — Intersection over Union (IoU) — ou índice de
 \subsubsubsection*{Classificação de conjuntos}
 
 A classificação de conjuntos é uma técnica para criar relações entre a imagem de predição e a imagem do conjunto de dados. Ela se divide em três classificações sendo elas: Positivos Verdadeiros — ou True Positives(TP) — sendo o requisito ter uma intersecção significativa entre classes iguais, \emph{i.e.}, IoU > 0.5, Falso Positivos — ou False Positives(FP) — quando um objeto não é correspondido na imagem de predição e por fim Falso Negativos — False Negatives(FN) — quando um objeto não é correspondido na imagem do conjunto de dados, pode-se observar esses conceitos de conjuntos na \cref{fig:conjuntos} \cite{kirillov2019panoptic}.
-\begin{figure}[H]
+\begin{figure}[ht]
 	\caption{Exemplo da classificação dos conjuntos usados nas métricas de segmentação}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=15cm]{figures/pan_metric.png} % leia abaixo

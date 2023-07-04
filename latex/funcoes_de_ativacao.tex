@@ -4,7 +4,7 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 
 \begin{enumerate}
 	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \cite{gharat2019what}.
-	\begin{figure}[H]
+	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{Sigmoid}.}
 	\begin{center}
 		\begin{minipage}{0.45\textwidth}
@@ -37,7 +37,7 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 	Segundo \citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e para valores muito extremos causa problemas na previsão.
 
 	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \cite{rizzo2020inteligencia}.
-	\begin{figure}[H]
+	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{ReLu}.}
 	\begin{center}
 		\begin{minipage}{0.45\textwidth}
@@ -72,7 +72,7 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 	A função \textit{ReLu} é computacionalmente eficiente e converge rapidamente, porém quando a entrada da função se aproxima de zero a rede neural não consegue executar o retropropagação, sendo assim não há aprendizado \cite{gharat2019what}.
 	
 	\item Função \textit{Leaky ReLU} (Unidade Linear Retificada com Vazamento), função não-linear variante da \textit{ReLU} que retorna um valor positivo ou $\upsilon/a_i$, sendo $a_i$ um valor na faixa $(1,\infty)$ \cite{xu2015empirical}.
-	\begin{figure}[H]
+	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{ReLu}.}
 	\begin{center}
 		\begin{minipage}{0.45\textwidth}
@@ -111,7 +111,7 @@ A função de ativação retorna a saída de um neurônio \cite{haykin1999neural
 	Possui as mesmas características da função \textit{ReLU}, mas sem o problema da retropropagação. \cite{gharat2019what}.
 
 	\item Função \textit{Softmax}, calcula a distribuição de probabilidades de um evento em "n"\space eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica, geralmente usada na camada de saída \cite{gharat2019what}.
-	\begin{figure}[H]
+	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{Softmax}.}
 	\begin{center}
 		\begin{minipage}{0.45\textwidth}
