@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+from PIL import Image
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QImage, QPixmap, QPalette, QPainter
+from PyQt5.QtGui import QImage, QPixmap, QPalette, QPainter, QColor
 from PyQt5.QtPrintSupport import QPrintDialog, QPrinter
 from PyQt5.QtWidgets import QLabel, QSizePolicy, QScrollArea, QMessageBox, QMainWindow, QMenu, QAction, \
     qApp, QFileDialog
@@ -39,12 +40,14 @@ class QImageViewer(QMainWindow):
         fileName, _ = QFileDialog.getOpenFileName(self, 'QFileDialog.getOpenFileName()', '',
                                                   'Images (*.png *.jpeg *.jpg *.bmp *.gif)', options=options)
         if fileName:
-            image = QImage(fileName)
-            if image.isNull():
+            self.img = QImage(fileName)
+            if self.img.isNull():
                 QMessageBox.information(self, "Image Viewer", "Cannot load %s." % fileName)
                 return
 
-            self.imageLabel.setPixmap(QPixmap.fromImage(image))
+            self.imageLabel.setPixmap(QPixmap.fromImage(self.img))
+            self.imageLabel.mousePressEvent = self.createMask
+
             self.scaleFactor = 1.0
 
             self.scrollArea.setVisible(True)
@@ -54,6 +57,29 @@ class QImageViewer(QMainWindow):
 
             if not self.fitToWindowAct.isChecked():
                 self.imageLabel.adjustSize()
+
+    def createMask(self, event):
+        x = event.pos().x()
+        y = event.pos().y()
+        c = self.img.pixel(x,y)
+        rgb_color = QColor(c).getRgb()[:3]
+
+        width = self.img.width()
+        height = self.img.height()
+
+        image = Image.new('RGB', (width, height))
+
+        for x_in in range(width):
+            for y_in in range(height):
+                pxl = self.img.pixel(x_in, y_in)
+                pxl_color = QColor(pxl).getRgb()[:3]
+                
+                if rgb_color == pxl_color:
+                    image.putpixel((x_in, y_in), (0, 0, 0))
+                else:
+                    image.putpixel((x_in, y_in), (255, 255, 255))
+
+        image.save('output.png')
 
     def print_(self):
         dialog = QPrintDialog(self.printer, self)
