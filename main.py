@@ -32,7 +32,7 @@ class QImageViewer(QMainWindow):
         self.createMenus()
 
         self.setWindowTitle("Image Viewer")
-        self.resize(800, 600)
+        self.showMaximized()
 
     def open(self):
         options = QFileDialog.Options()
@@ -145,19 +145,11 @@ class QImageViewer(QMainWindow):
         self.fileMenu.addSeparator()
         self.fileMenu.addAction(self.exitAct)
 
-        self.viewMenu = QMenu("&View", self)
-        self.viewMenu.addAction(self.zoomInAct)
-        self.viewMenu.addAction(self.zoomOutAct)
-        self.viewMenu.addAction(self.normalSizeAct)
-        self.viewMenu.addSeparator()
-        self.viewMenu.addAction(self.fitToWindowAct)
-
         self.helpMenu = QMenu("&Help", self)
         self.helpMenu.addAction(self.aboutAct)
         self.helpMenu.addAction(self.aboutQtAct)
 
         self.menuBar().addMenu(self.fileMenu)
-        self.menuBar().addMenu(self.viewMenu)
         self.menuBar().addMenu(self.helpMenu)
 
     def updateActions(self):
