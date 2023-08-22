@@ -20,6 +20,7 @@ latex/main.txt
 .actrc
 **/.DS_Store
 output.png
+output_centralized.png
 ## Intermediate documents:
 *.dvi
 *.xdv
