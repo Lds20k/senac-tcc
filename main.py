@@ -100,6 +100,20 @@ class QImageViewer(QMainWindow):
         else:
             image.save('output_centralized.png')
 
+        im = Image.open('output_centralized.png')
+        width, height = im.size   # Get dimensions
+
+        left = (width - w  * 1.5 )/2
+        top = (height - h * 1.5)/2
+        right = (width + w * 1.5)/2
+        bottom = (height + h * 1.5)/2
+
+        # Crop the center of the image
+        im = im.crop((left, top, right, bottom))
+        im = im.resize((width, height))
+        im.save('output_croped.png')
+
+
     def print_(self):
         dialog = QPrintDialog(self.printer, self)
         if dialog.exec_():

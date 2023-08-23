@@ -21,6 +21,7 @@ latex/main.txt
 **/.DS_Store
 output.png
 output_centralized.png
+output_croped.png
 ## Intermediate documents:
 *.dvi
 *.xdv
