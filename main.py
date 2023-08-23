@@ -82,20 +82,23 @@ class QImageViewer(QMainWindow):
                     image.putpixel((x_in, y_in), (0, 0, 0))
 
         image.save('output.png')
+        
         # Load image as grayscale and obtain bounding box coordinates
-        image = cv2.imread('output.png', 0)
-        height, width = image.shape
-        x,y,w,h = cv2.boundingRect(image)
+        img_in = cv2.imread('output.png', 0)
+        height, width = img_in.shape
+        x,y,w,h = cv2.boundingRect(img_in)
 
         # Create new blank image and shift ROI to new coordinates
-        mask = np.zeros(image.shape, dtype=np.uint8)
-        ROI = image[y:y+h, x:x+w]
+        mask = np.zeros(img_in.shape, dtype=np.uint8)
+        ROI = img_in[y:y+h, x:x+w]
         x = width//2 - ROI.shape[0]//2 
-        y = height//2 - ROI.shape[1]//2 
-        mask[y:y+h, x:x+w] = ROI
-
-        # Save the image to a file
-        cv2.imwrite('output_centralized.png', mask)
+        y = height//2 - ROI.shape[1]//2
+        if x > 0 and y > 0: 
+            mask[y:y+h, x:x+w] = ROI
+            # Save the image to a file
+            cv2.imwrite('output_centralized.png', mask)
+        else:
+            image.save('output_centralized.png')
 
     def print_(self):
         dialog = QPrintDialog(self.printer, self)
