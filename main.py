@@ -10,6 +10,66 @@ from PyQt5.QtPrintSupport import QPrintDialog, QPrinter
 from PyQt5.QtWidgets import QLabel, QSizePolicy, QScrollArea, QMessageBox, QMainWindow, QMenu, QAction, \
     qApp, QFileDialog
 
+from PyQt5.QtWidgets import (QWidget, QApplication, QVBoxLayout, QPushButton, 
+                             QDesktopWidget, QLabel, QGridLayout, QMainWindow)
+from PyQt5.QtCore import Qt, QTimer, QSize, QRect
+from PyQt5.QtGui import QIcon
+
+class Message(QWidget):
+    def __init__(self, title, message, parent=None):
+        QWidget.__init__(self, parent)
+        self.setLayout(QGridLayout())
+        self.titleLabel = QLabel(title, self)
+        self.titleLabel.setStyleSheet("font-size: 18px; font-weight: bold; padding: 0;")
+        self.messageLabel = QLabel(message, self)
+        self.messageLabel.setStyleSheet("font-size: 12px; font-weight: normal; padding: 0;")
+        self.buttonClose = QPushButton(self)
+        self.buttonClose.setIcon(QIcon.fromTheme("window-close"))
+        self.buttonClose.setFlat(True)
+        self.buttonClose.setFixedSize(32, 32)
+        self.buttonClose.setIconSize(QSize(16, 16))
+        self.layout().addWidget(self.titleLabel)
+        self.layout().addWidget(self.messageLabel, 2, 0)
+        self.layout().addWidget(self.buttonClose, 0, 1)
+
+class Notification(QWidget):
+    def __init__(self, parent = None):        
+        super(QWidget, self).__init__(parent = None)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)      
+        self.setStyleSheet("background: #00FF00; padding: 0;")
+        self.mainLayout = QVBoxLayout(self)
+        
+
+    def setNotify(self, title, message, timeout):
+        self.m = Message(title, message)
+        self.mainLayout.addWidget(self.m)
+        self.m.buttonClose.clicked.connect(self.onClicked)
+        self.show()
+        QTimer.singleShot(timeout, 0, self.closeMe)
+        
+    def closeMe(self):
+        self.close()
+        self.m.close()
+    
+    def onClicked(self):
+        self.close()
+            
+class Window(QMainWindow):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        btn = QPushButton(QIcon.fromTheme("info"), "show Notify")
+        btn.setFixedWidth(110)
+        btn.setFixedHeight(30)
+        self.setCentralWidget(btn)
+        btn.clicked.connect(self.showNotification)
+        
+    def showNotification(self):
+        self.notification = Notification()
+        self.notification.setNotify("Message Title", "Message line 1\nMessage line 2\nMessage line 3", 3000)
+        
+
+
+
 
 class QImageViewer(QMainWindow):
     def __init__(self):
@@ -59,6 +119,8 @@ class QImageViewer(QMainWindow):
 
             if not self.fitToWindowAct.isChecked():
                 self.imageLabel.adjustSize()
+
+        self.showNotification("AVISO", "Selecione uma parte da imagem para gerar um mapa", 3000)
 
     def createMask(self, event):
         x = event.pos().x()
@@ -128,6 +190,14 @@ class QImageViewer(QMainWindow):
             self.normalSize()
 
         self.updateActions()
+    
+    def showNotification(self, title, body, time_interval):
+        print("notificação")
+        self.notification = Notification()
+        self.notification.setNotify(title, body, time_interval)
+        r = QRect(self.x() + round(self.width() / 2) - round(self.notification.width() / 2), 
+                                        self.y() + 26, self.notification.m.messageLabel.width() + 30, self.notification.m.messageLabel.height())
+        self.notification.setGeometry(r)
 
     def about(self):
         QMessageBox.about(self, "About Image Viewer",
@@ -156,6 +226,9 @@ class QImageViewer(QMainWindow):
                                       triggered=self.fitToWindow)
         self.aboutAct = QAction("&About", self, triggered=self.about)
         self.aboutQtAct = QAction("About &Qt", self, triggered=qApp.aboutQt)
+       
+
+
 
     def createMenus(self):
         self.fileMenu = QMenu("&File", self)
@@ -204,3 +277,10 @@ if __name__ == '__main__':
     #
     # if you need Two Image Synchronous Scrolling in the window by PyQt5 and Python 3
     # please visit https://gist.github.com/acbetter/e7d0c600fdc0865f4b0ee05a17b858f2
+
+
+
+    # quando abrir a imagem a gente aparece o load diferenciado e coisar com a IA
+    # Depois que terminar vai abrir a notificação
+    # Selecione uma parte da imagem para gerar um mapa
+    # 
