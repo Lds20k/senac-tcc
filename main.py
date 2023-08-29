@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import shutil
 from PIL import Image
 import cv2
 import numpy as np
@@ -60,30 +61,34 @@ class QImageViewer(QMainWindow):
             if not self.fitToWindowAct.isChecked():
                 self.imageLabel.adjustSize()
 
+    def qimage_to_cv2(self, qimage):
+        buffer = np.array(qimage.bits().asarray(qimage.width() * qimage.height() * qimage.depth() // 8))
+        buffer = buffer.reshape((qimage.height(), qimage.width(), qimage.depth() // 8))
+        cv2_image = cv2.cvtColor(buffer, cv2.COLOR_BGR2RGB)
+        return cv2_image
+
     def createMask(self, event):
         x = event.pos().x()
         y = event.pos().y()
         c = self.img.pixel(x,y)
-        rgb_color = QColor(c).getRgb()[:3]
 
-        width = self.img.width()
-        height = self.img.height()
+        width = int(self.img.width())
+        height = int(self.img.height())
 
-        image = Image.new('RGB', (width, height))
+        image = self.qimage_to_cv2(self.img)
 
-        for x_in in range(width):
-            for y_in in range(height):
-                pxl = self.img.pixel(x_in, y_in)
-                pxl_color = QColor(pxl).getRgb()[:3]
-                
-                if rgb_color == pxl_color:
-                    image.putpixel((x_in, y_in), (255, 255, 255))
-                else:
-                    image.putpixel((x_in, y_in), (0, 0, 0))
+        seed = (x, y)
+        mask = np.zeros((height+2,width+2),np.uint8)
 
-        image.save('output.png')
-        
-        # Load image as grayscale and obtain bounding box coordinates
+        floodflags = 4
+        floodflags |= cv2.FLOODFILL_MASK_ONLY
+        floodflags |= (255 << 8)
+
+        _,_,mask,_ = cv2.floodFill(image, mask, seed, (255,0,0), (10,)*3, (10,)*3, floodflags)
+        _, binary_mask = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
+
+        cv2.imwrite("output.png", binary_mask)
+
         img_in = cv2.imread('output.png', 0)
         height, width = img_in.shape
         x,y,w,h = cv2.boundingRect(img_in)
@@ -95,10 +100,9 @@ class QImageViewer(QMainWindow):
         y = height//2 - ROI.shape[1]//2
         if x > 0 and y > 0: 
             mask[y:y+h, x:x+w] = ROI
-            # Save the image to a file
             cv2.imwrite('output_centralized.png', mask)
         else:
-            image.save('output_centralized.png')
+            shutil.move("output.png", "output_centralized.png")
 
         im = Image.open('output_centralized.png')
         width, height = im.size   # Get dimensions
@@ -110,7 +114,8 @@ class QImageViewer(QMainWindow):
 
         # Crop the center of the image
         im = im.crop((left, top, right, bottom))
-        im = im.resize((width, height))
+
+        im = im.resize((height, height))
         im.save('output_croped.png')
 
 
