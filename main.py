@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import shutil
+import time
 from PIL import Image
+from PyQt5.QtCore import QTimer
 import cv2
 import numpy as np
 from PyQt5.QtCore import Qt
+from pyqtspinner import WaitingSpinner
 from PyQt5.QtGui import QImage, QPixmap, QPalette, QPainter, QColor
 from PyQt5.QtPrintSupport import QPrintDialog, QPrinter
 from PyQt5.QtWidgets import QLabel, QSizePolicy, QScrollArea, QMessageBox, QMainWindow, QMenu, QAction, \
@@ -16,6 +19,7 @@ class QImageViewer(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.spinner = None
         self.printer = QPrinter()
         self.scaleFactor = 0.0
 
@@ -45,7 +49,8 @@ class QImageViewer(QMainWindow):
         if fileName:
             self.img = QImage(fileName)
             if self.img.isNull():
-                QMessageBox.information(self, "Image Viewer", "Cannot load %s." % fileName)
+                QMessageBox.information(
+                    self, "Image Viewer", "Cannot load %s." % fileName)
                 return
 
             self.imageLabel.setPixmap(QPixmap.fromImage(self.img))
@@ -60,17 +65,24 @@ class QImageViewer(QMainWindow):
 
             if not self.fitToWindowAct.isChecked():
                 self.imageLabel.adjustSize()
+            self.start_loading()
+
+            timer = QTimer(self)
+            timer.timeout.connect(self.spinner.stop)
+            timer.start(5000)
 
     def qimage_to_cv2(self, qimage):
-        buffer = np.array(qimage.bits().asarray(qimage.width() * qimage.height() * qimage.depth() // 8))
-        buffer = buffer.reshape((qimage.height(), qimage.width(), qimage.depth() // 8))
+        buffer = np.array(qimage.bits().asarray(
+            qimage.width() * qimage.height() * qimage.depth() // 8))
+        buffer = buffer.reshape(
+            (qimage.height(), qimage.width(), qimage.depth() // 8))
         cv2_image = cv2.cvtColor(buffer, cv2.COLOR_BGR2RGB)
         return cv2_image
 
     def createMask(self, event):
         x = event.pos().x()
         y = event.pos().y()
-        c = self.img.pixel(x,y)
+        c = self.img.pixel(x, y)
 
         width = int(self.img.width())
         height = int(self.img.height())
@@ -78,27 +90,28 @@ class QImageViewer(QMainWindow):
         image = self.qimage_to_cv2(self.img)
 
         seed = (x, y)
-        mask = np.zeros((height+2,width+2),np.uint8)
+        mask = np.zeros((height+2, width+2), np.uint8)
 
         floodflags = 4
         floodflags |= cv2.FLOODFILL_MASK_ONLY
         floodflags |= (255 << 8)
 
-        _,_,mask,_ = cv2.floodFill(image, mask, seed, (255,0,0), (10,)*3, (10,)*3, floodflags)
+        _, _, mask, _ = cv2.floodFill(
+            image, mask, seed, (255, 0, 0), (10,)*3, (10,)*3, floodflags)
         _, binary_mask = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
 
         cv2.imwrite("output.png", binary_mask)
 
         img_in = cv2.imread('output.png', 0)
         height, width = img_in.shape
-        x,y,w,h = cv2.boundingRect(img_in)
+        x, y, w, h = cv2.boundingRect(img_in)
 
         # Create new blank image and shift ROI to new coordinates
         mask = np.zeros(img_in.shape, dtype=np.uint8)
         ROI = img_in[y:y+h, x:x+w]
-        x = width//2 - ROI.shape[0]//2 
+        x = width//2 - ROI.shape[0]//2
         y = height//2 - ROI.shape[1]//2
-        if x > 0 and y > 0: 
+        if x > 0 and y > 0:
             mask[y:y+h, x:x+w] = ROI
             cv2.imwrite('output_centralized.png', mask)
         else:
@@ -107,7 +120,7 @@ class QImageViewer(QMainWindow):
         im = Image.open('output_centralized.png')
         width, height = im.size   # Get dimensions
 
-        left = (width - w  * 1.5 )/2
+        left = (width - w * 1.5)/2
         top = (height - h * 1.5)/2
         right = (width + w * 1.5)/2
         bottom = (height + h * 1.5)/2
@@ -118,7 +131,6 @@ class QImageViewer(QMainWindow):
         im = im.resize((height, height))
         im.save('output_croped.png')
 
-
     def print_(self):
         dialog = QPrintDialog(self.printer, self)
         if dialog.exec_():
@@ -126,7 +138,8 @@ class QImageViewer(QMainWindow):
             rect = painter.viewport()
             size = self.imageLabel.pixmap().size()
             size.scale(rect.size(), Qt.KeepAspectRatio)
-            painter.setViewport(rect.x(), rect.y(), size.width(), size.height())
+            painter.setViewport(rect.x(), rect.y(),
+                                size.width(), size.height())
             painter.setWindow(self.imageLabel.pixmap().rect())
             painter.drawPixmap(0, 0, self.imageLabel.pixmap())
 
@@ -165,16 +178,36 @@ class QImageViewer(QMainWindow):
                           "print an image.</p>")
 
     def createActions(self):
-        self.openAct = QAction("&Open...", self, shortcut="Ctrl+O", triggered=self.open)
-        self.printAct = QAction("&Print...", self, shortcut="Ctrl+P", enabled=False, triggered=self.print_)
-        self.exitAct = QAction("E&xit", self, shortcut="Ctrl+Q", triggered=self.close)
-        self.zoomInAct = QAction("Zoom &In (25%)", self, shortcut="Ctrl++", enabled=False, triggered=self.zoomIn)
-        self.zoomOutAct = QAction("Zoom &Out (25%)", self, shortcut="Ctrl+-", enabled=False, triggered=self.zoomOut)
-        self.normalSizeAct = QAction("&Normal Size", self, shortcut="Ctrl+S", enabled=False, triggered=self.normalSize)
+        self.openAct = QAction(
+            "&Open...", self, shortcut="Ctrl+O", triggered=self.open)
+        self.printAct = QAction(
+            "&Print...", self, shortcut="Ctrl+P", enabled=False, triggered=self.print_)
+        self.exitAct = QAction(
+            "E&xit", self, shortcut="Ctrl+Q", triggered=self.close)
+        self.zoomInAct = QAction(
+            "Zoom &In (25%)", self, shortcut="Ctrl++", enabled=False, triggered=self.zoomIn)
+        self.zoomOutAct = QAction(
+            "Zoom &Out (25%)", self, shortcut="Ctrl+-", enabled=False, triggered=self.zoomOut)
+        self.normalSizeAct = QAction(
+            "&Normal Size", self, shortcut="Ctrl+S", enabled=False, triggered=self.normalSize)
         self.fitToWindowAct = QAction("&Fit to Window", self, enabled=False, checkable=True, shortcut="Ctrl+F",
                                       triggered=self.fitToWindow)
         self.aboutAct = QAction("&About", self, triggered=self.about)
         self.aboutQtAct = QAction("About &Qt", self, triggered=qApp.aboutQt)
+
+    def start_loading(self):
+        self.spinner = WaitingSpinner(self, center_on_parent=True, disable_parent_when_spinning=True,
+                                       roundness=100.0,
+                                        fade=80.0,
+                                        radius=20,
+                                        lines=5,
+                                        line_length=45,
+                                        line_width=10,
+                                        speed=2.3
+                                      )
+        
+
+        self.spinner.start()
 
     def createMenus(self):
         self.fileMenu = QMenu("&File", self)
@@ -197,7 +230,8 @@ class QImageViewer(QMainWindow):
 
     def scaleImage(self, factor):
         self.scaleFactor *= factor
-        self.imageLabel.resize(self.scaleFactor * self.imageLabel.pixmap().size())
+        self.imageLabel.resize(
+            self.scaleFactor * self.imageLabel.pixmap().size())
 
         self.adjustScrollBar(self.scrollArea.horizontalScrollBar(), factor)
         self.adjustScrollBar(self.scrollArea.verticalScrollBar(), factor)
