@@ -19,6 +19,7 @@
 latex/main.txt
 .actrc
 **/.DS_Store
+**/._.DS_Store
 output.png
 output_centralized.png
 output_croped.png
