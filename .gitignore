@@ -22,6 +22,7 @@ latex/main.txt
 output.png
 output_centralized.png
 output_croped.png
+**/*.pyc
 ## Intermediate documents:
 *.dvi
 *.xdv
