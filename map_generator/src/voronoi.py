@@ -4,6 +4,7 @@ from typing import Optional, List, Tuple
 import matplotlib.pyplot as plt
 from scipy.spatial import Voronoi, voronoi_plot_2d
 from shapely.geometry import Polygon
+from PIL import Image
 
 
 class VoronoiPolygons:
@@ -48,13 +49,25 @@ class VoronoiPolygons:
         return self._vor_c
 
     def generate_points(self, N: int, alpha: float) -> None:
-        self._points = np.random.random((int((1-alpha)*N), 2))
+        count = 0
+        self._points = []
+        im = Image.open('output_croped.png')
+        im = im.convert('RGB')
+        width, height = im.size   # Get dimensions
+        while count < int((1-alpha)*N):
+            point_x = np.random.rand()
+            point_y = np.random.rand()
+            r, g, b = im.getpixel(( int(point_x *  width), int((1 - point_y) * height)))
+            if r == 255: 
+                self._points.append([point_x,  point_y])
+                count += 1 
+
         if alpha > 0:
             N_ = N - int((1-alpha)*N)
             new_points = np.random.random((N_, 2))/2
             regions = np.array([[.5,.5],[.5,.0],[.0,.0],[.0,.5]])
-            region = regions[np.random.randint(0,4)]
-            new_points = new_points + region
+            region_up = regions[np.random.randint(0,4)]
+            new_points = new_points + region_up
         self._points = np.vstack((self._points, new_points))
 
     def generate_centroids(self, N: int) -> None:

@@ -8,9 +8,8 @@
             "name": "Python: Arquivo Atual",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": true
+            "program": "${workspaceFolder}/map_generator/map_generator.py",
+            "console": "integratedTerminal"
         }
     ]
 }
