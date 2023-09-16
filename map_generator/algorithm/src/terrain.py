@@ -217,7 +217,7 @@ def assign_terrain_from_image(image, graph):
 
             
             x_convert = np.divide(x, image.size[0])
-            y_convert = np.divide(y, image.size[1])
+            y_convert = np.divide(image.size[1] - y, image.size[1])
             point = Point(x_convert, y_convert)
             for i in range(len(polygons)):
                 if polygons[i].contains(point):

@@ -3,7 +3,7 @@ from src.map import Graph
 from src.terrain import (assign_terrain_from_image,
                          assign_terrain_types_to_graph)
 
-IMAGE_PATH = "/home/lucas/Documentos/map-generator/algorithm/image.png"
+IMAGE_PATH = "map_generator/algorithm/image.png"
 
 g = Graph(N=250, iterations=2)
 
