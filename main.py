@@ -1,18 +1,15 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 import shutil
 import time
-from PIL import Image
-from PyQt5.QtCore import QTimer
+
 import cv2
 import numpy as np
-from PyQt5.QtCore import Qt
-from pyqtspinner import WaitingSpinner
-from PyQt5.QtGui import QImage, QPixmap, QPalette, QPainter, QColor
+from PIL import Image
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QColor, QImage, QPainter, QPalette, QPixmap
 from PyQt5.QtPrintSupport import QPrintDialog, QPrinter
-from PyQt5.QtWidgets import QLabel, QSizePolicy, QScrollArea, QMessageBox, QMainWindow, QMenu, QAction, \
-    qApp, QFileDialog
+from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
+                             QMessageBox, QScrollArea, QSizePolicy, qApp)
+from pyqtspinner import WaitingSpinner
 
 
 class QImageViewer(QMainWindow):
@@ -246,14 +243,10 @@ class QImageViewer(QMainWindow):
 
 if __name__ == '__main__':
     import sys
+
     from PyQt5.QtWidgets import QApplication
 
     app = QApplication(sys.argv)
     imageViewer = QImageViewer()
     imageViewer.show()
     sys.exit(app.exec_())
-    # TODO QScrollArea support mouse
-    # base on https://github.com/baoboa/pyqt5/blob/master/examples/widgets/imageviewer.py
-    #
-    # if you need Two Image Synchronous Scrolling in the window by PyQt5 and Python 3
-    # please visit https://gist.github.com/acbetter/e7d0c600fdc0865f4b0ee05a17b858f2
