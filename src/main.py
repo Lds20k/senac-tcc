@@ -23,6 +23,7 @@ class EfficientPSWorker(QObject):
     def run(self):
         logging.info("EfficientPSWorker em execução")
         result_image = execute_efficientps(self.image)
+        logging.info(f"Imagem pos processamento com {result_image.shape[1]}x{result_image.shape[0]}")
         qtImage = QImage(result_image.data, result_image.shape[1], result_image.shape[0], QImage.Format_RGB888).rgbSwapped()
         self.result.emit(qtImage)
         self.finished.emit()
@@ -37,6 +38,7 @@ class MapWorker(QObject):
     def run(self):
         logging.info("MapWorker em execução")
         result_image = generate(self.image, self.points)
+        logging.info(f"Imagem pos processamento com {result_image.shape[1]}x{result_image.shape[0]}")
         qtImage = QImage(result_image.data, result_image.shape[1], result_image.shape[0], QImage.Format_RGB888).rgbSwapped()
         self.result.emit(qtImage)
         self.finished.emit()
@@ -277,6 +279,7 @@ class QImageViewer(QMainWindow):
     def update_screen_image(self, image: QImage):
         self.img = image
         self.imageLabel.setPixmap(QPixmap.fromImage(self.img))
+        self.imageLabel.adjustSize()
 
     def runEfficientPSWorker(self, image):
         logging.info("Criando EfficientPSWorker")

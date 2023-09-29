@@ -1,8 +1,5 @@
 import logging
 
-import cv2
-import numpy as np
-
 from map_geration.graph import *
 from map_geration.map import convert_map_to_image
 from map_geration.terrain import *
@@ -21,11 +18,5 @@ def generate(image, points=25):
     assign_center_elevations(graph)
 
     logging.info("Gerando imagem")
-    fig = convert_map_to_image(graph)
-    fig.canvas.draw()
     
-    img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-    img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
-    img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
-
-    return img
+    return convert_map_to_image(graph)

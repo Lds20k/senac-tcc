@@ -3,15 +3,18 @@ from __future__ import absolute_import
 import queue
 from typing import *
 
+import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import plotly.graph_objs as go
-from map_geration.graph import *
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
 from scipy.spatial import ConvexHull
+
+from map_geration.graph import *
 from map_geration.terrain_enum import *
+
 
 def convert_map_to_image(
     graph: Graph,
@@ -72,8 +75,21 @@ def convert_map_to_image(
                 
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
+    
+    plt.axis('off')
+    plt.margins(0,0)
 
-    return fig
+    plt.gca().xaxis.set_major_locator(plt.NullLocator())
+    plt.gca().yaxis.set_major_locator(plt.NullLocator())
+
+    plt.savefig('output_fig.png', bbox_inches = 'tight', pad_inches = 0)
+
+    fig.subplots_adjust(0,0,1,1)
+    fig.canvas.draw()
+    img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
+    img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+
+    return cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
 
 def center_to_polygon(center, plot_type):
     """

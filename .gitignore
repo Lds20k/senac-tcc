@@ -23,6 +23,7 @@ latex/main.txt
 output.png
 output_centralized.png
 output_croped.png
+output_fig.png
 **/*.pyc
 ## Intermediate documents:
 *.dvi
