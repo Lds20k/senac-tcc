@@ -27,8 +27,8 @@ from cv2.typing import MatLike
 
 def execute_efficientps(img: MatLike):
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    config_file = current_dir + '/efficientPS_singlegpu_sample.py'
-    checkpoint_file = current_dir + '/model_ct.pth'
+    config_file = current_dir + '/kitti_config.py'
+    checkpoint_file = current_dir + '/model_kt.pth'
 
     device = torch.device('cuda:0')
     cfg = mmcv.Config.fromfile(config_file)
