@@ -10,6 +10,26 @@ A linguagem de programação utilizada para desenvolvimento do projeto foi Pytho
 
 Utilizou-se o código aberto oficial do trabalho ciéntifico postado no repositório do Github \footnote{\url{https://github.com/DeepSceneSeg/EfficientPS}}.
 
+Percebe-se que o resultado do modelo proposto não foi o esperado pois objetos de mesma classe como carros tem a mesma cor com uma borda branca exemplificados na \cref{fig:resultado_inicial}. Logo tentou-se mudar o código para gerar uma saída com objetos de mesma classe com cores diferentes como na figura \cref{fig:segmantations_2}.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado inicial do repositório.}
+	\includegraphics[width=0.6\textwidth]{figures/resultado_primario.png}
+    \legend{Fonte: Criação própria}
+	\label{fig:resultado_inicial}
+\end{figure}
+
+Seguiu-se os passos citados numa publicação no repositório \footnote{\url{https://github.com/DeepSceneSeg/EfficientPS/issues/23}} porém o resultado obtido não foi satisfatório pois não possível discernir quais segmentos pertenciam as respectivas classes, o resultado é ilustrado na \cref{fig:resultado_obtido}.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado obtido seguindo os passos da publicação no repositório.}
+	\includegraphics[width=0.6\textwidth]{figures/resultado_obtido.png}
+    \legend{Fonte: Criação própria}
+	\label{fig:resultado_obtido}
+\end{figure}
+
 \subsection{Geração procedural do mapa}
 
 Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:geracaoProcedural]{Polygonal Map Generation for Games} com uma implementação não oficial porém baseada no artigo feito em Python.
