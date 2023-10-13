@@ -13,7 +13,7 @@ from matplotlib.patches import Polygon
 from scipy.spatial import ConvexHull
 
 from map_geration.graph import *
-from map_geration.terrain_enum import *
+from map_geration.map_enums import *
 
 
 def convert_map_to_image(

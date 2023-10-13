@@ -8,7 +8,7 @@ import numpy as np
 from map_geration.graph import *
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
-from map_geration.terrain_enum import *
+from map_geration.map_enums import *
 
 def assign_terrain_from_image(image, graph: Graph):
     def generate_coast(center: Center, visited: list=[]):
@@ -48,14 +48,14 @@ def assign_terrain_from_image(image, graph: Graph):
             
             graph.centers[i].terrain_type = TerrainType.LAND
 
-    logging.info("Encontrando o primeiro poligono LAND")
+    logging.info("Procurando o primeiro poligono LAND")
     a_land_center = graph.centers[0]
     for center in graph.centers:
         if center.terrain_type == TerrainType.LAND:
             a_land_center = center
             break
     
-    logging.info("Assinando poligonos como COAST")
+    logging.info("Marcando poligonos como COAST")
     generate_coast(a_land_center)
 
 def assign_corner_elevations(graph: Graph, borders=None):

@@ -1,6 +1,6 @@
 from typing import *
 
-from map_geration.terrain_enum import BiomeType, TerrainType
+from map_geration.map_enums import BiomeType, TerrainType
 
 from map_geration.voronoi import VoronoiPolygons
 
@@ -37,7 +37,7 @@ class Corner:
         self.touches = []
         self.protrudes = []
         self.adjacent = []
-        self.terrain_type = TerrainType.LAND
+        self.terrain_type = TerrainType.OCEAN
         self.height = 0
         self.downslope = None
         self.river = 0
