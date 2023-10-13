@@ -1,78 +1,70 @@
 from PIL import Image
 import numpy as np
 import cv2
+from collections import Counter
 
 def numpytoimage(numpy):
     numpy = numpy * 255
     image= Image.fromarray(numpy.astype(np.uint8))
     return image
 
+dimension = (300, 300)
 
 if __name__ == '__main__':
+
     reference = cv2.imread("output_croped.png",0)
+    reference_resized = cv2.resize(reference, dimension)
 
-    extract = cv2.imread("output_2d.png")
 
-    height = extract.shape[0]
-    width = extract.shape[1]
-    image = Image.new('RGB', (width, height))
+    # extract = cv2.imread("output_2d.png")
 
-    for x_in in range(width):
-        for y_in in range(height):
-            pixel_color = extract[y_in, x_in]
+    extract = cv2.imread("output_3d.png", 0)
+    extract_resized = cv2.resize(extract, dimension)
 
-            if pixel_color[0] == 255 and pixel_color[1] == 191 and pixel_color[2] == 0:
-                image.putpixel((x_in, y_in), (0, 0, 0))
-            else:
-                image.putpixel((x_in, y_in), (255, 255, 255))
 
-    open_cv_image = np.array(image)
-    open_cv_image = open_cv_image[:, :, ::-1].copy()
-    gray = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2GRAY)
+    # height = extract.shape[0]
+    # width = extract.shape[1]
+    # image = Image.new('RGB', (width, height))
 
-    cv2.imwrite("map_mas.png", gray)
+    # for x_in in range(width):
+    #     for y_in in range(height):
+    #         pixel_color = extract[y_in, x_in]
 
-    # lut = [[  1,  1,  1],
-    #     [  1,  0,  0],
-    #     [  0,  1,  0],
-    #     [0.5,0.5,0.5]]
+    #         if pixel_color[0] == 255 and pixel_color[1] == 191 and pixel_color[2] == 0:
+    #             image.putpixel((x_in, y_in), (0, 0, 0))
+    #         else:
+    #             image.putpixel((x_in, y_in), (255, 255, 255))
 
-    # _, thresh_ref = cv2.threshold(reference, 75, 1, 0)
+    # open_cv_image = np.array(image)
+    # open_cv_image = open_cv_image[:, :, ::-1].copy()
+    # gray = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2GRAY)
+
+    # cv2.imwrite("map_mask.png", gray)
+
+    lut = np.array([[0.5,0.5,0.5],
+        [  0,  1,  0],
+        [  1,  0,  0],
+        [  1,  1,  1]])
+
+    _, thresh_ref = cv2.threshold(reference_resized, 75, 1, 0)
+
     # _, thresh_extract = cv2.threshold(gray, 75, 2, 0)
-    # C = lut[thresh_ref + thresh_extract]
+    _, thresh_extract = cv2.threshold(extract_resized, 1, 2, 0)
 
+    _, mask_example = cv2.threshold(extract_resized, 1, 255, 0)
+    cv2.imwrite("map_mask.png", mask_example)
 
-    _, thresh_ref = cv2.threshold(reference, 75, 255, 0)
-    _, thresh_extract = cv2.threshold(gray, 75, 255, 0)
-    C = np.zeros(shape=(len(thresh_ref), len(thresh_ref[0]), 3))
+    C = lut[thresh_ref + thresh_extract]
 
-    counter_correct = 0
-    counter_correct_and_errors = 0
+    C_reshaped = C.reshape(-1, C.shape[-1])
+    C_tuples =  [tuple(x) for x in C_reshaped]
 
-    for i in range (0, thresh_ref.shape[0],1):
-        for j in range(0, thresh_ref.shape[1], 1):
-            if thresh_ref[i][j] == thresh_extract[i][j] and thresh_ref[i][j] == 0:
-                # sem nada nos dois
+    C_counter = Counter(C_tuples)
+    counter_correct = C_counter[tuple([1, 1, 1])]
+    count_error_1 = C_counter[tuple([0, 1, 0])]
+    count_error_2 = C_counter[tuple([1, 0, 0])]
 
-                C[i][j][0] = 0.5
-                C[i][j][1] = 0.5
-                C[i][j][2] = 0.5
-            elif thresh_ref[i][j] == 0:
-                C[i][j][0] = 1
-                C[i][j][1] = 0
-                C[i][j][2] = 0
-                counter_correct_and_errors += 1
-            elif np.any(thresh_extract[i][j]) == 0:
-                C[i][j][0] = 0
-                C[i][j][1] = 1
-                C[i][j][2] = 0
-                counter_correct_and_errors += 1
-            else:
-                # igual nos dois
-                counter_correct += 1
-                counter_correct_and_errors += 1
-                C[i][j] = 1
-
+    counter_correct_and_errors = counter_correct + count_error_1 + count_error_2
 
     C_image = numpytoimage(C)
     C_image.save("quality.png")
