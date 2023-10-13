@@ -39,7 +39,6 @@ def assign_terrain_from_image(image, graph: Graph):
             pixel = image.getpixel((x, y))
             if(0 in pixel): continue
 
-            
             x_convert = np.divide(x, image.size[0])
             y_convert = np.divide(image.size[1] - y, image.size[1])
             point = Point(x_convert, y_convert)

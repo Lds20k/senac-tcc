@@ -1,7 +1,9 @@
 import logging
 
+
 from map_geration.graph import *
 from map_geration.map import convert_map_to_image
+from map_geration.draw_map import  convert_map_to_3d_image
 from map_geration.terrain import *
 
 
@@ -17,6 +19,8 @@ def generate(image, points=25):
     redistribute_elevations(graph)
     assign_center_elevations(graph)
 
-    logging.info("Gerando imagem")
-    
-    return convert_map_to_image(graph)
+    logging.info("Gerando imagem 3D")
+    convert_map_to_3d_image(graph, path="output_3d")
+
+    logging.info("Gerando imagem 2D")
+    return convert_map_to_image(graph, path="output_2d")

@@ -23,12 +23,12 @@ def convert_map_to_image(
     debug_moisture=False,
     downslope_arrows=False,
     rivers=True,
+    path:str=""
 ):
     """
     Here the next adjustments will be added to create a complete map.
     """
     fig, ax = plt.subplots(figsize=(10, 10))
-
 
     polygons = [center_to_polygon(center, plot_type) for center in graph.centers]
     p = PatchCollection(polygons, match_original=True)
@@ -82,7 +82,8 @@ def convert_map_to_image(
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
 
-    plt.savefig('output_fig.png', bbox_inches = 'tight', pad_inches = 0)
+    if path != None and path != "":
+        plt.savefig(f"{path}.png", bbox_inches = 'tight', pad_inches = 0)
 
     fig.subplots_adjust(0,0,1,1)
     fig.canvas.draw()
@@ -114,7 +115,7 @@ def center_to_polygon(center, plot_type):
     vertices = hull.vertices
     vertices = np.append(vertices, vertices[0])
     xs, ys = corner_coordinates[vertices, 0], corner_coordinates[vertices, 1]
-    return Polygon(np.c_[xs, ys], facecolor=color, edgecolor='black', linewidth=2)
+    return Polygon(np.c_[xs, ys], facecolor=color)
 
 def center_to_terrain_color(center: Center):
     if center.terrain_type is TerrainType.LAND:
