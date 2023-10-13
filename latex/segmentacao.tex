@@ -1,6 +1,6 @@
 \subsubsubsection*{Segmentação}
 
-O estudo de segmentação semântica dentro da área de redes neurais convolucionais têm três principais nichos, sendo eles: segmentação semântica que é a classificação por pixel, a segmentação de instância que atribui um id para cada objeto encontrado de uma classe, e a segmentação panóptica que junta as duas anteriores para criar uma imagem semelhante a saída de segmentação semântica porém separando objetos de mesma classe sendo essa a mais recente e completa, a diferença entre esses três tipos está ilustrado na \cref{fig:segentacoes} \space\cite{dp_semantic_segmantation, lapix}. 
+O estudo de segmentação semântica dentro da área de redes neurais convolucionais têm três principais nichos, sendo eles: segmentação semântica que é a classificação por pixel, a segmentação de instância que atribui um id para cada objeto encontrado de uma classe, e a segmentação panóptica que junta as duas anteriores para criar uma imagem semelhante a saída de segmentação semântica porém separando objetos de mesma classe sendo essa a mais recente e completa, a diferença entre esses três tipos está ilustrado na \cref{fig:segentacoes} \space\cite{dp_semantic_segmantation, lapix}.
 
 \begin{figure}[ht]
 	\caption{Tipos de segmentação em redes neurais convolucionais}
@@ -39,7 +39,7 @@ A arquitetura Mask R-CNN é derivado do Fast R-CNN — aprimoramento do R-CNN ap
 
 \subsubsubsection*{Segmentação panóptica}
 
-Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados como na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \space\citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc. 
+Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados como na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \space\citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc.
 Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Cityscapes, Mapillary Vistas, ADE20K, e Indian Driving Dataset. Cada conjunto de dados possui diversas classes para o modelo aprender \space\cite{v7labs2022panoptic}.
 
 \subsubsubsection*{Métricas, técnicas e resultados}
@@ -47,11 +47,12 @@ Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Citys
 Com base no contexto acima percebe-se que a segmentação panóptica é a mais completa e por efeito de estudos será utilizado o mesmo para concluir o trabalho. Como nesse nicho existem várias alternativas será abordado algumas métricas, técnicas e resultados para selecionar o modelo.
 
 \subsubsubsection*{União sobre intersecção}
+\label{sec:uniaoSobInterseccao}
 
 A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utilizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados, segue a exemplificação da \cref{eq:iou} \space\cite{dp_semantic_segmantation, lapix, kirillov2019panoptic}:
 
 \begin{equation}
-	\label{eq:iou}	
+	\label{eq:iou}
 	IoU = \frac{\text{Área de intersecção}}{\text{Área de união}} \quad IoU(p_i, g) = \frac{p_i \cap g}{ p_i \cup g}
 \end{equation}
 
@@ -80,7 +81,7 @@ Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ tem-se:
 
 \begin{equation}
 	\label[]{eq:pq_metric_mult}
-	PQ = \underbrace{\frac{\sum_{(p,g)\in TP}IoU(p,g)}{|TP|}}_{\text{Segmentation Quality (SQ)}} 
+	PQ = \underbrace{\frac{\sum_{(p,g)\in TP}IoU(p,g)}{|TP|}}_{\text{Segmentation Quality (SQ)}}
 	\times
 	\underbrace{\frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}}_{\text{Recognition Quality (RQ)}}
 \end{equation}
@@ -116,6 +117,6 @@ Os resultados são de uma competição em aberto criada pela Cytyscapes Dataset,
 	  \hline
 	\end{tabular}
   \end{table}
-  
-  
+
+
 

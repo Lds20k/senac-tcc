@@ -1,6 +1,6 @@
 \section{Implementação}
 
-Pode-se dividir a implementação em três partes, sendo elas: segmentar imagens, geração procedural do mapa, interface gráfica.
+Pode-se dividir a implementação em quatro partes, sendo elas: segmentar imagens, selecionar contorno, gerar proceduralmente o mapa com biomas e interligar as ferramentas atráves de uma interface gráfica.
 
 \subsection{Segmentar imagens}
 
@@ -10,25 +10,29 @@ A linguagem de programação utilizada para desenvolvimento do projeto foi Pytho
 
 Utilizou-se o código aberto oficial do trabalho ciéntifico postado no repositório do Github \footnote{\url{https://github.com/DeepSceneSeg/EfficientPS}}.
 
-\subsection{Geração procedural do mapa}
+Percebe-se que o resultado do modelo proposto não foi o esperado pois objetos de mesma classe como carros tem a mesma cor com uma borda branca exemplificados na \cref{fig:resultado_inicial}. Logo tentou-se mudar o código para gerar uma saída com objetos de mesma classe com cores diferentes como na figura \cref{fig:segmantations_2}.
 
-Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:geracaoProcedural]{Polygonal Map Generation for Games} com uma implementação não oficial porém baseada no artigo feito em Python.
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado inicial do repositório.}
+	\includegraphics[width=0.6\textwidth]{figures/resultado_primario.png}
+    \legend{Fonte: Criação própria}
+	\label{fig:resultado_inicial}
+\end{figure}
 
-\subsubsection{Ilha gerada no contorno}
+Seguiu-se os passos citados numa publicação no repositório \footnote{\url{https://github.com/DeepSceneSeg/EfficientPS/issues/23}} porém o resultado obtido não foi satisfatório pois não possível discernir quais segmentos pertenciam as respectivas classes, o resultado é ilustrado na \cref{fig:resultado_obtido}.
 
-\subsubsection{Mapa de altura}
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado obtido seguindo os passos da publicação no repositório.}
+	\includegraphics[width=0.6\textwidth]{figures/resultado_obtido.png}
+    \legend{Fonte: Criação própria}
+	\label{fig:resultado_obtido}
+\end{figure}
 
-\subsubsection{Testes}
+\subsection{Selecionar contorno}
 
-
-
-\subsection{Interface gráfica}
-
-Utilizou-se a biblioteca PyQt5 para criar uma interface gráfica na qual o usuário poderá interagir e criar um mapa a partir da seleção do contorno detectado pelo modelo de IA.
-
-Esse módulo é responsável para conectar todas as partes e obter o mapa. Portanto é necessário abrir uma imagem do diretório local, carregar e disparar a execução do processo de segmentação de imagem. Após o resultado da IA, permitir a seleção do contorno,  criar uma imagem binária a partir do contorno e envia-lá como argumento na geração procedural de mapas.
-
-Além disso para promever a usabilidade utilizou-se um loading específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
+Para representar a seleção do contorno utilizou-se uma técnica chamada de imagem binária, explicaa no subtópico seguinte.
 
 \subsubsection{Imagem binária}
 
@@ -59,3 +63,44 @@ Após a saída dos algoritmos de seleção, o objeto selecionado é detectado e 
     \legend{Fonte: \space Autoria própria}
 	\label{fig:saidas_selecao}
 \end{figure}
+
+\subsection{Geração procedural do mapa}
+
+Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:geracaoProcedural]{Polygonal Map Generation for Games} com uma implementação não oficial porém baseada no artigo feito em Python.
+
+\subsubsection{Ilha gerada no contorno}
+
+Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vertice, e a cor rosa representa a aresta do polígono.
+
+A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do algoritmo, sendo os pontos vermelhos os centroides que são ligados por linhas pretas, os pontos azuis são os vértices que se ligam com linha branca para tornar as arestas formando assim o polígono.
+
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Ilustração do cálculo para definir a localização dos vértices.}
+	\includegraphics[width=0.6\textwidth]{figures/explicacao_vertice.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:explicacao_vertice}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Ilustração do diagrama de Voronoi.}
+	\includegraphics[width=0.6\textwidth]{figures/diagrama_voronoi_pontos.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:diagrama_voronoi_pontos}
+\end{figure}
+
+\subsubsection{Mapa de altura}
+
+\subsubsection{Testes}
+
+Será feito um teste baseado no sutópico \hyperref[sec:uniaoSobInterseccao]{união sob intersecção} no qual irá comparar duas imagens binárias da entrada do algoritmo de geração procedural e a saída, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa medida maior a compatibilidade com o contorno inicialmente proposto.
+
+\subsection{Interface gráfica}
+
+Utilizou-se a biblioteca PyQt5 para criar uma interface gráfica na qual o usuário poderá interagir e criar um mapa a partir da seleção do contorno detectado pelo modelo de IA.
+
+Esse módulo é responsável para conectar todas as partes e obter o mapa. Portanto é necessário abrir uma imagem do diretório local, carregar e disparar a execução do processo de segmentação de imagem. Após o resultado da IA, permitir a seleção do contorno,  criar uma imagem binária a partir do contorno e envia-lá como argumento na geração procedural de mapas.
+
+Além disso para promever a usabilidade utilizou-se um loading específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
