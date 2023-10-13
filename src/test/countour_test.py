@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     # extract = cv2.imread("output_2d.png")
 
-    extract = cv2.imread("output_3d.png", 0)
+    extract = cv2.imread("output_3d_m.png", 0)
     extract_resized = cv2.resize(extract, dimension)
 
 
@@ -51,8 +51,26 @@ if __name__ == '__main__':
     # _, thresh_extract = cv2.threshold(gray, 75, 2, 0)
     _, thresh_extract = cv2.threshold(extract_resized, 1, 2, 0)
 
-    _, mask_example = cv2.threshold(extract_resized, 1, 255, 0)
-    cv2.imwrite("map_mask.png", mask_example)
+    # creating blur image
+    _, mask = cv2.threshold(extract_resized, 1, 255, 0)
+    cv2.imwrite("map_mask.png", mask)
+
+    mu_rgb = np.mean(extract_resized)  # mu_rgb.shape == (3,)
+    std_rgb = np.std(extract_resized)  # std_rgb.shape == (3,)
+
+
+    ksize = (40, 40)
+    blur_image = cv2.medianBlur(extract_resized,21)
+    blur_image = cv2.blur(extract_resized, ksize)
+
+    mu_rgb = np.mean(blur_image)  # mu_rgb.shape == (3,)
+    std_rgb = np.std(blur_image)  # std_rgb.shape == (3,)
+
+
+    final = cv2.bitwise_and(blur_image,blur_image,mask = mask)
+
+    cv2.imshow("Window", blur_image)
+    cv2.waitKey(0)
 
     C = lut[thresh_ref + thresh_extract]
 
