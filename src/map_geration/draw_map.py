@@ -19,9 +19,9 @@ def pos_processing(image):
     
     _, mask = cv2.threshold(open_cv_image, 1, 255, 0)
     blur_image = cv2.blur(open_cv_image, KERNEL_SIZE)
-    open_cv_image = cv2.bitwise_and(blur_image, blur_image, mask=mask)
+    #open_cv_image = cv2.bitwise_and(blur_image, blur_image, mask=mask)
 
-    return Image.fromarray(open_cv_image)
+    return Image.fromarray(blur_image)
 
 
 def convert_map_to_3d_image(

@@ -11,13 +11,22 @@ from shapely.geometry.polygon import Polygon
 from map_geration.map_enums import *
 
 def assign_terrain_from_image(image, graph: Graph):
+
+    def set_cost(center: Center, neighbor: Center):
+        center.terrain_type = TerrainType.COAST
+
+        for corner_n in neighbor.corners:
+            for corner_c in center.corners:
+                if corner_n == corner_c:
+                    corner_c.terrain_type = TerrainType.COAST
+
     def generate_coast(center: Center, visited: list=[]):
         if center in visited: return
         visited.append(center)
         
         for neighbor in center.neighbors:
             if neighbor.terrain_type == TerrainType.OCEAN:
-                center.terrain_type = TerrainType.COAST
+                set_cost(center, neighbor)
                 continue
             
             generate_coast(neighbor)
@@ -46,7 +55,9 @@ def assign_terrain_from_image(image, graph: Graph):
                 if polygons[i].contains(point):
                     break
             
-            graph.centers[i].terrain_type = TerrainType.LAND
+            center: Center = graph.centers[i]
+            center.terrain_type = TerrainType.LAND
+            for corner in center.corners: corner.terrain_type = TerrainType.LAND
 
     logging.info("Procurando o primeiro poligono LAND")
     a_land_center = graph.centers[0]
