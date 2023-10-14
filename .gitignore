@@ -21,6 +21,7 @@ latex/main.txt
 **/.DS_Store
 **/._.DS_Store
 map_mask.png
+output_2d-shaped.png
 output_2d.png
 output_3d.png
 output.png

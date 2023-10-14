@@ -33,7 +33,7 @@ class MapWorker(QObject):
     finished = pyqtSignal()
     result = pyqtSignal(QImage)
     image = None
-    points = 450
+    points = 250
 
     def run(self):
         logging.info("MapWorker em execução")

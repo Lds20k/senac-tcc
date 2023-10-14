@@ -83,14 +83,19 @@ def convert_map_to_image(
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
 
     if path != None and path != "":
-        plt.savefig(f"{path}.png", bbox_inches = 'tight', pad_inches = 0)
+        plt.savefig(f"{path}-shaped.png", bbox_inches = 'tight', pad_inches = 0)
 
     fig.subplots_adjust(0,0,1,1)
     fig.canvas.draw()
     img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
     img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
+    img = cv2.medianBlur(img, 21)
 
-    return cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
+    if path != None and path != "":
+        cv2.imwrite(f"{path}.png", img)
+
+    return img
 
 def center_to_polygon(center, plot_type):
     """
