@@ -12,80 +12,47 @@ dimension = (300, 300)
 
 if __name__ == '__main__':
 
-    reference = cv2.imread("output_croped.png",0)
-    reference_resized = cv2.resize(reference, dimension)
+    ground_truth = cv2.imread("output_croped.png",0)
+    ground_truth_resized = cv2.resize(ground_truth, dimension)
 
+    prediction = cv2.imread("output_3d_m.png", 0)
+    prediction_resized = cv2.resize(prediction, dimension)
 
-    # extract = cv2.imread("output_2d.png")
+    color_map = np.array([[0.5,0.5,0.5],
+                          [  0,  1,  0],
+                          [  1,  0,  0],
+                          [  1,  1,  1]])
 
-    extract = cv2.imread("output_3d_m.png", 0)
-    extract_resized = cv2.resize(extract, dimension)
+    _, thresh_gt = cv2.threshold(ground_truth_resized, 1, 1, 0)
+    _, thresh_prediction = cv2.threshold(prediction_resized, 1, 2, 0)
 
-
-    # height = extract.shape[0]
-    # width = extract.shape[1]
-    # image = Image.new('RGB', (width, height))
-
-    # for x_in in range(width):
-    #     for y_in in range(height):
-    #         pixel_color = extract[y_in, x_in]
-
-    #         if pixel_color[0] == 255 and pixel_color[1] == 191 and pixel_color[2] == 0:
-    #             image.putpixel((x_in, y_in), (0, 0, 0))
-    #         else:
-    #             image.putpixel((x_in, y_in), (255, 255, 255))
-
-    # open_cv_image = np.array(image)
-    # open_cv_image = open_cv_image[:, :, ::-1].copy()
-    # gray = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2GRAY)
-
-    # cv2.imwrite("map_mask.png", gray)
-
-    lut = np.array([[0.5,0.5,0.5],
-        [  0,  1,  0],
-        [  1,  0,  0],
-        [  1,  1,  1]])
-
-    _, thresh_ref = cv2.threshold(reference_resized, 75, 1, 0)
-
-    # _, thresh_extract = cv2.threshold(gray, 75, 2, 0)
-    _, thresh_extract = cv2.threshold(extract_resized, 1, 2, 0)
-
-    # creating blur image
-    _, mask = cv2.threshold(extract_resized, 1, 255, 0)
+    # Visualize mask
+    _, mask = cv2.threshold(prediction_resized, 1, 255, 0)
     cv2.imwrite("map_mask.png", mask)
 
-    mu_rgb = np.mean(extract_resized)  # mu_rgb.shape == (3,)
-    std_rgb = np.std(extract_resized)  # std_rgb.shape == (3,)
+    # Create new image as numpy matrix with sum of two masks
+    result_set = color_map[thresh_gt + thresh_prediction]
 
+    # Modiffy to counterer occurrences
+    result_set_reshaped = result_set.reshape(-1, result_set.shape[-1])
+    result_set_tuples =  [tuple(x) for x in result_set_reshaped]
+    result_set_counter = Counter(result_set_tuples)
 
-    ksize = (40, 40)
-    blur_image = cv2.medianBlur(extract_resized,21)
-    blur_image = cv2.blur(extract_resized, ksize)
+    # True Positive
+    counter_TP = result_set_counter[tuple([1, 1, 1])]
 
-    mu_rgb = np.mean(blur_image)  # mu_rgb.shape == (3,)
-    std_rgb = np.std(blur_image)  # std_rgb.shape == (3,)
+    # False Negative
+    counter_FN = result_set_counter[tuple([0, 1, 0])]
 
+    # False Positive
+    counter_FP = result_set_counter[tuple([1, 0, 0])]
 
-    final = cv2.bitwise_and(blur_image,blur_image,mask = mask)
+    # Correction plus errors occurrences
+    counterer_TP_FN_FP = counter_TP + counter_FN + counter_FP
 
-    cv2.imshow("Window", blur_image)
-    cv2.waitKey(0)
+    # Visualize result set
+    result_set_image = numpytoimage(result_set)
+    result_set_image.save("result_set.png")
 
-    C = lut[thresh_ref + thresh_extract]
-
-    C_reshaped = C.reshape(-1, C.shape[-1])
-    C_tuples =  [tuple(x) for x in C_reshaped]
-
-    C_counter = Counter(C_tuples)
-    counter_correct = C_counter[tuple([1, 1, 1])]
-    count_error_1 = C_counter[tuple([0, 1, 0])]
-    count_error_2 = C_counter[tuple([1, 0, 0])]
-
-    counter_correct_and_errors = counter_correct + count_error_1 + count_error_2
-
-    C_image = numpytoimage(C)
-    C_image.save("quality.png")
-
-    result = (counter_correct / counter_correct_and_errors) * 100
-    print(f'O resultado eh {result}%')
+    result = (counter_TP / counterer_TP_FN_FP) * 100
+    print(f'O resultado eh {result:.2f}%')
