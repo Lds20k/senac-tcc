@@ -20,6 +20,9 @@ latex/main.txt
 .actrc
 **/.DS_Store
 **/._.DS_Store
+map_mask.png
+output_2d.png
+output_3d.png
 output.png
 output_centralized.png
 output_croped.png

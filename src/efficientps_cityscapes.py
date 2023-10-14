@@ -42,13 +42,25 @@ def execute_efficientps(img: MatLike):
     img_ = cv2.resize(img, cfg.test_pipeline[1]['img_scale'])
 
     result = inference_detector(model, img_, eval='panoptic')
-    pan_pred, _, _ = result[0]
+    pan_pred, cat_pred, _ = result[0]
 
-    panoptic_col = pan_pred
-    pan_pred = pan_pred.numpy()
-    panoptic_col[pan_pred==0] = colors.shape[0] - 1
-    panoptic_col = Image.fromarray(colors[panoptic_col])
+    sem = cat_pred[pan_pred].numpy()
+    sem_tmp = sem.copy()
+    sem_tmp[sem==255] = colors.shape[0] - 1
+    sem_img = Image.fromarray(colors[sem_tmp])
 
-    out = panoptic_col.convert(mode="RGB")
+    is_background = (sem < 11) | (sem == 255)
+    pan_pred = pan_pred.numpy() 
+    pan_pred[is_background] = 0
+
+    contours = find_boundaries(pan_pred, mode="outer", background=0).astype(np.uint8) * 255
+    contours = dilation(contours)
+
+    contours = np.expand_dims(contours, -1).repeat(4, -1)
+    contours_img = Image.fromarray(contours, mode="RGBA")
+    
+    out = sem_img.convert(mode="RGBA")
+    out = Image.alpha_composite(out, contours_img).convert(mode="RGB")
+    out = cv2.resize(np.array(out)[:,:,::-1], img_shape)
 
     return cv2.resize(np.array(out)[:,:,::-1], img_shape)

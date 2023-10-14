@@ -70,15 +70,19 @@ class QImageViewer(QMainWindow):
         self.setWindowTitle("Image Viewer")
         self.showMaximized()
 
-        self.spinner = WaitingSpinner(self, center_on_parent=True, disable_parent_when_spinning=True,
+        self.spinner = WaitingSpinner(
+            self,
+            center_on_parent=True,
+            disable_parent_when_spinning=True,
             roundness=100.0,
             fade=80.0,
-            radius=20,
-            lines=5,
-            line_length=45,
-            line_width=10,
-            speed=2.3
+            radius=18,
+            lines=20,
+            line_length=10,
+            line_width=20,
+            speed=1.5707963267948966
         )
+
 
     def open(self):
         options = QFileDialog.Options()
