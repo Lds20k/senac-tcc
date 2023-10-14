@@ -6,8 +6,6 @@ import os
 import os.path as osp
 import tempfile
 
-import random
-
 import mmcv
 import numpy as np
 import pycocotools.mask as maskUtils
@@ -15,40 +13,33 @@ import pycocotools.mask as maskUtils
 from mmdet.utils import print_log
 from .coco import CocoDataset
 from .registry import DATASETS
-from .pipelines import LoadAnnotations
 
 from cityscapesscripts.evaluation.evalPanopticSemanticLabeling import pq_compute_multi_core, \
                                                                       average_pq
-
-import torch
 import json
 import shutil
 
-def get_colors(num_colors):
-    colors_rgb = [
-        [128,  64, 128], # road
-        [244,  35, 232], # sidewalk
-        [ 70,  70,  70], # building
-        [102, 102, 156], # wall
-        [190, 153, 153], # fence
-        [153, 153, 153], # pole
-        [250, 170,  30], # traffic light
-        [220, 220,   0], # traffic sign
-        [107, 142,  35], # vegetation
-        [152, 251, 152], # terrain
-        [ 70, 130, 180]  # sky
-    ]
-
-    for i in range(num_colors):
-        r = random.randint(0,255)
-        g = random.randint(0,255)
-        b = random.randint(0,255)
-        rgb = [r,g,b]
-        colors_rgb.append(rgb)
-    
-    return colors_rgb
-
-PALETTE = get_colors(30)
+PALETTE = [
+    [128,  64, 128], # road
+    [244,  35, 232], # sidewalk
+    [ 70,  70,  70], # building
+    [102, 102, 156], # wall
+    [190, 153, 153], # fence
+    [153, 153, 153], # pole
+    [250, 170,  30], # traffic light
+    [220, 220,   0], # traffic sign
+    [107, 142,  35], # vegetation
+    [152, 251, 152], # terrain
+    [ 70, 130, 180], # sky
+    [220,  20,  60],
+    [255,   0,   0],
+    [  0,   0, 142],
+    [  0,   0,  70],
+    [  0,  60, 100],
+    [  0,  80, 100],
+    [  0,   0, 230],
+    [119,  11,  32]
+]
 
 @DATASETS.register_module
 class CityscapesDataset(CocoDataset):
