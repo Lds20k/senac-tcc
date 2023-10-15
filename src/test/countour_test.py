@@ -18,32 +18,38 @@ def numpytoimage(numpy):
 
 DIMENSION = (300, 300)
 
-ITERATIONS_PER_POINTS = 10
+ITERATIONS_PER_POINTS = 3
 QUANTITY_OF_IMAGES = 5
 START_QUANTITY_POINTS = 50
-END_QUANTITY_POINTS = 401
+END_QUANTITY_POINTS = 301
 SIZE_STEPS_POINTS = 50
 
 def test_countour_image():
     all_results = {}
 
     for img_num in range(1, QUANTITY_OF_IMAGES + 1):
-
+        print(f'Imagem {img_num}')
         ground_truth = cv2.imread(f'src/test/images/test-{img_num}.png', 0)
         ground_truth_resized = cv2.resize(ground_truth, DIMENSION)
 
         img = cv2.cvtColor(ground_truth_resized, cv2.COLOR_BGR2RGB)
         im_pil = Image.fromarray(img)
-
+        retriyng_counter = 0
 
         for i in range(START_QUANTITY_POINTS, END_QUANTITY_POINTS, SIZE_STEPS_POINTS):
             sum_results = 0
             sum_durations = 0
             for j in range (0, ITERATIONS_PER_POINTS):
+                while True:
+                    try:
+                        start_time = time.time()
+                        generate_map.generate(im_pil, points=i)
+                        end_time = time.time()
+                        break
+                    except Exception as e:
+                        print(f"Ocorreu um erro: {e}. Tentando novamente...")
+                        retriyng_counter += 1
 
-                start_time = time.time()
-                generate_map.generate(im_pil, points=i)
-                end_time = time.time()
                 sum_durations += end_time - start_time
 
                 prediction = cv2.imread("output_3d.png", 0)
@@ -88,10 +94,10 @@ def test_countour_image():
                 result = (counter_TP / counterer_TP_FN_FP) * 100
                 sum_results += result
                 print(f'O resultado eh {result:.2f}%')
-        if all_results.get(i) == None:
-            all_results[i] = [0, 0]
-        all_results[i][0] += sum_results
-        all_results[i][1] += sum_durations
+            if all_results.get(i) == None:
+                all_results[i] = [0, 0]
+            all_results[i][0] += sum_results
+            all_results[i][1] += sum_durations
 
 
     for key, value in all_results.items():

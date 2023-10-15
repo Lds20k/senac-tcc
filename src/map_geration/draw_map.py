@@ -13,15 +13,15 @@ from map_geration.map_enums import *
 from map_geration.map import is_center_a_map_corner, nearest_map_corner
 
 KERNEL_SIZE = (75, 75)
+BORDER_SIZE = 150
 
 def pos_processing(image):
-    open_cv_image = np.array(image)
-    
-    _, mask = cv2.threshold(open_cv_image, 1, 255, 0)
-    blur_image = cv2.blur(open_cv_image, KERNEL_SIZE)
-    #open_cv_image = cv2.bitwise_and(blur_image, blur_image, mask=mask)
+    img = np.array(image)
+    img= cv2.copyMakeBorder(img,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,cv2.BORDER_CONSTANT,value=(0,0,0))
+    img = cv2.resize(img, (1000, 1000))
+    img = cv2.blur(img, KERNEL_SIZE)
 
-    return Image.fromarray(blur_image)
+    return Image.fromarray(img)
 
 
 def convert_map_to_3d_image(
@@ -42,10 +42,10 @@ def convert_map_to_3d_image(
             points = points.reshape(-1, 2)
         points = points * IMAGE_SIZE
         points_converted = list(map(tuple, points))
-        
+
         color = math.floor(center.height * 255)
         image_draw.polygon(xy=points_converted, fill=color)
-    
+
     image = image.transpose(Image.FLIP_TOP_BOTTOM)
     image = pos_processing(image)
     image.save(f"{path}.png")
