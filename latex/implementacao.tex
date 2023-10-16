@@ -36,9 +36,9 @@ Para representar a seleção do contorno utilizou-se uma técnica chamada de ima
 
 \subsubsection{Imagem binária}
 
-Uma imagem  binária contém  apenas duas cores, geralmente preto e  branco e para essa aplicação sera utilizado como uma máscara para servir de auxilio ao  gerar o  mapa no contorno desejado \cite{Aznag2020}.
+Uma imagem  binária contém  apenas duas cores, geralmente preto e  branco e para essa aplicação sera utilizado uma imagem binária como uma máscara para servir de auxilio ao  gerar o  mapa no contorno desejado \cite{Aznag2020}.
 
-Utilizou-se duas maneiras para selecionar o contorno, sendo eles: selecionar por cor, selecionar por preenchimento por inundação — ou  em inglês  flood fill —.
+Utilizou-se duas maneiras para selecionar o contorno, sendo eles: selecionar por cor e selecionar por preenchimento por inundação — ou  em inglês  flood fill —.
 
 \subsubsubsection*{Selecionar por cor}
 
@@ -59,7 +59,7 @@ Após a saída dos algoritmos de seleção, o objeto selecionado é detectado e 
 \begin{figure}[!ht]
 	\centering
     \caption{Passos da seleção da saída da inteligência  artificial.}
-	\includegraphics[width=0.6\textwidth]{figures/saidas_selecao.png}
+	\includegraphics[width=1.0\textwidth]{figures/saidas_selecao.png}
     \legend{Fonte: \space Autoria própria}
 	\label{fig:saidas_selecao}
 \end{figure}
@@ -95,7 +95,24 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 
 \subsubsection{Testes}
 
-Será feito um teste baseado no sutópico \hyperref[sec:uniaoSobInterseccao]{união sob intersecção} no qual irá comparar duas imagens binárias da entrada do algoritmo de geração procedural e a saída, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa medida maior a compatibilidade com o contorno inicialmente proposto.
+Será feito um teste baseado no sutópico \hyperref[sec:uniaoSobInterseccao]{união sob intersecção} — ou IoU sigla em inglês — no qual irá comparar duas imagens binárias da entrada do algoritmo de geração procedural e a saída, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
+
+Para isso utilizou-se 5 imagens com o contorno desejado, e em cada imagem percorre-se uma lista contendo a quantidade de pontos para gerar o mapa, sendo eles 50, 100, 150, 200, 250 e 300 respectivamente. Para cada índice dessa lista executou-se três tentativas, em cada, será armazenado as informações de tempo de processamento em segundos da função de gerar o mapa e o resultado em porcentagem obtido pela métrica IoU. Essas informações são armazenadas em um dicionário, usando como chave a quantidade de pontos para gerar o mapa e o valor, uma lista contendo no índice zero o somatório dos valores IoU obtidos e no índice um o somatório da duração das execuções.
+
+Para visualização da métrica IoU utilizou-se um método que aplica um filtro para obter imagens binárias a partir de uma imagem em tons de cinza e definindo-se uma divisão entre 0 e 255 no espectro de cores de preto ao branco. Definiu-se a imagem de entrada para representar o objeto — ilha — com a cor em escala de cinza como 1, já na imagem de saída identifica-se a ilha como valor 2. Após isso cria-se uma matriz do mesmo tamanho com auxilio de uma lista com quatro cores — que representam os conjuntos do IoU — populando essa matriz com as cores do índice derivado do cálculo da soma entre os pixéis da imagem binária de entrada e de saída.
+
+Obtém-se como resultado a \cref{fig:resultado_iou}, sendo as figuras da esquerda para direita a imagem binária de entrada para gerar o mapa, a segunda a imagem de saída da geração do mapa denominada de mapa de altura, a terceira é uma representação da máscara criada a partir do filtro no mapa de altura, e a quarta representa os conjuntos da métrica IoU sendo eles o verdadeiro positivo representado com branco, o verdadeiro negativo representado como cinza, o falso positivo representado como vermelho e por fim o falso negativo representado de verde.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Ilustração do passos da métrica IoU.}
+	\includegraphics[width=0.8\textwidth]{figures/passos_iou.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:resultado_iou}
+\end{figure}
+
+Após a execução desses laços aninhados calcula-se com a operação de divisão para cada valor do dicionário em prol de obter as médias.
+
 
 \subsection{Interface gráfica}
 
