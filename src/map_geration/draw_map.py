@@ -21,6 +21,8 @@ def pos_processing(image):
     img = cv2.resize(img, (1000, 1000))
     img = cv2.blur(img, KERNEL_SIZE)
 
+    img.astype('int8').tofile("output_3d.raw")
+
     return Image.fromarray(img)
 
 

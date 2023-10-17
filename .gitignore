@@ -409,3 +409,5 @@ TSWLatexianTemp*
 # End of https://www.toptal.com/developers/gitignore/api/unity
 
 result_set.png
+
+output_3d.raw
