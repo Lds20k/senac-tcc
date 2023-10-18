@@ -334,7 +334,7 @@ class QImageViewer(QMainWindow):
         self.thread.finished.connect(self.stop_loading)
 
 if __name__ == '__main__':
-    logging.basicConfig()
+    logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.DEBUG)
     logging.getLogger().setLevel(logging.INFO)
 
     app = QApplication(sys.argv)
