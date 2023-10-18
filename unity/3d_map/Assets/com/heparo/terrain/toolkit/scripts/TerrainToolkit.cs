@@ -1,21 +1,21 @@
 /*---------------------------------------------------------------------------*/
 /* INFOS / REFERENCES */
 /*---------------------------------------------------------------------------*/
-/* This script is part of the TerrainToolkit2017 asset from the Unity Asset Store 
+/* This script is part of the TerrainToolkit2017 asset from the Unity Asset Store
  * Please refer to : https://unity3d.com/asset-store
  *
- * Author : Hervé PARONNAUD 
+ * Author : Hervé PARONNAUD
  * Contact / Support : contact@heparo.com
  *
  * Asset Store Terms of Service and EULA
  * Please refer to : http://unity3d.com/company/legal/as_terms
  *
  *
- * 
+ *
  * WARNING ! WARNING ! WARNING !
- *  
+ *
  * The present version of the Unity Terrain Toolkit is based on :
- * 
+ *
  * The Unity Terrain Toolkit
  * Unity Summer of Code 2009
  * Terrain Toolkit for Unity (Version 1.0.2)
@@ -26,19 +26,19 @@
  *
  *
  * WARNING ! WARNING ! WARNING !
- *  
+ *
  * The present version of the Unity Terrain Toolkit is based on :
- * 
+ *
  * The Unity Terrain Toolkit V1.0.2 from the Unity Summer of Code 2009
  * All code by Sándor Moldán, except where noted.
  * Contains an implementation of Perlin noise by Daniel Greenheck.
  * Contains an implementation of the Diamond-Square algorithm by Jim George.
- * 
- * The present version of the Terrain Toolkit is an adaptation and enhancement 
+ *
+ * The present version of the Terrain Toolkit is an adaptation and enhancement
  * of the original tool for the newer versions of Unity.
  *
- * Beyond the necessary code adaptation, a cosmetic refactoring was performed 
- * (GUI mainly but also core code). This being said, the whole toolkit works 
+ * Beyond the necessary code adaptation, a cosmetic refactoring was performed
+ * (GUI mainly but also core code). This being said, the whole toolkit works
  * as the original toolkit was designed
  *
  * The original package (Unity 4 compatible) is bundled in the 'original' folder
@@ -48,7 +48,7 @@
  * Enjoy and keep it a popular tool !
  *
  *//*------------------------------------------------------------------------*/
- 
+
 /*---------------------------------------------------------------------------*/
 /* REQUIREMENTS */
 /*---------------------------------------------------------------------------*/
@@ -80,14 +80,14 @@ namespace com.heparo.terrain.toolkit {
 [AddComponentMenu("Terrain/Terrain Toolkit")]
 
 public class TerrainToolkit : MonoBehaviour {
-	
+
 /*---------------------------------------------------------------------------*/
 /* MEMBERS */
 /*---------------------------------------------------------------------------*/
 
 		// ------------------------------------------------------------------------
 		// STRINGS CONSTANTS
-		
+
 		public const string EMPTY = "";
 		public const string TERRAIN_LAYER_EXTENSION = ".terrainlayer";
 		public const string TERRAIN_LAYER_PREFIX = "Layer_";
@@ -104,16 +104,16 @@ public class TerrainToolkit : MonoBehaviour {
 		public enum GeneratorType {Voronoi = 0, DiamondSquare = 1, Perlin = 2, Smooth = 3, Normalise = 4}
 		public enum VoronoiType {Linear = 0, Sine = 1, Tangent = 2}
 		public enum FeatureType {Mountains = 0, Hills = 1, Plateaus = 2}
-		
-		// --------------------------------------------------------------------------	
-		
+
+		// --------------------------------------------------------------------------
+
 		public struct Peak {
 			public Vector2 peakPoint;
 			public float peakHeight;
 		}
 
-		// --------------------------------------------------------------------------	
-		
+		// --------------------------------------------------------------------------
+
 		private ErosionMode p_erosionMode = ErosionMode.Filter;
 		private ErosionType p_erosionType = ErosionType.Thermal;
 		private GeneratorType p_generatorType = GeneratorType.Voronoi;
@@ -122,14 +122,14 @@ public class TerrainToolkit : MonoBehaviour {
 		private VoronoiType p_voronoiType = VoronoiType.Linear;
 
 		// --------------------------------------------------------------------------
-	
+
 		// Delegates...
 		public delegate void ErosionProgressDelegate(string titleString, string displayString, int iteration, int nIterations, float percentComplete);
 		public delegate void TextureProgressDelegate(string titleString, string displayString, float percentComplete);
 		public delegate void GeneratorProgressDelegate(string titleString, string displayString, float percentComplete);
-	
+
 		// --------------------------------------------------------------------------
-	
+
 		// Global..
 		public int toolModeInt = 0;
 		public int erosionTypeInt = 0;
@@ -141,30 +141,30 @@ public class TerrainToolkit : MonoBehaviour {
 		public float brushSize = 50.0f;
 		public float brushOpacity = 1.0f;
 		public float brushSoftness = 0.5f;
-		
+
 		// Settings...
 		public int neighbourhoodInt = 0;
 		public bool useDifferenceMaps = true;
-		
+
 		// Thermal...
 		public int thermalIterations = 25;
 		public float thermalMinSlope = 1.0f;
 		public float thermalFalloff = 0.5f;
-		
+
 		// Hydraulic...
 		public int hydraulicTypeInt = 0;
 		public int hydraulicIterations = 25;
-		
+
 		// Fast...
 		public float hydraulicMaxSlope = 60.0f;
 		public float hydraulicFalloff = 0.5f;
-		
+
 		// Full...
 		public float hydraulicRainfall = 0.01f;
 		public float hydraulicEvaporation = 0.5f;
 		public float hydraulicSedimentSolubility = 0.01f;
 		public float hydraulicSedimentSaturation = 0.1f;
-		
+
 		// Velocity...
 		public float hydraulicVelocityRainfall = 0.01f;
 		public float hydraulicVelocityEvaporation = 0.5f;
@@ -174,13 +174,13 @@ public class TerrainToolkit : MonoBehaviour {
 		public float hydraulicMomentum = 1.0f;
 		public float hydraulicEntropy = 0.0f;
 		public float hydraulicDowncutting = 0.1f;
-		
+
 		// Tidal...
 		public int tidalIterations = 25;
 		public float tidalSeaLevel = 50.0f;
 		public float tidalRangeAmount = 5.0f;
 		public float tidalCliffLimit = 60.0f;
-		
+
 		// Wind...
 		public int windIterations = 25;
 		public float windDirection = 0.0f;
@@ -190,16 +190,16 @@ public class TerrainToolkit : MonoBehaviour {
 		public float windCapacity = 0.01f;
 		public float windEntropy = 0.1f;
 		public float windSmoothing = 0.25f;
-		
+
 		// Texturing...
 		public TerrainLayer[] terrainLayers;
 		public float slopeBlendMinAngle = 60.0f;
 		public float slopeBlendMaxAngle = 75.0f;
 		public List<float> heightBlendPoints;
 		public string[] gradientStyles;
-		
+
 		// Generators...
-		public int voronoiTypeInt = 0;		
+		public int voronoiTypeInt = 0;
 		public int voronoiCells = 16;
 		public float voronoiFeatures = 1.0f;
 		public float voronoiScale = 1.0f;
@@ -215,7 +215,7 @@ public class TerrainToolkit : MonoBehaviour {
 		public float normaliseMin = 0.0f;
 		public float normaliseMax = 1.0f;
 		public float normaliseBlend = 1.0f;
-		
+
 		// Presets...
 		public ArrayList voronoiPresets = new ArrayList();
 		public ArrayList fractalPresets = new ArrayList();
@@ -226,9 +226,9 @@ public class TerrainToolkit : MonoBehaviour {
 		public ArrayList velocityHydraulicErosionPresets = new ArrayList();
 		public ArrayList tidalErosionPresets = new ArrayList();
 		public ArrayList windErosionPresets = new ArrayList();
-		
+
 		// --------------------------------------------------------------------------
-		
+
 		[System.NonSerialized]
 		public bool presetsInitialised = false;
 		[System.NonSerialized]
@@ -248,25 +248,25 @@ public class TerrainToolkit : MonoBehaviour {
 		[System.NonSerialized]
 		public int tidalErosionPresetId = 0;
 		[System.NonSerialized]
-		public int windErosionPresetId = 0;	
-		
+		public int windErosionPresetId = 0;
+
 		// --------------------------------------------------------------------------
-		
+
 		string layersPath = EMPTY;
-		string assetPath = EMPTY ; 
-		
+		string assetPath = EMPTY ;
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 	// Default constructor
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void addPresets(){
-		
+
 		presetsInitialised = true;
 		voronoiPresets = new ArrayList();
 		fractalPresets = new ArrayList();
@@ -311,13 +311,13 @@ public class TerrainToolkit : MonoBehaviour {
 		windErosionPresets.Add(new windErosionPresetData("Default (Southerly)", 25, 0.0f, 0.5f, 0.01f, 0.5f, 0.01f, 0.1f, 0.25f));
 		windErosionPresets.Add(new windErosionPresetData("Default (Easterly)", 25, 270.0f, 0.5f, 0.01f, 0.5f, 0.01f, 0.1f, 0.25f));
 		windErosionPresets.Add(new windErosionPresetData("Default (Westerly)", 25, 90.0f, 0.5f, 0.01f, 0.5f, 0.01f, 0.1f, 0.25f));
-		
+
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setVoronoiPreset(voronoiPresetData preset){
 		generatorTypeInt = 0;
 		p_generatorType = GeneratorType.Voronoi;
@@ -328,22 +328,22 @@ public class TerrainToolkit : MonoBehaviour {
 		voronoiScale = preset.voronoiScale;
 		voronoiBlend = preset.voronoiBlend;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setFractalPreset(fractalPresetData preset){
 		generatorTypeInt = 1;
 		p_generatorType = GeneratorType.DiamondSquare;
 		diamondSquareDelta = preset.diamondSquareDelta;
 		diamondSquareBlend = preset.diamondSquareBlend;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setPerlinPreset(perlinPresetData preset){
 		generatorTypeInt = 2;
 		p_generatorType = GeneratorType.Perlin;
@@ -352,11 +352,11 @@ public class TerrainToolkit : MonoBehaviour {
 		perlinOctaves = preset.perlinOctaves;
 		perlinBlend = preset.perlinBlend;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setThermalErosionPreset(thermalErosionPresetData preset){
 		erosionTypeInt = 0;
 		p_erosionType = ErosionType.Thermal;
@@ -364,11 +364,11 @@ public class TerrainToolkit : MonoBehaviour {
 		thermalMinSlope = preset.thermalMinSlope;
 		thermalFalloff = preset.thermalFalloff;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setFastHydraulicErosionPreset(fastHydraulicErosionPresetData preset){
 		erosionTypeInt = 1;
 		p_erosionType = ErosionType.Hydraulic;
@@ -378,11 +378,11 @@ public class TerrainToolkit : MonoBehaviour {
 		hydraulicMaxSlope = preset.hydraulicMaxSlope;
 		hydraulicFalloff = preset.hydraulicFalloff;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setFullHydraulicErosionPreset(fullHydraulicErosionPresetData preset){
 		erosionTypeInt = 1;
 		p_erosionType = ErosionType.Hydraulic;
@@ -394,11 +394,11 @@ public class TerrainToolkit : MonoBehaviour {
 		hydraulicSedimentSolubility = preset.hydraulicSedimentSolubility;
 		hydraulicSedimentSaturation = preset.hydraulicSedimentSaturation;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setVelocityHydraulicErosionPreset(velocityHydraulicErosionPresetData preset){
 		erosionTypeInt = 1;
 		p_erosionType = ErosionType.Hydraulic;
@@ -414,11 +414,11 @@ public class TerrainToolkit : MonoBehaviour {
 		hydraulicEntropy = preset.hydraulicEntropy;
 		hydraulicDowncutting = preset.hydraulicDowncutting;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setTidalErosionPreset(tidalErosionPresetData preset){
 		erosionTypeInt = 2;
 		p_erosionType = ErosionType.Tidal;
@@ -426,11 +426,11 @@ public class TerrainToolkit : MonoBehaviour {
 		tidalRangeAmount = preset.tidalRangeAmount;
 		tidalCliffLimit = preset.tidalCliffLimit;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void setWindErosionPreset(windErosionPresetData preset){
 		erosionTypeInt = 3;
 		p_erosionType = ErosionType.Wind;
@@ -443,41 +443,41 @@ public class TerrainToolkit : MonoBehaviour {
 		windEntropy = preset.windEntropy;
 		windSmoothing = preset.windSmoothing;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void Update(){
 		if( isBrushOn ){
 			if( toolModeInt!=1 || erosionTypeInt>2 || ( erosionTypeInt==1 && hydraulicTypeInt>0 ) ){
 				isBrushOn = false;
 			}
 		}
-		
+
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void OnDrawGizmos(){
 
 		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
 
 		if( ter==null )	return;
-		
+
 		// Brush gizmos...
-		
+
 		if( isBrushOn && !isBrushHidden ){
-			
+
 			if( isBrushPainting ){
 				Gizmos.color = Color.red;
 			}
 			else{
 				Gizmos.color = Color.white;
 			}
-			
+
 			float crossHairSize = brushSize / 4.0f;
 			Gizmos.DrawLine((brushPosition + new Vector3(-crossHairSize, 0, 0)), (brushPosition + new Vector3(crossHairSize, 0, 0)));
 			Gizmos.DrawLine(brushPosition + new Vector3(0, -crossHairSize, 0), brushPosition + new Vector3(0, crossHairSize, 0));
@@ -507,32 +507,32 @@ public class TerrainToolkit : MonoBehaviour {
 			Gizmos.DrawLine(endPoint, midPoint - new Vector3(0, terSize.x / 16, 0));
 		}
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void paint(){
 		convertIntVarsToEnums();
 		erodeTerrainWithBrush();
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void erodeTerrainWithBrush(){
 		p_erosionMode = ErosionMode.Brush;
 		// Error checking...
 		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
-		
+
 		if( ter==null )	return;
-		
+
 		int Px = 0;
 		int Py = 0;
-		
+
 		try {
-			
+
 			TerrainData terData = ter.terrainData;
 			int Tw = terData.heightmapResolution;
 			int Th = terData.heightmapResolution;
@@ -587,11 +587,11 @@ public class TerrainToolkit : MonoBehaviour {
 		 	Debug.LogError("A brush error occurred : "+e);
 		}
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void erodeAllTerrain(ErosionProgressDelegate erosionProgressDelegate){
 		p_erosionMode = ErosionMode.Filter;
 		// Check enum vars...
@@ -648,13 +648,13 @@ public class TerrainToolkit : MonoBehaviour {
 		catch(System.Exception e){
 			Debug.LogError("An error occurred : "+e);
 		}
-		
+
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] fastErosion(float[,] heightMap, Vector2 arraySize, int iterations, ErosionProgressDelegate erosionProgressDelegate){
 		int Tw = (int) arraySize.y;
 		int Th = (int) arraySize.x;
@@ -832,12 +832,12 @@ public class TerrainToolkit : MonoBehaviour {
 									blendAmount = 1 - ((tAverage - maxSlopeBlendMin) / blendRange); // maxSlopeBlendMin = 1; maxSlopeBlendMax = 0
 								}
 							}
-							
+
 							// From SDudzic on version 20180515170000 in user reviews
-							// In fastErosion method this line seems to be bugged: 
-							// float m = tMin / 2 * blendAmount; 
-							// Thermal erosion is producing artifacts, when I have changed this to: 
-							float m = tAverage / 2 * blendAmount; 
+							// In fastErosion method this line seems to be bugged:
+							// float m = tMin / 2 * blendAmount;
+							// Thermal erosion is producing artifacts, when I have changed this to:
+							float m = tAverage / 2 * blendAmount;
 							// It started generating smooth terrain, no sharp edges. I also cannot find any reason to use tMin. If any surrounding point is higher erosion will never happen.
 
 							float pointValue = heightMap[Tx + xIndex + xShift, Ty + yIndex + yShift];
@@ -924,11 +924,11 @@ public class TerrainToolkit : MonoBehaviour {
 		}
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] velocityHydraulicErosion(float[,] heightMap, Vector2 arraySize, int iterations, ErosionProgressDelegate erosionProgressDelegate){
 		int Tx = (int) arraySize.x;
 		int Ty = (int) arraySize.y;
@@ -981,7 +981,7 @@ public class TerrainToolkit : MonoBehaviour {
 				yNeighbours = 2;
 				yShift = 0;
 				yIndex = 0;
-			} 
+			}
 			else if( My==Ty - 1){
 				yNeighbours = 2;
 				yShift = -1;
@@ -1017,7 +1017,7 @@ public class TerrainToolkit : MonoBehaviour {
 					for( Nx = 0; Nx<xNeighbours; Nx++ ){
 						if( Nx!=xIndex || Ny!=yIndex){
 							if( p_neighbourhood==Neighbourhood.Moore || (p_neighbourhood==Neighbourhood.VonNeumann && (Nx==xIndex || Ny==yIndex))) {
-								heightAtPoint = heightMap[Mx + Nx + xShift, My + Ny + yShift]; // Get height at point 
+								heightAtPoint = heightMap[Mx + Nx + xShift, My + Ny + yShift]; // Get height at point
 								t = Mathf.Abs(heightAtIndex - heightAtPoint);
 								tCumulative += t;
 								nNeighbours++;
@@ -1247,11 +1247,11 @@ public class TerrainToolkit : MonoBehaviour {
 		}
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] fullHydraulicErosion(float[,] heightMap, Vector2 arraySize, int iterations, ErosionProgressDelegate erosionProgressDelegate){
 		int Tx = (int) arraySize.x;
 		int Ty = (int) arraySize.y;
@@ -1433,7 +1433,7 @@ public class TerrainToolkit : MonoBehaviour {
 					sedimentAtCell = sedimentMap[Mx, My] + sedimentDiffMap[Mx, My];
 					if( sedimentAtCell>1.0f ){
 						sedimentAtCell = 1.0f;
-					} 
+					}
 					else if( sedimentAtCell<0.0f){
 						sedimentAtCell = 0.0f;
 					}
@@ -1460,11 +1460,11 @@ public class TerrainToolkit : MonoBehaviour {
 		}
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] windErosion(float[,] heightMap, Vector2 arraySize, int iterations, ErosionProgressDelegate erosionProgressDelegate){
 		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
 		TerrainData terData = ter.terrainData;
@@ -1665,59 +1665,59 @@ public class TerrainToolkit : MonoBehaviour {
 		}
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
 
 	public void textureTerrain(TextureProgressDelegate textureProgressDelegate){
-		
+
 		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
 		if( ter==null)	return;
-		
+
 		TerrainData terData = ter.terrainData;
 		terrainLayers = terData.terrainLayers;
 		int nTextures = terrainLayers.Length;
-		
+
 		if( nTextures<2 ){
 			Debug.LogError("Error: You must assign at least 2 textures.");
 			return;
 		}
-		
+
 		// -----------------------------------------------------------------------
 		// CLIFF SLOPES REFERENCE FOR ONE HEIGHTMAP PIXEL
-		
+
 		textureProgressDelegate("Procedural Terrain Texture", "Generating height and slope maps. Please wait.", 0.1f);
-		
+
 		int Tw = terData.heightmapResolution - 1;
 		int Th = terData.heightmapResolution - 1;
-		
+
 		float[,] heightMapData = new float[Tw, Th];
 		float[,] slopeMapData = new float[Tw, Th];
 		float[,,] splatMapData = terData.GetAlphamaps(0, 0, Tw, Tw);
-		
+
 		terData.alphamapResolution = Tw;
 		Vector3 terSize = terData.size;
-		
+
 		// At which angle cliff texture stars appearing ? >>> slopeBlendMinAngle
 		// At which angle cliff texture is totally visible ? >>> slopeBlendMaxAngle
 		// Convert this angle to HEIGHTMAP VALUE
 		// TAN(angle) = oposite side / (adjacent side reduced to one unit !!) then normalize result (HEIGHT value !)
 		// float slopeBlendMinimum = ( (terSize.x / Tw) * Mathf.Tan( slopeBlendMinAngle * Mathf.Deg2Rad ) ) / terSize.y;
 		// float slopeBlendMaximum = ( (terSize.x / Tw) * Mathf.Tan( slopeBlendMaxAngle * Mathf.Deg2Rad ) ) / terSize.y;
-		
+
 		float angleToSlope =  terSize.x / ( Tw * terSize.y );
 		float slopeBlendMinimum = angleToSlope * Mathf.Tan( slopeBlendMinAngle * Mathf.Deg2Rad );
 		float slopeBlendMaximum = angleToSlope * Mathf.Tan( slopeBlendMaxAngle * Mathf.Deg2Rad );
 		float slopeBlendAmplitude = slopeBlendMaximum - slopeBlendMinimum;
-		
+
 		try {
-			
+
 			// -----------------------------------------------------------------------
 			// SLOPES PER HEIGHTMAP PIXEL NEIGHBOUR
-			
+
 			textureProgressDelegate("Procedural Terrain Texture", "Generating height and slope maps. Please wait.", 0.25f);
-			
+
 			int xNeighbours;
 			int yNeighbours;
 			int xShift;
@@ -1732,9 +1732,9 @@ public class TerrainToolkit : MonoBehaviour {
 			int Nx;
 			int Ty;
 			int Tx;
-			
+
 			for( Ty = 0; Ty<Th; Ty++ ){
-				
+
 				// y...
 				if( Ty==0 ){
 					yNeighbours = 2;
@@ -1751,9 +1751,9 @@ public class TerrainToolkit : MonoBehaviour {
 					yShift = -1;
 					yIndex = 1;
 				}
-				
+
 				for( Tx = 0; Tx<Tw; Tx++ ){
-					
+
 					// x...
 					if( Tx==0 ){
 						xNeighbours = 2;
@@ -1770,11 +1770,11 @@ public class TerrainToolkit : MonoBehaviour {
 						xShift = -1;
 						xIndex = 1;
 					}
-					
+
 					// Get height... And apply to height map...
 					h = heightMap[Tx + xIndex + xShift, Ty + yIndex + yShift];
 					heightMapData[Tx, Ty] = h;
-					
+
 					// Calculate average height using neighbours only (ignoring index)...
 					tCumulative = 0.0f;
 					nNeighbours = xNeighbours * yNeighbours - 1;
@@ -1785,22 +1785,22 @@ public class TerrainToolkit : MonoBehaviour {
 							}
 						}
 					}
-					
+
 					// Compute and assign average HEIGHT value to the slope map...
 					slopeMapData[Tx, Ty] = tCumulative / nNeighbours;
-					
+
 				}
-				
+
 			}
-			
+
 			// -----------------------------------------------------------------------
 
 			textureProgressDelegate("Procedural Terrain Texture", "Generating height and slope maps. Please wait.", 0.6f);
-			
+
 			float sBlended = 0;
 			int Px;
 			int Py;
-			
+
 			float hBlendInMinimum;
 			float hBlendInMaximum;
 			float hBlendOutMinimum;
@@ -1808,15 +1808,15 @@ public class TerrainToolkit : MonoBehaviour {
 			float hValue;
 			float hBlended;
 			int i;
-						
+
 			for( Py = 0; Py<Th; Py++ ){
 				for( Px = 0; Px<Tw; Px++ ){
-					
+
 					// -----------------------------------------------------------------------
 					// Blend slope... FOR CLIFF
-					
+
 					sBlended = slopeMapData[Px, Py];
-					
+
 					if( sBlended<slopeBlendMinimum ){
 						sBlended = 0;
 					}
@@ -1826,22 +1826,22 @@ public class TerrainToolkit : MonoBehaviour {
 					else if( sBlended>slopeBlendMaximum){
 						sBlended = 1;
 					}
-					
+
 					slopeMapData[Px, Py] = sBlended;
 					splatMapData[Px, Py, 0] = sBlended;
 					tCumulative = sBlended;
 
 					// -----------------------------------------------------------------------
 					// Blend slope... FOR TEXTURES
-					
+
 					for( i = 1; i<nTextures; i++ ){
-				
+
 						hBlendInMinimum = 0;
 						hBlendInMaximum = 0;
 						hBlendOutMinimum = 1;
 						hBlendOutMaximum = 1;
-							
-						if( i>1 ){													
+
+						if( i>1 ){
 							hBlendInMinimum = (float) heightBlendPoints[i * 2 - 4];
 							hBlendInMaximum = (float) heightBlendPoints[i * 2 - 3];
 						}
@@ -1850,10 +1850,10 @@ public class TerrainToolkit : MonoBehaviour {
 							hBlendOutMinimum = (float) heightBlendPoints[i * 2 - 2];
 							hBlendOutMaximum = (float) heightBlendPoints[i * 2 - 1];
 						}
-								
+
 						hValue = heightMapData[Px, Py];
 						hBlended = 0;
-						
+
 						if( hValue>=hBlendInMaximum && hValue<=hBlendOutMinimum){
 							// Full...
 							hBlended = 1;
@@ -1866,226 +1866,228 @@ public class TerrainToolkit : MonoBehaviour {
 							// Blend out...
 							hBlended = Mathf.Clamp01( 1 - ( (hValue - hBlendOutMinimum) / (hBlendOutMaximum - hBlendOutMinimum) ) );
 						}
-						
+
 						// Assign value
 						splatMapData[Px, Py, i] = Mathf.Clamp01(hBlended - slopeMapData[Px, Py] );
-						
+
 						// Cumulate
 						tCumulative += splatMapData[Px, Py, i];
-								
+
 					}
-					
+
 					// Final test for global splatMapData impacting CLIFF BLENDING !
 					if( tCumulative<1.0f )	splatMapData[Px, Py, 0] = Mathf.Clamp01( splatMapData[Px, Py, 0] + 1.0f - tCumulative );
-										
+
 				}
 
 			}
-						
+
 			// -----------------------------------------------------------------------
 			// Generate splat maps...
-			
+
 			textureProgressDelegate("Procedural Terrain Texture", "Generating splat map. Please wait.", 0.9f);
-			
+
 			// Assign generated splatmap data to terrain data
 			terData.SetAlphamaps(0, 0, splatMapData);
-			
+
 			// Clean up...
 			heightMapData = null;
 			slopeMapData = null;
 			splatMapData = null;
-			
+
 		}
 		catch (System.Exception e){
-			
+
 			// Clean up...
 			heightMapData = null;
 			slopeMapData = null;
 			splatMapData = null;
 			Debug.LogError("An error occurred : "+e);
-			
+
 		}
-		
-	}	
-	
-	
+
+	}
+
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void BuildPaths(){
-		
+
 		layersPath = Application.dataPath + Path.DirectorySeparatorChar + TOOLKIT_LAYERS_FOLDER + Path.DirectorySeparatorChar + gameObject.name + TERRAIN_LAYERS_FOLDER ;
 		assetPath = "Assets" + Path.DirectorySeparatorChar + TOOLKIT_LAYERS_FOLDER + Path.DirectorySeparatorChar + gameObject.name + TERRAIN_LAYERS_FOLDER + Path.DirectorySeparatorChar ;
 		System.IO.Directory.CreateDirectory(layersPath);
-		
+
 	}
-	
-	
+
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void addTerrainLayer(Texture2D tex, int index){
-		
+
 		#if UNITY_EDITOR
 		// try{
-			
+
 		if( terrainLayers==null ){ terrainLayers = new TerrainLayer[0];	}
-		
+
 		// Build paths
 		BuildPaths();
-		
+
 		// New layers repository
 		TerrainLayer[] newTerrainLayers = new TerrainLayer[index + 1];
-		
+
 		// For each layer from 0 to index
 		for( int i = 0; i<=index; i++ ){
-			
+
 			// Reached new layer ?
 			if( i==index ){
-				
+
 				// Create a nex layer
 				newTerrainLayers[i] = new TerrainLayer();
-				
+
 				// Generate asset
 				AssetDatabase.CreateAsset(newTerrainLayers[i], assetPath + TERRAIN_LAYER_PREFIX + i + TERRAIN_LAYER_EXTENSION );
-			
+
 				// Assign values
 				newTerrainLayers[i].diffuseTexture = tex;
 				newTerrainLayers[i].tileSize = new Vector2(15, 15);
-				
-			} 
+
+			}
 			// Previous layer
 			else {
-		
+
 				// Simply point to asset
 				newTerrainLayers[i] = terrainLayers[i];
-		
+
 			}
-			
+
 		}
-		
+
 		// Refresh repository
 		terrainLayers = newTerrainLayers;
-		
+
 		// Blend points
 		if( index+1>2 )	addBlendPoints();
-		
+
 		// }
 		// catch(System.Exception e){
 			// Debug.LogError("addTerrainLayer error : "+e);
 		// }
-			
+
 		#endif
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void deleteTerrainLayer(Texture2D tex, int index){
-		
+
 		#if UNITY_EDITOR
 		// try{
-			
+
 		if( terrainLayers==null ){ terrainLayers = new TerrainLayer[0];	}
-		
+
 		// Build paths
 		BuildPaths();
-		
+
 		// Get current layer repository length
 		int c = terrainLayers.Length;
-		
+
 		// If empty... return
 		if( c==0 )  return;
-		
+
 		// New repository to populate
 		TerrainLayer[] newTerrainLayers = new TerrainLayer[c - 1];
-		
+
 		// Index to use
 		int n = 0;
-		
+
 		// Delete the asset corresponding to removed index
 		AssetDatabase.DeleteAsset( assetPath + TERRAIN_LAYER_PREFIX + index + TERRAIN_LAYER_EXTENSION );
-		terrainLayers[index] = null; 
-		
+		terrainLayers[index] = null;
+
 		// For each layer in the old repository
 		for(int i=0;i<c;i++){
-			
+
 			// Not removed index ?
 			if( i!=index ){
-				
+
 				// Simply point to asset
 				newTerrainLayers[n] = terrainLayers[i];
-				
+
 				// Difference entree old and new index ?
 				if( i!=n ){
-					
+
 					// Rename asset to new index
 					AssetDatabase.RenameAsset(
 						assetPath + TERRAIN_LAYER_PREFIX + i + TERRAIN_LAYER_EXTENSION,
 						TERRAIN_LAYER_PREFIX + n + TERRAIN_LAYER_EXTENSION
 					);
-					
+
 				}
-				
+
 				// Next index
-				n++;			
-				
+				n++;
+
 			}
-			
+
 		}
-		
+
 		// Refresh repository
 		terrainLayers = newTerrainLayers;
-		
+
 		// Blend points
 		if( c-1>1)	deleteBlendPoints();
-		
+
 		// }
 		// catch(System.Exception e){
 			// Debug.LogError("addTerrainLayer error : "+e);
 		// }
-		
+
 		#endif
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void deleteAllTerrainLayers(){
-		
+
 		#if UNITY_EDITOR
 		// try{
-			
+
 		if( terrainLayers==null ){ terrainLayers = new TerrainLayer[0];	}
 		
-		// For each layer in the repository
-		for(int i=0;i<terrainLayers.Length;i++){
-		
-			// Delete the asset corresponding to removed index
-			AssetDatabase.DeleteAsset( assetPath + TERRAIN_LAYER_PREFIX + i + TERRAIN_LAYER_EXTENSION );
-			terrainLayers[i] = null; 
-			
+		BuildPaths();
+
+        // For each layer in the repository
+        for (int i=0;i<terrainLayers.Length;i++){
+			string layerPath = assetPath + TERRAIN_LAYER_PREFIX + i + TERRAIN_LAYER_EXTENSION;
+            // Delete the asset corresponding to removed index
+            AssetDatabase.DeleteAsset(layerPath);
+			terrainLayers[i] = null;
+
 		}
-		
+
 		// Reset repository
 		terrainLayers = new TerrainLayer[0];
-		
+
 		// }
 		// catch(System.Exception e){
 			// Debug.LogError("addTerrainLayer error : "+e);
 		// }
-		
+
 		#endif
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void addBlendPoints(){
 		float lastBlendPoint = 0.0f;
 		if( heightBlendPoints.Count>0){
@@ -2096,29 +2098,29 @@ public class TerrainToolkit : MonoBehaviour {
 		newBlendPoint = lastBlendPoint + (1.0f - lastBlendPoint) * 0.66f;
 		heightBlendPoints.Add(newBlendPoint);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void deleteBlendPoints(){
 		if( heightBlendPoints.Count>0)	heightBlendPoints.RemoveAt( heightBlendPoints.Count-1 );
 		if( heightBlendPoints.Count>0)	heightBlendPoints.RemoveAt( heightBlendPoints.Count-1 );
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void deleteAllBlendPoints(){
 		heightBlendPoints.Clear();
 		heightBlendPoints = new List<float>();
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void generateTerrain(GeneratorProgressDelegate generatorProgressDelegate){
 		// Check enum vars...
 		convertIntVarsToEnums();
@@ -2180,11 +2182,11 @@ public class TerrainToolkit : MonoBehaviour {
 		 terData.SetHeights(0, 0, heightMap);
 		// terData.SetHeightsDelayLOD(0, 0, heightMap);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] generateVoronoi(float[,] heightMap, Vector2 arraySize, GeneratorProgressDelegate generatorProgressDelegate){
 		int Tx = (int) arraySize.x;
 		int Ty = (int) arraySize.y;
@@ -2265,11 +2267,11 @@ public class TerrainToolkit : MonoBehaviour {
 		}
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] generateDiamondSquare(float[,] heightMap, Vector2 arraySize, GeneratorProgressDelegate generatorProgressDelegate){
 		int Tw = (int) arraySize.x;
 		int Th = (int) arraySize.y;
@@ -2322,11 +2324,11 @@ public class TerrainToolkit : MonoBehaviour {
 		generatorProgressDelegate("Fractal Generator", "Generating height map. Please wait.", 1.0f);
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void dsCalculateHeight(float[,] heightMap, Vector2 arraySize, int Tx, int Ty, Vector2[] points, float heightRange){
 		int Tw = (int) arraySize.x;
 		int Th = (int) arraySize.y;
@@ -2367,11 +2369,11 @@ public class TerrainToolkit : MonoBehaviour {
 			heightMap[Tx, 0] = h;
 		}
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] generatePerlin(float[,] heightMap, Vector2 arraySize, GeneratorProgressDelegate generatorProgressDelegate){
 		int Tw = (int) arraySize.x;
 		int Th = (int) arraySize.y;
@@ -2429,11 +2431,11 @@ public class TerrainToolkit : MonoBehaviour {
 		noiseFunctions = null;
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] smooth(float[,] heightMap, Vector2 arraySize, GeneratorProgressDelegate generatorProgressDelegate){
 		int Tw = (int) arraySize.x;
 		int Th = (int) arraySize.y;
@@ -2504,11 +2506,11 @@ public class TerrainToolkit : MonoBehaviour {
 		}
 		return heightMap;
 	}
-		
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public float[,] normalise(float[,] heightMap, Vector2 arraySize, GeneratorProgressDelegate generatorProgressDelegate){
 		int Tx = (int) arraySize.x;
 		int Ty = (int) arraySize.y;
@@ -2542,11 +2544,11 @@ public class TerrainToolkit : MonoBehaviour {
 		generatorProgressDelegate("Normalise Filter", "Normalising height map. Please wait.", 1.0f);
 		return heightMap;
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void FastThermalErosion(int iterations, float minSlope, float blendAmount){
 		erosionTypeInt = 0;
 		p_erosionType = ErosionType.Thermal;
@@ -2557,11 +2559,11 @@ public class TerrainToolkit : MonoBehaviour {
 		ErosionProgressDelegate erosionProgressDelegate = new ErosionProgressDelegate(dummyErosionProgress);
 		erodeAllTerrain(erosionProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void FastHydraulicErosion(int iterations, float maxSlope, float blendAmount){
 		erosionTypeInt = 1;
 		p_erosionType = ErosionType.Hydraulic;
@@ -2574,11 +2576,11 @@ public class TerrainToolkit : MonoBehaviour {
 		ErosionProgressDelegate erosionProgressDelegate = new ErosionProgressDelegate(dummyErosionProgress);
 		erodeAllTerrain(erosionProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void FullHydraulicErosion(int iterations, float rainfall, float evaporation, float solubility, float saturation){
 		erosionTypeInt = 1;
 		p_erosionType = ErosionType.Hydraulic;
@@ -2593,11 +2595,11 @@ public class TerrainToolkit : MonoBehaviour {
 		ErosionProgressDelegate erosionProgressDelegate = new ErosionProgressDelegate(dummyErosionProgress);
 		erodeAllTerrain(erosionProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void VelocityHydraulicErosion(int iterations, float rainfall, float evaporation, float solubility, float saturation, float velocity, float momentum, float entropy, float downcutting){
 		erosionTypeInt = 1;
 		p_erosionType = ErosionType.Hydraulic;
@@ -2616,11 +2618,11 @@ public class TerrainToolkit : MonoBehaviour {
 		ErosionProgressDelegate erosionProgressDelegate = new ErosionProgressDelegate(dummyErosionProgress);
 		erodeAllTerrain(erosionProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void TidalErosion(int iterations, float seaLevel, float tidalRange, float cliffLimit){
 		erosionTypeInt = 2;
 		p_erosionType = ErosionType.Tidal;
@@ -2632,11 +2634,11 @@ public class TerrainToolkit : MonoBehaviour {
 		ErosionProgressDelegate erosionProgressDelegate = new ErosionProgressDelegate(dummyErosionProgress);
 		erodeAllTerrain(erosionProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void WindErosion(int iterations, float direction, float force, float lift, float gravity, float capacity, float entropy, float smoothing){
 		erosionTypeInt = 3;
 		p_erosionType = ErosionType.Wind;
@@ -2652,11 +2654,11 @@ public class TerrainToolkit : MonoBehaviour {
 		ErosionProgressDelegate erosionProgressDelegate = new ErosionProgressDelegate(dummyErosionProgress);
 		erodeAllTerrain(erosionProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void TextureTerrain(float[] slopeStops, float[] heightStops, Texture2D[] textures){
 		if( slopeStops.Length!=2 ){
 			Debug.LogError("Error: slopeStops must have 2 values");
@@ -2708,11 +2710,11 @@ public class TerrainToolkit : MonoBehaviour {
 		TextureProgressDelegate textureProgressDelegate = new TextureProgressDelegate(dummyTextureProgress);
 		textureTerrain(textureProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void VoronoiGenerator(FeatureType featureType, int cells, float features, float scale, float blend){
 		generatorTypeInt = 0;
 		p_generatorType = GeneratorType.Voronoi;
@@ -2737,11 +2739,11 @@ public class TerrainToolkit : MonoBehaviour {
 		GeneratorProgressDelegate generatorProgressDelegate = new GeneratorProgressDelegate(dummyGeneratorProgress);
 		generateTerrain(generatorProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void FractalGenerator(float fractalDelta, float blend){
 		generatorTypeInt = 1;
 		p_generatorType = GeneratorType.DiamondSquare;
@@ -2750,11 +2752,11 @@ public class TerrainToolkit : MonoBehaviour {
 		GeneratorProgressDelegate generatorProgressDelegate = new GeneratorProgressDelegate(dummyGeneratorProgress);
 		generateTerrain(generatorProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void PerlinGenerator(int frequency, float amplitude, int octaves, float blend){
 		generatorTypeInt = 2;
 		p_generatorType = GeneratorType.Perlin;
@@ -2765,11 +2767,11 @@ public class TerrainToolkit : MonoBehaviour {
 		GeneratorProgressDelegate generatorProgressDelegate = new GeneratorProgressDelegate(dummyGeneratorProgress);
 		generateTerrain(generatorProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void SmoothTerrain(int iterations, float blend){
 		generatorTypeInt = 3;
 		p_generatorType = GeneratorType.Smooth;
@@ -2778,11 +2780,11 @@ public class TerrainToolkit : MonoBehaviour {
 		GeneratorProgressDelegate generatorProgressDelegate = new GeneratorProgressDelegate(dummyGeneratorProgress);
 		generateTerrain(generatorProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void NormaliseTerrain(float minHeight, float maxHeight, float blend){
 		generatorTypeInt = 4;
 		p_generatorType = GeneratorType.Normalise;
@@ -2792,19 +2794,19 @@ public class TerrainToolkit : MonoBehaviour {
 		GeneratorProgressDelegate generatorProgressDelegate = new GeneratorProgressDelegate(dummyGeneratorProgress);
 		generateTerrain(generatorProgressDelegate);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void NormalizeTerrain(float minHeight, float maxHeight, float blend){
 		NormaliseTerrain(minHeight, maxHeight, blend);
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void convertIntVarsToEnums(){
 		switch( erosionTypeInt ){
 			case 0:
@@ -2871,27 +2873,27 @@ public class TerrainToolkit : MonoBehaviour {
 				break;
 		}
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void dummyErosionProgress(string titleString, string displayString, int iteration, int nIterations, float percentComplete){
 		//
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void dummyTextureProgress(string titleString, string displayString, float percentComplete){
 		//
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void dummyGeneratorProgress(string titleString, string displayString, float percentComplete){
 		//
 	}
@@ -2899,265 +2901,265 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* Reset terrain */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void resetTerrain(){
-		
+
 		// Check...
 		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
 		if( ter==null )	return;
-		
+
 		try {
-			
+
 			TerrainData terData = ter.terrainData;
-			
+
 			// Delete texture informations
 			deleteAllTerrainLayers();
 			deleteAllBlendPoints();
-			
+
 			// Reset splats !
 			terData.terrainLayers = terrainLayers;
-			
+
 			int Tw = terData.heightmapResolution;
 			int Th = terData.heightmapResolution;
-			
+
 			float[,] heightMap = terData.GetHeights(0, 0, Tw, Th);
-			
+
 			int Mw;
 			int Mh;
-		
+
 			// Reset to ZERO the heights ([0.0f,1.0f] value)
 			for( Mw = 0; Mw<Tw; Mw++ ){
 				for( Mh = 0; Mh<Th; Mh++ ){
 					heightMap[Mw, Mh] = 0.0f;
 				}
 			}
-			
+
 			// Apply back to terrain data
 			terData.SetHeights(0, 0, heightMap);
-						
+
 		}
 		catch(System.Exception e){
 			Debug.LogError("An error occurred : "+e);
 		}
-			
+
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* Invert height of the terrain */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void invertTerrain(){
-		
+
 		// Check...
 		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
 		if( ter==null )	return;
-		
+
 		try {
-			
+
 			TerrainData terData = ter.terrainData;
-			
+
 			int Tw = terData.heightmapResolution;
 			int Th = terData.heightmapResolution;
 			float[,] heightMap = terData.GetHeights(0, 0, Tw, Th);
-			
+
 			int Mw;
 			int Mh;
-		
+
 			// Invert height ([0.0f,1.0f] value)
 			for( Mw = 0; Mw<Tw; Mw++ ){
 				for( Mh = 0; Mh<Th; Mh++ ){
 					heightMap[Mw, Mh] = 1.0f - heightMap[Mw, Mh];
 				}
-			}			
-			
+			}
+
 			// Apply back to terrain data
 			terData.SetHeights(0, 0, heightMap);
-			
+
 		}
 		catch(System.Exception e){
 			Debug.LogError("An error occurred : "+e);
 		}
-			
+
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* Apply artifacts to terrain using a provided texture */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void applyArtifacts(Texture2D artifacts, float pivot, float neutral, float strength){
-		
+
 		// Check...
 		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
 		if( ter==null )	return;
-		
-			
+
+
 		try {
-			
+
 			TerrainData terData = ter.terrainData;
-			
+
 			int Tw = terData.heightmapResolution;
 			int Th = terData.heightmapResolution;
 			float[,] heightMap = terData.GetHeights(0, 0, Tw, Th);
-			
+
 			int Mw;
 			int Mh;
-			
+
 			// Artifacts texture size
 			int aWidth = artifacts.width;
 			int aHeight = artifacts.height;
-			
+
 			Color[] aColors = artifacts.GetPixels(0,0,aWidth,aHeight);
-			
+
 			// Interpolation for terrain on width and height
 			float wInterp;
 			float hInterp;
-			
+
 			float heightAtPoint;
 			float val;
-			
+
 			float halfNeutral = neutral * 0.5f;
 			float lowNeutral = 1 - halfNeutral;
 			float highNeutral = 1 + halfNeutral;
-		
+
 			// Apply artifacts texture
 			for( Mw = 0; Mw<Tw; Mw++ ){
-				
+
 				wInterp = Mathf.InverseLerp(0,Tw, Mw) ;
-				
+
 				for( Mh = 0; Mh<Th; Mh++ ){
-										
+
 					hInterp  = Mathf.InverseLerp(0,Th, Mh) ;
 
 						heightAtPoint = heightMap[Mw, Mh] ;
-						
+
 						val = aColors[ Mathf.FloorToInt( Mathf.Lerp(0,aHeight,hInterp) ) * aWidth + Mathf.FloorToInt(Mathf.Lerp(0,aWidth,wInterp) ) ].grayscale ;
-	
+
 						if( heightAtPoint > pivot * highNeutral  ){
 							heightMap[Mw, Mh] += heightAtPoint *  strength * (1+val);
 						}
 						else if( heightAtPoint < pivot * lowNeutral  ){
 							heightMap[Mw, Mh] -= heightAtPoint * strength * val;
 						}
-	
-						heightMap[Mw, Mh] = Mathf.Clamp01(heightMap[Mw, Mh] );					
-					
+
+						heightMap[Mw, Mh] = Mathf.Clamp01(heightMap[Mw, Mh] );
+
 				}
-			}			
-			
+			}
+
 			// Apply back to terrain data
 			terData.SetHeights(0, 0, heightMap);
-			
+
 		}
 		catch(System.Exception e){
 			Debug.LogError("An error occurred : "+e);
 		}
-			
+
 	}
-	
+
 /*---------------------------------------------------------------------------*/
 /* Modify terrain in order to be tileable */
 /*---------------------------------------------------------------------------*/
-	
+
 	public void seamlessTerrain(float amount){
-		
-		Terrain ter = (Terrain) GetComponent(typeof(Terrain));		
+
+		Terrain ter = (Terrain) GetComponent(typeof(Terrain));
 		if( ter==null )	return;
-		
+
 		try {
-			
+
 			TerrainData terData = ter.terrainData;
-			
+
 			int Tw = terData.heightmapResolution;
 			int Th = terData.heightmapResolution;
-			
+
 			int hTwLimit = (int) (Tw * amount);
-			int hThLimit = (int) (Th * amount);			
-			
+			int hThLimit = (int) (Th * amount);
+
 			float[,] heightMap = terData.GetHeights(0, 0, Tw, Th);
-			
+
 			int Mw;
 			int Mh;
-			
+
 			float avrgH, avrgLerp;
-			
+
 			for( Mw = 0; Mw<Tw; Mw++ ){
 				for( Mh = 0; Mh<Th; Mh++ ){
-					
+
 					if( Mw<hTwLimit || Mh<hThLimit ){
-						
+
 						// The closer we get to the border of the terrain the stronger
 						// the average value must be and this for the 4 impacted points
-						
+
 						// Compute the average Lerp (one for each limit)
-						avrgLerp = ( 
-							Mathf.InverseLerp(0.0f,hTwLimit,Mw) + 
-							Mathf.InverseLerp(0.0f,hThLimit,Mh) 
+						avrgLerp = (
+							Mathf.InverseLerp(0.0f,hTwLimit,Mw) +
+							Mathf.InverseLerp(0.0f,hThLimit,Mh)
 						) * 0.5f;
-						
+
 						// Compute average height
-						avrgH = ( 
-							heightMap[Mw, Mh] + 
-							heightMap[Tw-Mw-1, Mh] + 
-							heightMap[Mw, Th-Mh-1] + 
-							heightMap[Tw-Mw-1, Th-Mh-1] 
+						avrgH = (
+							heightMap[Mw, Mh] +
+							heightMap[Tw-Mw-1, Mh] +
+							heightMap[Mw, Th-Mh-1] +
+							heightMap[Tw-Mw-1, Th-Mh-1]
 						) / 4;
-						
+
 						// For each of the 4 points compute new height value
 						heightMap[Mw, Mh] = Mathf.Lerp(avrgH,heightMap[Mw, Mh],avrgLerp);
 						heightMap[Tw-Mw-1, Mh] = Mathf.Lerp(avrgH,heightMap[Tw-Mw-1, Mh],avrgLerp);
 						heightMap[Mw, Th-Mh-1] = Mathf.Lerp(avrgH,heightMap[Mw, Th-Mh-1],avrgLerp);
 						heightMap[Tw-Mw-1, Th-Mh-1] = Mathf.Lerp(avrgH,heightMap[Tw-Mw-1, Th-Mh-1],avrgLerp);
-					
+
 					}
-					
+
 				}
 			}
-			
-			
+
+
 			// Apply it to the terrain object
 			terData.SetHeights(0, 0, heightMap);
-			
+
 		}
 		catch(System.Exception e){
 			Debug.LogError("An error occurred : "+e);
 		}
-			
+
 	}
-	
+
 /* ************************************************************************* */
 /*---------------------------------------------------------------------------*/
 /* START INNER CLASS */
 /*---------------------------------------------------------------------------*/
 
 	public class PeakDistance : IComparable {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
-		
+
 			public int id;
 			public float dist;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 	// Default constructor
 
 /*---------------------------------------------------------------------------*/
 /* IComparable interface method */
 /*---------------------------------------------------------------------------*/
-	
+
 		public int CompareTo(object obj){
-			
+
 			PeakDistance Compare = (PeakDistance) obj;
-			
+
 			int result = this.dist.CompareTo(Compare.dist);
-			
+
 			if( result==0 )	result = this.dist.CompareTo(Compare.dist);
 
 			return(result);
-			
+
 		}
 
 /*---------------------------------------------------------------------------*/
@@ -3175,7 +3177,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class voronoiPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3186,11 +3188,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public float voronoiFeatures;
 			public float voronoiScale;
 			public float voronoiBlend;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public voronoiPresetData(string pn, VoronoiType vt, int c, float vf, float vs, float vb){
 			presetName = pn;
 			p_voronoiType = vt;
@@ -3203,9 +3205,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3221,7 +3223,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class fractalPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3229,11 +3231,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public string presetName;
 			public float diamondSquareDelta;
 			public float diamondSquareBlend;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public fractalPresetData(string pn, float dsd, float dsb){
 			presetName = pn;
 			diamondSquareDelta = dsd;
@@ -3243,9 +3245,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3261,7 +3263,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class perlinPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3271,11 +3273,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public float perlinAmplitude;
 			public int perlinOctaves;
 			public float perlinBlend;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public perlinPresetData(string pn, int pf, float pa, int po, float pb){
 			presetName = pn;
 			perlinFrequency = pf;
@@ -3287,9 +3289,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3305,7 +3307,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class thermalErosionPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3314,11 +3316,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public int thermalIterations;
 			public float thermalMinSlope;
 			public float thermalFalloff;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-			
+
 		public thermalErosionPresetData(string pn, int ti, float tms, float tba){
 			presetName = pn;
 			thermalIterations = ti;
@@ -3329,9 +3331,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3347,7 +3349,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class fastHydraulicErosionPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3356,11 +3358,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public int hydraulicIterations;
 			public float hydraulicMaxSlope;
 			public float hydraulicFalloff;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public fastHydraulicErosionPresetData(string pn, int hi, float hms, float hba){
 			presetName = pn;
 			hydraulicIterations = hi;
@@ -3371,9 +3373,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3389,22 +3391,22 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class fullHydraulicErosionPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
-			
+
 		public string presetName;
 		public int hydraulicIterations;
 		public float hydraulicRainfall;
 		public float hydraulicEvaporation;
 		public float hydraulicSedimentSolubility;
 		public float hydraulicSedimentSaturation;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public fullHydraulicErosionPresetData(string pn, int hi, float hr, float he, float hso, float hsa){
 			presetName = pn;
 			hydraulicIterations = hi;
@@ -3417,9 +3419,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3435,7 +3437,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class velocityHydraulicErosionPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3450,11 +3452,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public float hydraulicMomentum;
 			public float hydraulicEntropy;
 			public float hydraulicDowncutting;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public velocityHydraulicErosionPresetData(string pn, int hi, float hvr, float hve, float hso, float hsa, float hv, float hm, float he, float hd){
 			presetName = pn;
 			hydraulicIterations = hi;
@@ -3471,9 +3473,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3489,7 +3491,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class tidalErosionPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3498,11 +3500,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public int tidalIterations;
 			public float tidalRangeAmount;
 			public float tidalCliffLimit;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public tidalErosionPresetData(string pn, int ti, float tra, float tcl){
 			presetName = pn;
 			tidalIterations = ti;
@@ -3513,9 +3515,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3531,7 +3533,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class windErosionPresetData {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3545,11 +3547,11 @@ public class TerrainToolkit : MonoBehaviour {
 			public float windCapacity;
 			public float windEntropy;
 			public float windSmoothing;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public windErosionPresetData(string pn, int wi, float wd, float wf, float wl, float wg, float wc, float we, float ws){
 			presetName = pn;
 			windIterations = wi;
@@ -3565,9 +3567,9 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 	// XXXX
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3583,7 +3585,7 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 
 	public class PerlinNoise2D {
-		
+
 /*---------------------------------------------------------------------------*/
 /* VARIABLES */
 /*---------------------------------------------------------------------------*/
@@ -3591,11 +3593,11 @@ public class TerrainToolkit : MonoBehaviour {
 			private double[,] p_noiseValues;
 			private float p_amplitude = 1.0f;
 			private int p_frequency = 1;
-		
+
 /*---------------------------------------------------------------------------*/
 /* Constructor */
 /*---------------------------------------------------------------------------*/
-	
+
 		public PerlinNoise2D(int freq, float _amp){
 			System.Random rand = new System.Random(System.Environment.TickCount);
 			p_noiseValues = new double[freq, freq];
@@ -3611,43 +3613,43 @@ public class TerrainToolkit : MonoBehaviour {
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 		public double getInterpolatedPoint(int _xa, int _xb, int _ya, int _yb, double Px, double Py){
 			double i1 = interpolate(p_noiseValues[_xa % Frequency, _ya % p_frequency], p_noiseValues[_xb % Frequency, _ya % p_frequency], Px);
 			double i2 = interpolate(p_noiseValues[_xa % Frequency, _yb % p_frequency], p_noiseValues[_xb % Frequency, _yb % p_frequency], Px);
 			return interpolate(i1, i2, Py);
 		}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 		public double interpolate(double Pa, double Pb, double Px){
 			double ft = Px * Mathf.PI;
 			double f = (1 - Mathf.Cos((float) ft)) * 0.5;
 			return Pa * (1 - f) + Pb * f;
 		}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 		public float Amplitude {
 			get {
 				return p_amplitude;
 			}
 		}
-	
+
 /*---------------------------------------------------------------------------*/
 /* XXX */
 /*---------------------------------------------------------------------------*/
-	
+
 		public int Frequency {
 			get {
 				return p_frequency;
 			}
 		}
-	
+
 /*---------------------------------------------------------------------------*/
 
 	}
@@ -3656,7 +3658,7 @@ public class TerrainToolkit : MonoBehaviour {
 /* END INNER CLASS */
 /*---------------------------------------------------------------------------*/
 /* ************************************************************************* */
-	
+
 /*---------------------------------------------------------------------------*/
 
 }
