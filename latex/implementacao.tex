@@ -91,7 +91,21 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 	\label{fig:diagrama_voronoi_pontos}
 \end{figure}
 
+Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada — ilustrada em \cref{fig:entrada_gerar_mapa} — e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano. \emph{descrever altura e umidade}.
+
+Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker}.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Entrada binária para gerar mapa.}
+	\includegraphics[width=0.6\textwidth]{figures/entrada_gerar_mapa.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:entrada_gerar_mapa}
+\end{figure}
+
 \subsubsection{Mapa de altura}
+
+
 
 \subsubsection{Testes}
 
