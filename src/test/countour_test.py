@@ -78,20 +78,20 @@ def test_countour_image():
                 # True Positive
                 counter_TP = result_set_counter[tuple([1, 1, 1])]
 
+                # True Negative
+                counter_TN = result_set_counter[tuple([0.5, 0.5, 0.5])]
+
                 # False Negative
                 counter_FN = result_set_counter[tuple([0, 1, 0])]
 
                 # False Positive
                 counter_FP = result_set_counter[tuple([1, 0, 0])]
 
-                # Correction plus errors occurrences
-                counterer_TP_FN_FP = counter_TP + counter_FN + counter_FP
-
                 # Visualize result set
                 result_set_image = numpytoimage(result_set)
                 result_set_image.save("result_set.png")
 
-                result = (counter_TP / counterer_TP_FN_FP) * 100
+                result = counter_TP / (counter_TP + counter_FN + counter_FP)
                 sum_results += result
                 print(f'O resultado eh {result:.2f}%')
             if all_results.get(i) == None:
