@@ -12,14 +12,17 @@ from map_geration.graph import *
 from map_geration.map_enums import *
 from map_geration.map import is_center_a_map_corner, nearest_map_corner
 
-KERNEL_SIZE = (75, 75)
+# KERNEL_SIZE = (75, 75)
 BORDER_SIZE = 150
 
-def pos_processing(image):
+def pos_processing(image, mode, kernel_size):
     img = np.array(image)
-    img= cv2.copyMakeBorder(img,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,cv2.BORDER_CONSTANT,value=(0,0,0))
-    img = cv2.resize(img, (1000, 1000))
-    img = cv2.blur(img, KERNEL_SIZE)
+
+    if mode > 1:
+        img= cv2.copyMakeBorder(img,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,cv2.BORDER_CONSTANT,value=(0,0,0))
+        img = cv2.resize(img, (1000, 1000))
+        if mode > 2:
+            img = cv2.blur(img, (kernel_size, kernel_size))
 
     img.astype('int8').tofile("unity/3d_map/Assets/output_3d.raw")
 
@@ -28,6 +31,8 @@ def pos_processing(image):
 
 def convert_map_to_3d_image(
     graph: Graph,
+    mode,
+    kernel_size,
     path:str=""
 ):
     IMAGE_SIZE = 1000
@@ -49,5 +54,5 @@ def convert_map_to_3d_image(
         image_draw.polygon(xy=points_converted, fill=color)
 
     image = image.transpose(Image.FLIP_TOP_BOTTOM)
-    image = pos_processing(image)
+    image = pos_processing(image, mode, kernel_size)
     image.save(f"{path}.png")

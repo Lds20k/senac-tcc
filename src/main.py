@@ -37,7 +37,7 @@ class MapWorker(QObject):
 
     def run(self):
         logging.info("MapWorker em execução")
-        result_image = generate(self.image, self.points)
+        result_image = generate(self.image, points=self.points)
         logging.info(f"Imagem pos processamento com {result_image.shape[1]}x{result_image.shape[0]}")
         qtImage = QImage(result_image.data, result_image.shape[1], result_image.shape[0], QImage.Format_RGB888).rgbSwapped()
         self.result.emit(qtImage)
@@ -110,7 +110,7 @@ class QImageViewer(QMainWindow):
                 self.imageLabel.adjustSize()
 
             image = self.qimage_to_cv2(self.img)
-            
+
             self.runEfficientPSWorker(image)
 
     def qimage_to_cv2(self, qimage):
@@ -122,7 +122,7 @@ class QImageViewer(QMainWindow):
         return cv2_image
 
     def createMask(self, event):
-        
+
         x = event.pos().x()
         y = event.pos().y()
         c = self.img.pixel(x, y)
@@ -242,7 +242,7 @@ class QImageViewer(QMainWindow):
 
     def start_loading(self):
         self.spinner.start()
-    
+
     def stop_loading(self):
         self.spinner.stop()
 
@@ -279,7 +279,7 @@ class QImageViewer(QMainWindow):
     def adjustScrollBar(self, scrollBar, factor):
         scrollBar.setValue(int(factor * scrollBar.value()
                                + ((factor - 1) * scrollBar.pageStep() / 2)))
-    
+
     def update_screen_image(self, image: QImage):
         self.img = image
         self.imageLabel.setPixmap(QPixmap.fromImage(self.img))
@@ -287,7 +287,7 @@ class QImageViewer(QMainWindow):
 
     def runEfficientPSWorker(self, image):
         logging.info("Criando EfficientPSWorker")
-        
+
         self.start_loading()
         self.thread = QThread()
 
@@ -305,7 +305,7 @@ class QImageViewer(QMainWindow):
         self.thread.start()
 
         self.thread.finished.connect(self.stop_loading)
-    
+
     def toggleMousePressEvent(self):
         if self.imageLabel.mousePressEvent != self.createMask:
             self.imageLabel.mousePressEvent = self.createMask

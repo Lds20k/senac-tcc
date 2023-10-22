@@ -1,3 +1,4 @@
+from math import sqrt
 import os
 import sys
 from PIL import Image
@@ -23,14 +24,15 @@ DIMENSION = (300, 300)
 
 # Cases 1 to 3
 CASE_ID = 1
+METRICS_QUANTITY = 2
 
 ITERATIONS_PER_POINTS = 3
 QUANTITY_OF_IMAGES = 5
-START_QUANTITY_POINTS = 50
-END_QUANTITY_POINTS = 301
-SIZE_STEPS_POINTS = 50
+START_KERNEL_SIZE = 0
+END_KERNEL_SIZE = 101
+SIZE_STEPS = 10
 
-def test_countour_image():
+def find_best_blur():
     all_results = {}
 
     for img_num in range(1, QUANTITY_OF_IMAGES + 1):
@@ -42,21 +44,16 @@ def test_countour_image():
         im_pil = Image.fromarray(img)
         retriyng_counter = 0
 
-        for i in range(START_QUANTITY_POINTS, END_QUANTITY_POINTS, SIZE_STEPS_POINTS):
-            sum_results = 0
-            sum_durations = 0
+        for i in range(START_KERNEL_SIZE, END_KERNEL_SIZE, SIZE_STEPS):
+            metrics = np.zeros(METRICS_QUANTITY)
             for j in range (0, ITERATIONS_PER_POINTS):
                 while True:
                     try:
-                        start_time = time.time()
-                        generate_map.generate(im_pil, points=i)
-                        end_time = time.time()
+                        generate_map.generate(im_pil, points=100, mode=3 if i > 0 else 2, kernel_size=i)
                         break
                     except Exception as e:
                         print(f"Ocorreu um erro: {e}. Tentando novamente...")
                         retriyng_counter += 1
-
-                sum_durations += end_time - start_time
 
                 prediction = cv2.imread("output_3d.png", 0)
                 prediction_resized = cv2.resize(prediction, DIMENSION)
@@ -68,10 +65,6 @@ def test_countour_image():
 
                 _, thresh_gt = cv2.threshold(ground_truth_resized, 1, 1, 0)
                 _, thresh_prediction = cv2.threshold(prediction_resized, 1, 2, 0)
-
-                # Visualize mask
-                _, mask = cv2.threshold(prediction_resized, 1, 255, 0)
-                cv2.imwrite("map_mask.png", mask)
 
                 # Create new image as numpy matrix with sum of two masks
                 result_set = color_map[thresh_gt + thresh_prediction]
@@ -93,30 +86,37 @@ def test_countour_image():
                 # False Positive
                 counter_FP = result_set_counter[tuple([1, 0, 0])]
 
-                # Visualize result set
-                result_set_image = numpytoimage(result_set)
-                result_set_image.save("result_set.png")
+                # Evaluate metrics
+                f1_score = counter_TP / (counter_TP + (counter_FN/2) + (counter_FP/2))
+                metrics[0] += f1_score
+                # print(f'O resultado eh {f1_score:.2f}')
 
-                result = counter_TP / (counter_TP + counter_FN + counter_FP)
-                sum_results += result
-                print(f'O resultado eh {result:.2f}%')
-            if all_results.get(i) is None:
-                all_results[i] = [0, 0]
-            all_results[i][0] += sum_results
-            all_results[i][1] += sum_durations
+                mcc = (counter_TP * counter_TN - counter_FP * counter_FN) / sqrt((counter_TP + counter_FP) * (counter_TP + counter_FN) * (counter_TN + counter_FP) * (counter_TN + counter_FN))
+                metrics[1] += mcc
+                # print(f'O resultado eh {mcc:.2f}')
 
 
-    for key, value in all_results.items():
-        value[0] = f'{ (value[0] / (ITERATIONS_PER_POINTS * QUANTITY_OF_IMAGES)):.2f}'
-        value[1] = f'{ (value[1] / (ITERATIONS_PER_POINTS * QUANTITY_OF_IMAGES)):.2f}'
-    print(all_results)
+            if not isinstance(all_results.get(i), np.ndarray):
+                all_results[i] = np.zeros(METRICS_QUANTITY)
+            all_results[i] += metrics
 
-    with open(f'latex/tabela_caso{get_char_for_number(CASE_ID)}.tex', "w", encoding='utf-8') as f:
+
+    sorted_dict = dict(sorted(all_results.items(), key=lambda x: sum(x[1]), reverse=True))
+
+    for key, value in sorted_dict.items():
+        for i in range(len(value)):
+            value[i] = f'{ (value[i] / (ITERATIONS_PER_POINTS * QUANTITY_OF_IMAGES)):.2f}'
+        sorted_dict[key] = value.astype(str)
+
+
+    print(sorted_dict)
+
+    with open(f'latex/table_find_best_blur.tex', "w", encoding='utf-8') as f:
         backreturn = "\\\\\n" + " "*8
 
         content = backreturn.join([
             f"{_k} & {' & '.join(_v)}"
-            for _k, _v in all_results.items()
+            for _k, _v in sorted_dict.items()
         ])
 
         f.write(re.sub(r"\s{16}(?=\{|\d|\\)", "",
@@ -136,4 +136,4 @@ def test_countour_image():
                 """.strip()))
 
 if __name__ == '__main__':
-    test_countour_image()
+    find_best_blur()
