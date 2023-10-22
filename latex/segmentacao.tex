@@ -43,28 +43,77 @@ A arquitetura Mask R-CNN é derivado do Fast R-CNN — aprimoramento do R-CNN ap
 Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados como na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \space\citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc.
 Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Cityscapes, Mapillary Vistas, ADE20K, e Indian Driving Dataset. Cada conjunto de dados possui diversas classes para o modelo aprender \space\cite{v7labs2022panoptic}.
 
-\subsubsection*{Métricas, técnicas e resultados}
+\subsubsubsection*{Métricas e técnicas}
 
 No ramo de segmentação existem diversas métricas que podem ser usadas
 
 \subsubsubsection*{Classificação de conjuntos}
 
-A classificação de conjuntos é uma técnica para criar relações entre a imagem de predição e a imagem do conjunto de dados. Ela se divide em três classificações sendo elas: Positivos Verdadeiros — ou True Positives(TP) — sendo o requisito ter uma intersecção significativa entre classes iguais, \emph{i.e.}, IoU > 0.5, Falso Positivos — ou False Positives(FP) — quando um objeto não é correspondido na imagem de predição e por fim Falso Negativos — False Negatives(FN) — quando um objeto não é correspondido na imagem do conjunto de dados. Pode-se observar esses conceitos de conjuntos na \cref{fig:conjuntos} \space\cite{kirillov2019panoptic}.
+A classificação de conjuntos é uma técnica para criar relações entre a imagem de predição e a imagem do conjunto de dados. Ela se divide em quatro conjuntos sendo eles: Positivo Verdadeiro — ou True Positive(TP) —
+% sendo o requisito ter uma intersecção significativa entre classes iguais, \emph{i.e.}, IoU > 0.5
+, Negativo Verdadeiro — ou True Negative(TN) —, Falso Positivo — ou False Positive(FP) — quando um objeto não é correspondido na imagem de predição e por fim o Falso Negativo — ou False Negatives(FN) — quando um objeto não é correspondido na imagem do conjunto de dados. Essa técnica pode ser usada em modelos de classificação binária usando uma matriz de confusão mas na área de segmentação costuma-se contar os pixeis e sua representação visual pode-se observar na \cref{fig:conjuntos} \space\cite{kirillov2019panoptic, Wang2020}.
 \begin{figure}[ht]
 	\caption{Exemplo da classificação dos conjuntos usados nas métricas de segmentação}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=15cm]{figures/pan_metric.png} % leia abaixo
-	\legend{Fonte: \space\citeonline{slidesKirillov}}
+	\legend{Fonte: \space\citeonline{slidesKirillov} editado}
 	\label{fig:conjuntos}
 \end{figure}
 
+
+\subsubsubsection*{F1 Score}
+
+O F1 Score é uma métrica que pode ser utilizada para calcular a eficiência de modelos de segmentação de instância,  baseando-se em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados porém diminuindo o peso dos erros. Varia de 0 a 1 sendo 1 com maior eficiência. Segue a exemplificação da \cref{eq:f1} \space\cite{Chicco2020}:
+
+\begin{equation}
+	\label{eq:f1}
+	F1\ Score = \frac{\text{TP}}{(TP + \frac{FP}{2} + \frac{FN}{2} )}
+\end{equation}
+
+\subsubsubsection*{Coeficiente de correlação de Matthews}
+
+O coeficiente de correlação de Matthews — ou Matthews Correlation Coefficient (Mcc) —  é uma métrica que pode ser utilizada para mensurar a eficiência de modelos de segmentação,  baseando-se no coeficiente de correlação de Pearson. Varia de -1 a 1 sendo 1 com maior correlação, 0 inconclusivo e -1 sem correlação. Segue a exemplificação da \cref{eq:mcc} \space\cite{Chicco2020, confusion_matrix_calculator}:
+
+\begin{equation}
+	\label{eq:mcc}
+	Mcc = \frac{\text{TP}\cdot\text{TN}-\text{FP}\cdot\text{FN}}{\sqrt{ (\text{TP}+\text{FP})\cdot(\text{TP}+\text{FN})\cdot(\text{TN}+\text{FP})\cdot(\text{TN}+\text{FN}) }}
+\end{equation}
+
+\subsubsubsection*{Taxa de descoberta falsa}
+
+A taxa de descoberta falsa — ou False Discovery Rate (FDR) — é uma métrica utilizada para calcular o erro obtido na imagem de predição,  baseando-se em encontrar uma relação entre ao erro obtido, divido pelo erro mais acerto esperado. Varia de 0 a 1 sendo 1 o pior caso e 0 o melhor. Segue a exemplificação da \cref{eq:fdr} \space\cite{Chicco2020}:
+
+\begin{equation}
+	\label{eq:fdr}
+	Fdr = \frac{FP}{FP + TP}
+\end{equation}
+
+
+\subsubsubsection*{Taxa de Falso Negativo}
+
+A taxa de falso negativo — ou False Negative Rate (FNR) — é uma métrica utilizada para calcular o erro obtido na imagem verdade,  baseando-se em encontrar uma relação entre ao erro obtido, divido pelo erro mais acerto esperado. Varia de 0 a 1 sendo 1 o pior caso e 0 o melhor. Segue a exemplificação da \cref{eq:fnr} \space\cite{Chicco2020}:
+
+\begin{equation}
+	\label{eq:fnr}
+	Fnr = \frac{FN}{FN + TP}
+\end{equation}
+
+\subsubsubsection*{Acurácia}
+
+A acurácia — ou Accuracy (Acc) — é uma métrica utilizada para calcular a eficiência de modelos de segmentação semântica,  baseando-se em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados para todos conjuntos. Varia de 0 a 1 sendo 1 com maior eficiência. Segue a exemplificação da \cref{eq:acc} \space\cite{Chicco2020}:
+
+\begin{equation}
+	\label{eq:acc}
+	Acc = \frac{\text{TP + TN}}{\text{(TP + TN + FP + FN)}}
+\end{equation}
+
 \subsubsubsection*{União sobre intersecção}
 
-A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utilizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados, segue a exemplificação da \cref{eq:iou} \space\cite{dp_semantic_segmantation, lapix, kirillov2019panoptic}:
+A união sobre intersecção — Intersection over Union (IoU) — ou índice de Jaccard é uma métrica muito utilizada para calcular a eficiência de modelos de segmentação, ela se baseia em encontrar uma relação entre a área das classes da imagem de saída com as classes na imagem do conjunto de dados para qualquer valor positivo, isto é, desconsiderando o conjunto positivo falso. Varia de 0 a 1 sendo 1 com maior eficiência. Segue a exemplificação da \cref{eq:iou} \space\cite{ iou_metric_link}:
 
 \begin{equation}
 	\label{eq:iou}
-	IoU = \frac{\text{Área de intersecção}}{\text{Área de união}} \quad IoU(p_i, g) = \frac{p_i \cap g}{ p_i \cup g}
+	IoU = \frac{\text{TP}}{\text{(TP + FP + FN)}}
 \end{equation}
 
 \subsubsubsection*{Qualidade panóptica}
@@ -85,7 +134,7 @@ Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ tem-se:
 	\underbrace{\frac{|TP|}{|TP| + \frac{1}{2}|FP| + \frac{1}{2}|FN|}}_{\text{Recognition Quality (RQ)}}
 \end{equation}
 
-Portanto pode-se concluir que PQ é apenas uma simplificação para uma fórmulaque contém uma relação entre métricas de segmentação semântica e de instância.
+Portanto pode-se concluir que PQ é apenas uma simplificação para uma fórmula que contém uma relação entre métricas de segmentação semântica e de instância.
 
 Com base no subtópico \hyperref[sec:segmentacao]{Segmentação} percebe-se que a segmentação panóptica é a mais completa e por efeito de estudos será utilizado o mesmo para concluir o trabalho. Como nesse nicho existem várias alternativas será utilizado a métrica demonstrada na \cref{eq:pq_metric} para analizar resultados e selecionar o modelo.
 
