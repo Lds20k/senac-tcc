@@ -7,7 +7,7 @@ from map_geration.draw_map import  convert_map_to_3d_image
 from map_geration.terrain import *
 
 
-def generate(image, points=25, mode=None, kernel_size=None):
+def generate(image, points=25, mode=3, kernel_size=None):
     logging.info("Gerando diagrama de Voronoi")
     graph = Graph(N=points, iterations=2)
 

@@ -91,9 +91,32 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 	\label{fig:diagrama_voronoi_pontos}
 \end{figure}
 
-Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada — ilustrada em \cref{fig:entrada_gerar_mapa} — e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano. \emph{descrever altura e umidade}.
+Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada — ilustrada em \cref{fig:entrada_gerar_mapa} — e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano.
 
-Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker}.
+Para definir a altura todos os cantos dos polígonos são estabelecidos como infinito, depois é feito uma busca em largura que começa dos cantos dos polígonos que se localizam na borda do mapa, todo começo de iteração é definido a altura da borda atual como zero. Para cada canto adjacente ao atual é verificado se não é um terreno de oceano ou lago então aumenta a elevação
+
+Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker} porém edita-se para chegar nos resultados da \cref{tab:biomes} \space\cite{amitp2010}.
+
+\begin{sidewaystable}
+	\centering
+	\caption{Relação entre umidade e elevação para biomas}
+	\label{tab:biomes}
+	\begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|}
+	\hline
+	\textbf{Zona de Elevação} & \multicolumn{6}{c|}{\textbf{Zona de Umidade}} \\
+	\cline{2-7}
+	 & \textbf{6 (úmido)} & \textbf{5} & \textbf{4} & \textbf{3} & \textbf{2} & \textbf{1 (seco)} \\
+	\hline
+	\textbf{4 (alto)} & \multicolumn{3}{|c|}{NEVE} & TUNDRA & DESNUDO & ESCALDADO  \\
+	\hline
+	\textbf{3} & \multicolumn{2}{|c|}{TAIGA} & \multicolumn{2}{|c|}{ARBUSTIVO} & \multicolumn{2}{|c|}{DESERTO TEMPERADO} \\
+	\hline
+	\textbf{2} & FLORESTA TROPICAL TEMPERADA & \multicolumn{2}{|c|}{FLORESTA DECÍDUA TEMPERADA} & \multicolumn{2}{|c|}{GRAMADO} & DESERTO TEMPERADO  \\
+	\hline
+	\textbf{1 (baixo)} &  \multicolumn{2}{|c|}{FLORESTA CHUVOSA TROPICAL} & \multicolumn{2}{|c|}{FLORESTA SAZONAL TROPICAL} & GRAMADO & DESERTO SUBTROPICAL  \\
+	\hline
+	\end{tabularx}
+\end{sidewaystable}
 
 \begin{figure}[!ht]
 	\centering
@@ -105,6 +128,42 @@ Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada
 
 \subsubsection{Mapa de altura}
 
+
+\subsubsection{Unity - Mapa 3d}
+
+Para demonstrar uma aplicação das imagens utilizou-se o motor gráfico Unity. Criou-se uma automatização entre a geração do mapa e a atualização no projeto Unity. Este processo pode ser dividido em duas partes sendo elas o terreno em 3d e a jogabilidade.
+
+\subsubsubsection{Jogabilidade}
+
+Criou-se um personagem com movimentação para andar pelo mapa baseado no \footnote{\url{https://www.youtube.com/watch?v=yl2Tv72tV7U}}. Adicionando os objetos e o script principal além de criar uma tag de chão para detectar a colisão é possível jogar no mapa andando em todas as direções e pulando.
+
+\subsubsubsection{Terreno}
+ Para atualizar o terreno usou-se primeiramente o pacote \textit{Terrain Tools} que faciita pois é possível usar um mapa de altura em png ou raw para criar um terreno, ao executar cria-se um terreno no qual o pixel mais branco (255) corresponde a altura mais alta.
+
+ Porém esse processo era manual e a ideia era que fosse automatizado, logo utilizou-se um algoritmo ligado a câmera do personagem que toda vez em que inicia-se a cena atualiza-se o terreno com a nova imagem de mapa 3d em raw. O algoritmo abre a imagem e percorre anotando o relevo proporcional a uma matriz e depois aplica no terreno.
+
+ Além da funcionalidade de relevo adicionou-se um pacote para alterar a textura de acordo com a altura para diferenciar o oceano da ilha e o bioma de floresta. Utilizou-se o pacote denominado de \textit{Terrain Toolkit 2017}, no script é carregado as texturas e definido alguns parâmetros para atualizar com o terreno.
+
+\subsubsection{Pós processamento}
+Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado no unity sem harmonia.}
+	\includegraphics[width=0.8\textwidth]{figures/unity_entry.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:unity_init}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado no unity usando desfoque.}
+	\includegraphics[width=0.8\textwidth]{figures/unity_blur.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:unity_blur}
+\end{figure}
 
 
 \subsubsection{Testes}

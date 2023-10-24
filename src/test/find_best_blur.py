@@ -24,13 +24,19 @@ DIMENSION = (300, 300)
 
 # Cases 1 to 3
 CASE_ID = 1
-METRICS_QUANTITY = 2
+METRICS_QUANTITY = 5
 
 ITERATIONS_PER_POINTS = 3
 QUANTITY_OF_IMAGES = 5
 START_KERNEL_SIZE = 0
 END_KERNEL_SIZE = 101
 SIZE_STEPS = 10
+
+def measureBlur(img):
+    grad_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y = cv2.Sobel(img,  cv2.CV_64F, 0, 1, ksize=3)
+    grad_mag = np.sqrt(grad_x**2 + grad_y**2)
+    return np.std(grad_mag)
 
 def find_best_blur():
     all_results = {}
@@ -49,11 +55,17 @@ def find_best_blur():
             for j in range (0, ITERATIONS_PER_POINTS):
                 while True:
                     try:
-                        generate_map.generate(im_pil, points=100, mode=3 if i > 0 else 2, kernel_size=i)
+                        generate_map.generate(im_pil, points=150, mode=3, kernel_size=75)
                         break
                     except Exception as e:
                         print(f"Ocorreu um erro: {e}. Tentando novamente...")
                         retriyng_counter += 1
+
+                map_2d = cv2.imread("output_2d.png")
+                ocean_color = (255,191,0)
+                mask = cv2.inRange(map_2d, ocean_color, ocean_color)
+                map_2d = cv2.bitwise_not(mask)
+                map_2d_resized = cv2.resize(map_2d, DIMENSION)
 
                 prediction = cv2.imread("output_3d.png", 0)
                 prediction_resized = cv2.resize(prediction, DIMENSION)
@@ -63,7 +75,7 @@ def find_best_blur():
                                     [  1,  0,  0],
                                     [  1,  1,  1]])
 
-                _, thresh_gt = cv2.threshold(ground_truth_resized, 1, 1, 0)
+                _, thresh_gt = cv2.threshold(map_2d_resized, 1, 1, 0)
                 _, thresh_prediction = cv2.threshold(prediction_resized, 1, 2, 0)
 
                 # Create new image as numpy matrix with sum of two masks
@@ -86,28 +98,37 @@ def find_best_blur():
                 # False Positive
                 counter_FP = result_set_counter[tuple([1, 0, 0])]
 
-                # Evaluate metrics
-                f1_score = counter_TP / (counter_TP + (counter_FN/2) + (counter_FP/2))
-                metrics[0] += f1_score
-                # print(f'O resultado eh {f1_score:.2f}')
+                # evaulate metrics
+                sm = measureBlur(prediction_resized)
+                metrics[0] += sm
 
-                mcc = (counter_TP * counter_TN - counter_FP * counter_FN) / sqrt((counter_TP + counter_FP) * (counter_TP + counter_FN) * (counter_TN + counter_FP) * (counter_TN + counter_FN))
-                metrics[1] += mcc
-                # print(f'O resultado eh {mcc:.2f}')
+                iou = counter_TP / (counter_TP + counter_FP + counter_FN)
+                metrics[1] += iou
 
+                fdr = counter_FP / (counter_TP + counter_FP)
+                metrics[2] += fdr
+
+                fnr = counter_FN / (counter_TP + counter_FN)
+                metrics[3] += fnr
+
+                acc = (counter_TP + counter_TN) / (counter_TP + counter_TN + counter_FP + counter_FN)
+                metrics[4] += acc
+
+                # Visualize result set
+                result_set_image = numpytoimage(result_set)
+                result_set_image.save("result_set.png")
 
             if not isinstance(all_results.get(i), np.ndarray):
                 all_results[i] = np.zeros(METRICS_QUANTITY)
             all_results[i] += metrics
 
-
-    sorted_dict = dict(sorted(all_results.items(), key=lambda x: sum(x[1]), reverse=True))
+    sorted_dict = all_results
+    sorted_dict = dict(sorted(all_results.items(), key=lambda x: x[1][0], reverse=False))
 
     for key, value in sorted_dict.items():
         for i in range(len(value)):
-            value[i] = f'{ (value[i] / (ITERATIONS_PER_POINTS * QUANTITY_OF_IMAGES)):.2f}'
+            value[i] = f'{ (value[i] / (ITERATIONS_PER_POINTS * QUANTITY_OF_IMAGES)):.5f}'
         sorted_dict[key] = value.astype(str)
-
 
     print(sorted_dict)
 
