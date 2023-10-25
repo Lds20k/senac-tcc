@@ -155,7 +155,17 @@ Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} pe
 	\label{fig:unity_init}
 \end{figure}
 
+% Aplicando um filtro — ou kernel — de tamanho 100x100 obteve-se o resultado ilustrado na \cref{fig:unity_blur}. Porém se analisar a \cref{} pode-se observar que o resultado baseado em métricas que mensuram a qualidade da geração procedural baseando-se no contorno das duas imagens. Na \cref{} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico} usados nas métricas.
 
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado no unity usando desfoque.}
+	\includegraphics[width=0.8\textwidth]{figures/unity_blur.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:unity_blur}
+\end{figure}
+
+\input{blur_error.tex}
 
 \begin{figure}[!ht]
 	\centering
