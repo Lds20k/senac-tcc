@@ -144,29 +144,34 @@ def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: in
                 results[comb_idx][param_num] += metrics
 
     for _, curr_comb in enumerate(results):
-        curr_comb = sortDict(curr_comb, 0)
+        # curr_comb = sortDict(curr_comb, 0)
         for key, value in curr_comb.items():
             for i in range(len(value)):
                 value[i] = f'{ (value[i] / (repeat * (end_img_id + 1 - start_img_id))):.5f}'
             curr_comb[key] = value.astype(str)
 
     print(results)
-    saveTable(results, metrics_name, generate_param, filename)
+    saveTable(results, metrics_name, generate_param, filename, images_combination)
 
 
-def saveTable(results, metrics, param: GENERATE_PARAM, filename):
+def saveTable(results, metrics, param: GENERATE_PARAM, filename, images_combination):
     with open(f'latex/{filename}.tex', "w", encoding='utf-8') as f:
         backreturn = "\\\\\n" + " "*8
         file_str = ""
 
-        columns_str = param.name
-        columns_str = columns_str.join(
+        columns_str = ""
+        if param == GENERATE_PARAM.KERNEL_SIZE:
+            columns_str = "Tamanho filtro"
+        else:
+            columns_str = "Pontos"
+
+        columns_str += ''.join(
             [
                 f" & {METRICS_DICT[_metric][1]}"
                 for _, _metric in enumerate(metrics)
             ])
 
-        for _, curr_comb in enumerate(results):
+        for curr_comb_idx, curr_comb in enumerate(results):
             content = backreturn.join(
             [
                 f"{_k} & {' & '.join(_v.astype(str))}"
@@ -177,9 +182,9 @@ def saveTable(results, metrics, param: GENERATE_PARAM, filename):
                         f"""
                         \\begin{{table}}[h]
                             \\centering
-                            \\caption{{Resultados dos testes de contorno}}
-                            \\label{{tab:resultados-contorno}}
-                            \\begin{{tabular}}{{{'| ' + 'c |' * (len(curr_comb) + 1) }}}
+                            \\caption{{Resultados dos testes {images_combination[curr_comb_idx][0]} {images_combination[curr_comb_idx][1]}}}
+                            \\label{{tab:{filename}_{images_combination[curr_comb_idx][0]}_{images_combination[curr_comb_idx][1]}}}
+                            \\begin{{tabular}}{{{'|' + 'c|' * (len(curr_comb) + 1) }}}
                                 \\hline
                                 {columns_str} \\\\
                                 \\hline
