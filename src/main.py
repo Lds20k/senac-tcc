@@ -163,15 +163,14 @@ class QImageViewer(QMainWindow):
         im = Image.open('output_centralized.png')
         width, height = im.size   # Get dimensionsimg
 
-        left = (width - w * 1.5)/2
-        top = (height - h * 1.5)/2
-        right = (width + w * 1.5)/2
-        bottom = (height + h * 1.5)/2
+        left = (width - w)/2
+        top = (height - h)/2
+        right = (width + w)/2
+        bottom = (height + h)/2
+        im = im.crop(left, top, right, bottom)
+        im = im.resize((200, 200))
+        im= cv2.copyMakeBorder(im,100,100,100,100,cv2.BORDER_CONSTANT,value=(0,0,0))
 
-        # Crop the center of the image
-        im = im.crop((left, top, right, bottom))
-
-        im = im.resize((300, 300))
         im.save('output_croped.png')
 
         self.runMapWorker(im)
