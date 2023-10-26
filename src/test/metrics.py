@@ -12,6 +12,7 @@ class METRICS_NAME(Enum):
     FALSE_DISCOVERY_RATE = 5
     FALSE_NEGATIVE_RATE = 6
     ACCURACY = 7
+    DURATION = 8
 
 def measureBlur(img):
     grad_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
@@ -44,11 +45,12 @@ def acc(TP, TN, FP, FN):
 
 
 METRICS_DICT = {
-METRICS_NAME.BLUR: [measureBlur, "Blur"],
+METRICS_NAME.BLUR: [measureBlur, "Desfoque"],
 METRICS_NAME.INTERSECTION_OVER_UNION: [iou,"IoU"],
 METRICS_NAME.F1_SCORE: [f1,"F1"],
 METRICS_NAME.MATTHEWS_CORRELATION_COEFFICIENT: [mcc,"MCC"],
 METRICS_NAME.FALSE_DISCOVERY_RATE: [fdr,"FDR"],
 METRICS_NAME.FALSE_NEGATIVE_RATE: [fnr,"FNR"],
 METRICS_NAME.ACCURACY: [acc,"Acc"],
+METRICS_NAME.DURATION: [None,"Duração"]
 }

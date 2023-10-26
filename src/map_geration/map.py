@@ -24,7 +24,8 @@ def convert_map_to_image(
     debug_moisture=False,
     downslope_arrows=False,
     rivers=True,
-    path:str=""
+    path:str="",
+    border_size=0
 ):
     """
     Here the next adjustments will be added to create a complete map.
@@ -91,7 +92,7 @@ def convert_map_to_image(
     img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
     img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
     img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
-    img= cv2.copyMakeBorder(img,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,cv2.BORDER_CONSTANT,value=(255,191,0))
+    img= cv2.copyMakeBorder(img,border_size,border_size,border_size,border_size,cv2.BORDER_CONSTANT,value=(255,191,0))
     img = cv2.resize(img, (1000, 1000))
     img = cv2.medianBlur(img, 21)
 

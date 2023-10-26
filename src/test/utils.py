@@ -4,9 +4,10 @@ import numpy as np
 from collections import Counter
 from PIL import Image
 from metrics import *
-from typing import Set
+from typing import List
 from enum import Enum
 from itertools import combinations
+import time
 
 import os
 import sys
@@ -22,7 +23,12 @@ COLOR_MAP = np.array([[0.5,0.5,0.5],
 class GENERATE_PARAM(Enum):
     POINTS = 1
     KERNEL_SIZE = 2
+    BORDER_SIZE = 3
 
+class SORT_METHOD(Enum):
+    NOT_REVERSE = 0
+    REVERSE = 1
+    NOT_SORT = 2
 
 class IMAGES(Enum):
     INPUT = 1
@@ -95,8 +101,9 @@ def getSetClassification(gt, prediction):
 def isSetClassificationMetric(metric):
     return not metric == METRICS_NAME.BLUR
 
-def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: int, param_step: int, metrics_name: Set[METRICS_NAME],
-             repeat: int, filename: str, generate_mode: int, generate_param: GENERATE_PARAM, images: Set[IMAGES]):
+def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: int, param_step: int, metrics_name: List[METRICS_NAME],
+             repeat: int, filename: str, generate_mode: int, generate_param: GENERATE_PARAM, images: List[IMAGES], output_generate = 1,
+             sort_method: SORT_METHOD = SORT_METHOD.NOT_SORT):
 
     results = []
     metrics_quantity = len(metrics_name)
@@ -104,7 +111,7 @@ def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: in
 
     for comb_idx, im_comb in enumerate(images_combination):
         results.append({})
-        print(f'Combinacao {comb_idx} do {im_comb[1].name} -> {im_comb[0].name}')
+        print(f'Combinacao {comb_idx} do {im_comb[0].name} -> {im_comb[1].name}')
 
         for img_num in range(start_img_id, end_img_id + 1):
             print(f'Imagem {img_num}')
@@ -120,14 +127,18 @@ def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: in
                 for j in range (0, repeat):
                     while True:
                         try:
+                            start_time = time.time()
                             if generate_param == GENERATE_PARAM.POINTS:
-                                generate_map.generate(im_pil, points=param_num, mode=generate_mode, kernel_size=75)
+                                generate_map.generate(im_pil, points=param_num, mode=generate_mode, kernel_size=75, output=output_generate)
                             if generate_param == GENERATE_PARAM.KERNEL_SIZE:
-                                generate_map.generate(im_pil, points=150, mode=generate_mode, kernel_size=param_num)
+                                generate_map.generate(im_pil, points=150, mode=generate_mode, kernel_size=param_num, output=output_generate)
+                            if generate_param == GENERATE_PARAM.BORDER_SIZE:
+                                generate_map.generate(im_pil, points=150, mode=generate_mode, kernel_size=75, output=output_generate, border_size=param_num)
                             break
                         except Exception as e:
                             print(f"Ocorreu um erro: {e}. Tentando novamente...")
-
+                        end_time = time.time()
+                        time_duration = end_time - start_time
                     gt, prediction = selectGtAndPrediction(input, im_comb)
 
                     TP, TN, FP, FN = getSetClassification(gt, prediction)
@@ -136,19 +147,25 @@ def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: in
                     for metric_idx, metric in enumerate(metrics_name):
                         if isSetClassificationMetric(metric):
                             metrics[metric_idx] += METRICS_DICT[metric][0](TP, TN, FP, FN)
-                        else:
+                        elif metric == METRICS_NAME.BLUR:
                             metrics[metric_idx] += METRICS_DICT[metric][0](prediction)
+                        elif metric == METRICS_NAME.DURATION:
+                            metrics[metric_idx] += time_duration
+                        else:
+                            print(f"Métrica: {metric.name} não encontrada.")
 
                 if not isinstance(results[comb_idx].get(param_num), np.ndarray):
                     results[comb_idx][param_num] = np.zeros(metrics_quantity)
                 results[comb_idx][param_num] += metrics
 
-    for _, curr_comb in enumerate(results):
-        # curr_comb = sortDict(curr_comb, 0)
+    for curr_bomb_idx, curr_comb in enumerate(results):
+        if not sort_method == SORT_METHOD.NOT_SORT:
+            curr_comb = sortDict(curr_comb, 0, reverse=bool(sort_method.value))
         for key, value in curr_comb.items():
             for i in range(len(value)):
                 value[i] = f'{ (value[i] / (repeat * (end_img_id + 1 - start_img_id))):.5f}'
             curr_comb[key] = value.astype(str)
+        results[curr_bomb_idx] = curr_comb
 
     print(results)
     saveTable(results, metrics_name, generate_param, filename, images_combination)
@@ -178,13 +195,16 @@ def saveTable(results, metrics, param: GENERATE_PARAM, filename, images_combinat
                 for _k, _v in curr_comb.items()
             ])
 
+            gt_str = images_combination[curr_comb_idx][0].name.lower()
+            pd_str = images_combination[curr_comb_idx][1].name.lower()
+
             file_str += re.sub(r"\s{16}(?=\{|\d|\\)", "",
                         f"""
                         \\begin{{table}}[h]
                             \\centering
-                            \\caption{{Resultados dos testes {images_combination[curr_comb_idx][0]} {images_combination[curr_comb_idx][1]}}}
-                            \\label{{tab:{filename}_{images_combination[curr_comb_idx][0]}_{images_combination[curr_comb_idx][1]}}}
-                            \\begin{{tabular}}{{{'|' + 'c|' * (len(curr_comb) + 1) }}}
+                            \\caption{{Resultados dos testes {gt_str.replace("_", "")} {pd_str.replace("_", "")}}}
+                            \\label{{tab:{filename}_{gt_str}_{pd_str}}}
+                            \\begin{{tabular}}{{{'|c|' + 'c|' * (len(metrics)) }}}
                                 \\hline
                                 {columns_str} \\\\
                                 \\hline

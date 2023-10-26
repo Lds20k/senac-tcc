@@ -12,7 +12,7 @@ class OUTPUT(Enum):
     MAP_3D = 3
 
 
-def generate(image, points=25, mode = 3, output: OUTPUT = OUTPUT.BOTH, kernel_size=None):
+def generate(image, points=25, mode = 3, output: OUTPUT = OUTPUT.BOTH, kernel_size=None, border_size = 0):
     logging.info("Gerando diagrama de Voronoi")
     graph = Graph(N=points, iterations=2)
 
@@ -30,4 +30,4 @@ def generate(image, points=25, mode = 3, output: OUTPUT = OUTPUT.BOTH, kernel_si
 
     if not output == OUTPUT.MAP_3D:
         logging.info("Gerando imagem 2D")
-        return convert_map_to_image(graph, path="output_2d")
+        return convert_map_to_image(graph, path="output_2d", border_size=border_size)

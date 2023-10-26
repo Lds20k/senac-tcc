@@ -144,38 +144,6 @@ Criou-se um personagem com movimentação para andar pelo mapa baseado no \footn
 
  Além da funcionalidade de relevo adicionou-se um pacote para alterar a textura de acordo com a altura para diferenciar o oceano da ilha e o bioma de floresta. Utilizou-se o pacote denominado de \textit{Terrain Toolkit 2017}, no script é carregado as texturas e definido alguns parâmetros para atualizar com o terreno.
 
-\subsubsection{Pós processamento}
-Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
-
-\begin{figure}[!ht]
-	\centering
-    \caption{Resultado no unity sem harmonia.}
-	\includegraphics[width=0.8\textwidth]{figures/unity_entry.png}
-    \legend{Fonte: \space Autoria própria}
-	\label{fig:unity_init}
-\end{figure}
-
-% Aplicando um filtro — ou kernel — de tamanho 100x100 obteve-se o resultado ilustrado na \cref{fig:unity_blur}. Porém se analisar a \cref{} pode-se observar que o resultado baseado em métricas que mensuram a qualidade da geração procedural baseando-se no contorno das duas imagens. Na \cref{} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico} usados nas métricas.
-
-\begin{figure}[!ht]
-	\centering
-    \caption{Resultado no unity usando desfoque.}
-	\includegraphics[width=0.8\textwidth]{figures/unity_blur.png}
-    \legend{Fonte: \space Autoria própria}
-	\label{fig:unity_blur}
-\end{figure}
-
-\input{blur_error.tex}
-
-\begin{figure}[!ht]
-	\centering
-    \caption{Resultado no unity usando desfoque.}
-	\includegraphics[width=0.8\textwidth]{figures/unity_blur.png}
-    \legend{Fonte: \space Autoria própria}
-	\label{fig:unity_blur}
-\end{figure}
-
-
 \subsubsection{Testes}
 
 Será feito um teste baseado no sutópico \hyperref[sec:uniaoSobInterseccao]{união sob intersecção} — ou IoU sigla em inglês — no qual irá comparar duas imagens binárias da entrada do algoritmo de geração procedural e a saída, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
@@ -204,3 +172,38 @@ Utilizou-se a biblioteca PyQt5 para criar uma interface gráfica na qual o usuá
 Esse módulo é responsável para conectar todas as partes e obter o mapa. Portanto é necessário abrir uma imagem do diretório local, carregar e disparar a execução do processo de segmentação de imagem. Após o resultado da IA, permitir a seleção do contorno,  criar uma imagem binária a partir do contorno e envia-lá como argumento na geração procedural de mapas.
 
 Além disso para promever a usabilidade utilizou-se um loading específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
+
+\subsubsection{Pós processamento}
+Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado no unity sem harmonia.}
+	\includegraphics[width=0.8\textwidth]{figures/unity_entry.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:unity_init}
+\end{figure}
+
+Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:unity_blur}. Porém se analisar a \cref{tab:resultados_blur_error} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico}.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado no unity usando desfoque.}
+	\includegraphics[width=0.8\textwidth]{figures/unity_blur.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:unity_blur}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Resultado comparando mapa de altura com e sem desfoque.}
+	\includegraphics[width=0.8\textwidth]{figures/comparacao_blur.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:comparando_blur}
+\end{figure}
+
+\input{blur_error.tex}
+
+Logo para tratar esse problema adotou-se uma solução baseada em redimensionar a imagem e adicionar uma borda para que diminui-se assim o tamanho do mapa de altura. Portanto foi redimensionado uma imagem 1000x1000 para 800x800, reduzindo em 20\% e depois adicionado uma borda de cor preta em todos os lados de tamanho 100, logo retorna ao tamanho original. E para encontrar o melhor tamanho do filtro de desfoque para essas condições executou-se os testes alterando o tamanho do filtro apos a aplicação da técnica de diminuir o tamanho do mapa. Os resultados referentes aos testes encontram-se na \cref{tab:blur_solution_input_output_3d}
+
+\input{blur_solution.tex}
