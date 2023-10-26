@@ -96,10 +96,10 @@ def getSetClassification(gt, prediction):
     result_set_image = numpytoimage(result_set)
     result_set_image.save("result_set.png")
 
-    return counter_TP, counter_TN, counter_FP, counter_FN
+    return counter_TP, counter_TN, counter_FP, counter_FN, result_set_image
 
 def isSetClassificationMetric(metric):
-    return not metric == METRICS_NAME.BLUR
+    return not metric == METRICS_NAME.BLUR and not metric == METRICS_NAME.DURATION
 
 def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: int, param_step: int, metrics_name: List[METRICS_NAME],
              repeat: int, filename: str, generate_mode: int, generate_param: GENERATE_PARAM, images: List[IMAGES], output_generate = 1,
@@ -111,6 +111,7 @@ def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: in
 
     for comb_idx, im_comb in enumerate(images_combination):
         results.append({})
+        rs_image = None
         print(f'Combinacao {comb_idx} do {im_comb[0].name} -> {im_comb[1].name}')
 
         for img_num in range(start_img_id, end_img_id + 1):
@@ -125,23 +126,24 @@ def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: in
             for param_num in range(start_param, end_param + 1, param_step):
                 metrics = np.zeros(metrics_quantity)
                 for j in range (0, repeat):
+                    time_duration = 0
                     while True:
                         try:
                             start_time = time.time()
                             if generate_param == GENERATE_PARAM.POINTS:
-                                generate_map.generate(im_pil, points=param_num, mode=generate_mode, kernel_size=75, output=output_generate)
+                                generate_map.generate(im_pil, points=param_num, mode=generate_mode, kernel_size=80, output=output_generate)
                             if generate_param == GENERATE_PARAM.KERNEL_SIZE:
                                 generate_map.generate(im_pil, points=150, mode=generate_mode, kernel_size=param_num, output=output_generate)
                             if generate_param == GENERATE_PARAM.BORDER_SIZE:
-                                generate_map.generate(im_pil, points=150, mode=generate_mode, kernel_size=75, output=output_generate, border_size=param_num)
+                                generate_map.generate(im_pil, points=150, mode=generate_mode, kernel_size=80, output=output_generate, border_size=param_num)
+                            end_time = time.time()
+                            time_duration = end_time - start_time
                             break
                         except Exception as e:
                             print(f"Ocorreu um erro: {e}. Tentando novamente...")
-                        end_time = time.time()
-                        time_duration = end_time - start_time
                     gt, prediction = selectGtAndPrediction(input, im_comb)
 
-                    TP, TN, FP, FN = getSetClassification(gt, prediction)
+                    TP, TN, FP, FN, rs_image = getSetClassification(gt, prediction)
 
                     # evaulate metrics
                     for metric_idx, metric in enumerate(metrics_name):
@@ -157,6 +159,7 @@ def testCase(start_img_id: int, end_img_id: int, start_param: int, end_param: in
                 if not isinstance(results[comb_idx].get(param_num), np.ndarray):
                     results[comb_idx][param_num] = np.zeros(metrics_quantity)
                 results[comb_idx][param_num] += metrics
+        rs_image.save(f'result_set_{im_comb[0].name.lower()}_{im_comb[1].name.lower()}.png')
 
     for curr_bomb_idx, curr_comb in enumerate(results):
         if not sort_method == SORT_METHOD.NOT_SORT:
@@ -179,8 +182,10 @@ def saveTable(results, metrics, param: GENERATE_PARAM, filename, images_combinat
         columns_str = ""
         if param == GENERATE_PARAM.KERNEL_SIZE:
             columns_str = "Tamanho filtro"
-        else:
+        elif param == GENERATE_PARAM.POINTS:
             columns_str = "Pontos"
+        else:
+            columns_str = "Tamanho borda"
 
         columns_str += ''.join(
             [
@@ -202,7 +207,7 @@ def saveTable(results, metrics, param: GENERATE_PARAM, filename, images_combinat
                         f"""
                         \\begin{{table}}[h]
                             \\centering
-                            \\caption{{Resultados dos testes {gt_str.replace("_", "")} {pd_str.replace("_", "")}}}
+                            \\caption{{Resultados dos testes {gt_str.replace("_", " ")} {pd_str.replace("_", " ")}}}
                             \\label{{tab:{filename}_{gt_str}_{pd_str}}}
                             \\begin{{tabular}}{{{'|c|' + 'c|' * (len(metrics)) }}}
                                 \\hline

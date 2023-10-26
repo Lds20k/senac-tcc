@@ -15,6 +15,6 @@ IMAGES_SET = [
 if __name__ == '__main__':
     testCase(
         start_img_id = 1, end_img_id = 5, start_param = 0, end_param = 100, param_step = 10, metrics_name = METRICS_SET,
-        repeat = 3, filename = "border_2d_solution", generate_mode = 3, generate_param = GENERATE_PARAM.KERNEL_SIZE, images = IMAGES_SET,
+        repeat = 3, filename = "border_2d_solution", generate_mode = 3, generate_param = GENERATE_PARAM.BORDER_SIZE, images = IMAGES_SET,
         output_generate = 1
     )

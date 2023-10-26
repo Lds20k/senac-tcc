@@ -204,6 +204,10 @@ Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se
 
 \input{blur_error.tex}
 
-Logo para tratar esse problema adotou-se uma solução baseada em redimensionar a imagem e adicionar uma borda para que diminui-se assim o tamanho do mapa de altura. Portanto foi redimensionado uma imagem 1000x1000 para 800x800, reduzindo em 20\% e depois adicionado uma borda de cor preta em todos os lados de tamanho 100, logo retorna ao tamanho original. E para encontrar o melhor tamanho do filtro de desfoque para essas condições executou-se os testes alterando o tamanho do filtro apos a aplicação da técnica de diminuir o tamanho do mapa. Os resultados referentes aos testes encontram-se na \cref{tab:blur_solution_input_output_3d}
+Logo para tratar esse problema adotou-se uma solução baseada em redimensionar a imagem e adicionar uma borda para que diminui-se assim o tamanho do mapa de altura. Portanto foi redimensionado uma imagem 1000x1000 para 800x800, reduzindo em 20\% e depois adicionado uma borda de cor preta em todos os lados de tamanho 100, logo retorna ao tamanho original. E para encontrar o melhor tamanho do filtro de desfoque para essas condições executou-se os testes alterando o tamanho do filtro apos a aplicação da técnica de diminuir o tamanho do mapa. Os resultados referentes aos testes encontram-se na \cref{tab:blur_solution_input_output_3d}. Para selecionar o melhor resultado definiu-se a quesito de ter a menor métrica de desfoque — que significa ter mais desfoque na imagem — e com a métrica IoU que varie no máximo 1\% da métrica sem o filtro de desfoque. Logo seleciona-se o restultado de filtro de tamanho 80 pois a métrica IoU tem 79\% assim como o tamanho de filtro 0. Percebe-se também que com a diminuição da borda resultou no comparrtilhamento entre os erros da imagem de entrada com o mapa de altura.
 
 \input{blur_solution.tex}
+
+Após melhorar o resultado do mapa de entrada é necessário ajustar o mapa 2d visto que esse deve ser bem parecido com o mapa de altura, parar informar por exemplo a localização exata do personagem em jogo com visualização do mapa inteiro. Observa-se na \cref{tab:border_2d_solution_output_2d_output_3d} os resultados obtidos dos testes com o tamanho da borda adicionada ao mapa 2d e o maior valor de IoU obtido foi 60.
+
+\input{border_2d_solution.tex}

@@ -18,9 +18,8 @@ IMAGES_SET = [
 ]
 
 if __name__ == '__main__':
-    # Testar primeiro
     testCase(
-        start_img_id = 1, end_img_id = 1, start_param = 250, end_param = 250, param_step = 10, metrics_name = METRICS_SET,
-        repeat = 1, filename = "final", generate_mode = 3, generate_param = GENERATE_PARAM.POINTS, images = IMAGES_SET,
+        start_img_id = 1, end_img_id = 5, start_param = 50, end_param = 300, param_step = 50, metrics_name = METRICS_SET,
+        repeat = 3, filename = "final", generate_mode = 3, generate_param = GENERATE_PARAM.POINTS, images = IMAGES_SET,
         output_generate = 1
     )
