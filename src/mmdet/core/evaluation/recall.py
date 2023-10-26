@@ -162,6 +162,7 @@ def plot_num_recall(recalls, proposal_nums):
     import matplotlib.pyplot as plt
     f = plt.figure()
     plt.plot([0] + _proposal_nums, [0] + _recalls)
+    plt.clf()
     plt.xlabel('Proposal num')
     plt.ylabel('Recall')
     plt.axis([0, proposal_nums.max(), 0, 1])
@@ -187,6 +188,7 @@ def plot_iou_recall(recalls, iou_thrs):
     import matplotlib.pyplot as plt
     f = plt.figure()
     plt.plot(_iou_thrs + [1.0], _recalls + [0.])
+    plt.clf()
     plt.xlabel('IoU')
     plt.ylabel('Recall')
     plt.axis([iou_thrs.min(), 1, 0, 1])

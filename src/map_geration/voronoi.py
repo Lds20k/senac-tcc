@@ -236,7 +236,7 @@ class VoronoiPolygons:
             neighbors - indexes of neighbors regions for each region
             intersecions - indexes of vertices creating line separating each two neighbors
         """
-        
+
         for iter in range(iterations + 1):
             self._vor = Voronoi(self._points)
             new_regions, new_vertices, new_centroids = \
@@ -259,11 +259,13 @@ class VoronoiPolygons:
             region.append(region[0])
             coords = vertices[region]
             plt.plot(coords[:, 0], coords[:, 1], c='white')
+            plt.clf()
         for i, n_list in enumerate(neighbors):
             p1 = points[i]
             for i2 in n_list:
                 p2 = points[i2]
                 plt.plot([p1[0], p2[0]], [p1[1], p2[1]], c='black')
+                plt.clf()
         plt.scatter(points[:, 0], points[:, 1], c='red')
         plt.scatter(vertices[:, 0], vertices[:, 1], c='blue')
         if centroids is not None:

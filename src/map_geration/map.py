@@ -30,7 +30,7 @@ def convert_map_to_image(
     """
     Here the next adjustments will be added to create a complete map.
     """
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 10), clear=True)
 
     polygons = [center_to_polygon(center, plot_type) for center in graph.centers]
     p = PatchCollection(polygons, match_original=True)
@@ -74,6 +74,7 @@ def convert_map_to_image(
                 X = (beg_x, end_x)
                 Y = (beg_y, end_y)
                 plt.plot(X, Y, linewidth=2+2*np.sqrt(edge.river), color='blue')
+                plt.clf()
 
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -91,6 +92,7 @@ def convert_map_to_image(
     fig.canvas.draw()
     img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
     img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    plt.close(fig)
     img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
     img= cv2.copyMakeBorder(img,border_size,border_size,border_size,border_size,cv2.BORDER_CONSTANT,value=(255,191,0))
     img = cv2.resize(img, (1000, 1000))
