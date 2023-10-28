@@ -93,7 +93,20 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 
 Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada — ilustrada em \cref{fig:entrada_gerar_mapa} — e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano.
 
-Para definir a altura todos os cantos dos polígonos são estabelecidos como infinito, depois é feito uma busca em largura que começa dos cantos dos polígonos que se localizam na borda do mapa, todo começo de iteração é definido a altura da borda atual como zero. Para cada canto adjacente ao atual é verificado se não é um terreno de oceano ou lago então aumenta a elevação
+Para se calcular a elevação dos polígonos primeiramente é calculado a elevação das arestas de todos os polígonos, isso é feito a partir de uma busca em profundidade que possui o inicio em todas as arestas que tocam a borda do grafico. A toda nova iteração, as arestas que tocam os cantos são atribuidas com o valor 0, e assim defini-se uma evolução da altura conforme chega-se ao centro do mapa.
+Após isso é feito o calculo de redistribuição de elevação, que com base na elevação calculada anteriormente é feito uma lista ordenadas pela elevação, começando da menor para a maior. Cada item da lista é enumerado a partir de um índice i e com essa enumeração é calculado usando a \cref{eq:total_indexes}. Após isso é calculado a \cref{eq:vertex_elevation} sendo X a elevação do vertice.
+E por final para calcular a elevação do poligino é feito a média dos vertices que pertencem ao polígonos.
+
+\begin{equation}
+	\label{eq:total_indexes}
+	Y = i / total de indices
+\end{equation}
+
+\begin{equation}
+	\label{eq:vertex_elevation}
+	X = sqrt(fator) - sqrt(sqrt * (1 - Y))
+\end{equation}
+
 
 Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker} porém edita-se para chegar nos resultados da \cref{tab:biomes} \space\cite{amitp2010}.
 
