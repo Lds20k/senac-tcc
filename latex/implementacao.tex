@@ -126,8 +126,15 @@ Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada
 	\label{fig:entrada_gerar_mapa}
 \end{figure}
 
-\subsubsection{Mapa de altura}
+Para gerar o mapa 3d é gerado uma imagem denominada de mapa de altura, construído com base nos dados de elevações do grafo. Basicamente gera-se uma imagem com tonalidades de cinza sendo o pixel branco com valor 255 o ponto mais alto do mapa e o pixel preto com valor 0 o ponto mais baixo. A \cref{fig:heightmap} ilustra uma saída de mapa de altura.
 
+\begin{figure}[!ht]
+	\centering
+    \caption{Exemplo de mapa de altura.}
+	\includegraphics[width=0.6\textwidth]{figures/heightmap_eample.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:heightmap}
+\end{figure}
 
 \subsubsection{Unity - Mapa 3d}
 
@@ -173,7 +180,7 @@ Esse módulo é responsável para conectar todas as partes e obter o mapa. Porta
 
 Além disso para promever a usabilidade utilizou-se um loading específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
 
-\subsubsection{Pós processamento}
+\subsection{Pós processamento}
 Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
 
 \begin{figure}[!ht]
