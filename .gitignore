@@ -27,6 +27,8 @@ output_3d.png
 output.png
 output_centralized.png
 output_croped.png
+output_biomes-shaped.png
+output_biomes.png
 output_fig.png
 **/*.pyc
 ## Intermediate documents:

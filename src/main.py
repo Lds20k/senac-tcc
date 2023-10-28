@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import *
 from pyqtspinner import WaitingSpinner
 
 from efficientps_cityscapes import execute_efficientps
-from generate_map import generate
+from generate_map import generate, OUTPUT
 
 
 class EfficientPSWorker(QObject):
@@ -37,7 +37,7 @@ class MapWorker(QObject):
 
     def run(self):
         logging.info("MapWorker em execução")
-        result_image = generate(self.image, points=self.points)
+        result_image = generate(self.image, points=self.points, output=OUTPUT.MAP_BIOME)
         logging.info(f"Imagem pos processamento com {result_image.shape[1]}x{result_image.shape[0]}")
         qtImage = QImage(result_image.data, result_image.shape[1], result_image.shape[0], QImage.Format_RGB888).rgbSwapped()
         self.result.emit(qtImage)
@@ -167,13 +167,18 @@ class QImageViewer(QMainWindow):
         top = (height - h)/2
         right = (width + w)/2
         bottom = (height + h)/2
-        im = im.crop(left, top, right, bottom)
+        im = im.crop((left, top, right, bottom))
         im = im.resize((200, 200))
-        im= cv2.copyMakeBorder(im,100,100,100,100,cv2.BORDER_CONSTANT,value=(0,0,0))
 
-        im.save('output_croped.png')
+        open_cv_image = np.array(im)
+        open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_RGB2BGR)
 
-        self.runMapWorker(im)
+        open_cv_image = cv2.copyMakeBorder(open_cv_image,100,100,100,100,cv2.BORDER_CONSTANT,value=(0,0,0))
+        cv2.imwrite('output_croped.png', open_cv_image)
+
+        open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB)
+
+        self.runMapWorker(Image.fromarray(open_cv_image))
 
     def print_(self):
         dialog = QPrintDialog(self.printer, self)

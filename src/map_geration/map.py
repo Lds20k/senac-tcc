@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import logging
 import queue
 from typing import *
 
@@ -74,7 +75,7 @@ def convert_map_to_image(
                 X = (beg_x, end_x)
                 Y = (beg_y, end_y)
                 plt.plot(X, Y, linewidth=2+2*np.sqrt(edge.river), color='blue')
-                plt.clf()
+                #plt.clf()
 
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -103,7 +104,7 @@ def convert_map_to_image(
 
     return img
 
-def center_to_polygon(center, plot_type):
+def center_to_polygon(center: Center, plot_type):
     """
     Helper function for plotting, which takes the center and returns a polygon which can be plotted.
     """
@@ -230,9 +231,11 @@ def create_rivers(graph: Graph, n, min_height):
     """
 
     # reset previous rivers
+    logging.info("Reatribuindo rios dos poligonos")
     for edge in graph.edges:
         edge.river = 0
 
+    
     def suitable_for_river(c: Corner):
         good_tile = c.terrain_type == TerrainType.LAND or c.terrain_type == TerrainType.COAST
         neighbour_tiles = [nei.terrain_type for nei in c.adjacent]
@@ -248,6 +251,7 @@ def create_rivers(graph: Graph, n, min_height):
 
         return good_tile and all(good_neighbours) and all(good_touches)
 
+    logging.info("Verificando tipo do terreno")
     for corner in graph.corners:
         if corner.terrain_type == TerrainType.LAND or corner.terrain_type == TerrainType.COAST:
             neighbors_heights = [nei.height for nei in corner.adjacent]
@@ -255,6 +259,7 @@ def create_rivers(graph: Graph, n, min_height):
             lowest_id = neighbors_heights.index(lowest)
             corner.downslope = lowest_id
 
+    logging.info("Verificando bom começo")
     good_beginnings = [
         c for c in graph.corners
         if ((c.terrain_type == TerrainType.LAND or c.terrain_type == TerrainType.COAST) \
@@ -263,6 +268,7 @@ def create_rivers(graph: Graph, n, min_height):
             and c.terrain_type != TerrainType.LAKE)
     ]
 
+    logging.info("Verificando quantidade de rios")
     if len(good_beginnings) < n:
         heighest = max([
             c.height for c in graph.corners
@@ -272,7 +278,10 @@ def create_rivers(graph: Graph, n, min_height):
         print(f'min_height={min_height} | Heighest mountain has height={heighest}')
         return
 
+    logging.info("Selecionando um começo")
     start_corners = np.random.choice(good_beginnings, n, replace=False)
+
+    logging.info("Verificando rios")
     for corner in start_corners:
         while True:
             if corner.downslope is None or not suitable_for_river(corner):
@@ -288,6 +297,7 @@ def create_rivers(graph: Graph, n, min_height):
             mutable_edge.river += 1
             corner = next_corner
 
+    logging.info("Atribuindo")
     assign_corner_river(graph)
 
 def assign_corner_river(graph: Graph):
@@ -297,7 +307,7 @@ def assign_corner_river(graph: Graph):
             edge.v1.river = max(edge.v0.river, edge.river)
 
 def assign_moisture(graph: Graph, redistribute=True, distance_decay=0.9, river_weight=0.25, lake_value=1.0, ocean_value=1.0):
-    assign_corner_moisture(distance_decay, river_weight, lake_value, ocean_value)
+    assign_corner_moisture(graph, distance_decay, river_weight, lake_value, ocean_value)
 
     for center in graph.centers:
         if center.terrain_type == TerrainType.LAND or center.terrain_type == TerrainType.COAST:
