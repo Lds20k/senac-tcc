@@ -33,7 +33,7 @@ class MapWorker(QObject):
     finished = pyqtSignal()
     result = pyqtSignal(QImage)
     image = None
-    points = 250
+    points = 1000
 
     def run(self):
         logging.info("MapWorker em execução")
@@ -148,37 +148,20 @@ class QImageViewer(QMainWindow):
         img_in = cv2.imread('output.png', 0)
         height, width = img_in.shape
         x, y, w, h = cv2.boundingRect(img_in)
+        croped_image = img_in[y:y+h, x:x+w]
 
-        # Create new blank image and shift ROI to new coordinates
-        mask = np.zeros(img_in.shape, dtype=np.uint8)
-        ROI = img_in[y:y+h, x:x+w]
-        x = width//2 - ROI.shape[0]//2
-        y = height//2 - ROI.shape[1]//2
-        if x > 0 and y > 0:
-            mask[y:y+h, x:x+w] = ROI
-            cv2.imwrite('output_centralized.png', mask)
+        diff = abs(w-h) // 2
+        if w > h:
+            im = cv2.copyMakeBorder(croped_image, diff, diff, 0, 0, cv2.BORDER_CONSTANT,value=(0,0,0))
         else:
-            shutil.move("output.png", "output_centralized.png")
+            im = cv2.copyMakeBorder(croped_image, 0, 0, diff, diff, cv2.BORDER_CONSTANT,value=(0,0,0))
 
-        im = Image.open('output_centralized.png')
-        width, height = im.size   # Get dimensionsimg
+        im = cv2.resize(im, (200, 200))
+        im = cv2.copyMakeBorder(im, 50, 50, 50, 50, cv2.BORDER_CONSTANT, value=(0,0,0))
+        cv2.imwrite('output_croped.png', im)
 
-        left = (width - w)/2
-        top = (height - h)/2
-        right = (width + w)/2
-        bottom = (height + h)/2
-        im = im.crop((left, top, right, bottom))
-        im = im.resize((200, 200))
-
-        open_cv_image = np.array(im)
-        open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_RGB2BGR)
-
-        open_cv_image = cv2.copyMakeBorder(open_cv_image,100,100,100,100,cv2.BORDER_CONSTANT,value=(0,0,0))
-        cv2.imwrite('output_croped.png', open_cv_image)
-
-        open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB)
-
-        self.runMapWorker(Image.fromarray(open_cv_image))
+        im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+        self.runMapWorker(Image.fromarray(im))
 
     def print_(self):
         dialog = QPrintDialog(self.printer, self)
