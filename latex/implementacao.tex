@@ -1,6 +1,6 @@
 \section{Implementação}
 
-Pode-se dividir a implementação em quatro partes, sendo elas: segmentar imagens, selecionar contorno, gerar proceduralmente o mapa com biomas e interligar as ferramentas atráves de uma interface gráfica.
+Pode-se dividir a implementação em cinco partes, sendo elas: segmentar imagens, selecionar contorno, gerar proceduralmente o mapa com biomas, analisar casos de pós processamento e interligar as ferramentas atráves de uma interface gráfica.
 
 \subsection{Segmentar imagens}
 
@@ -8,9 +8,11 @@ A segmentação da imagem é usada para classificar os pixels da imagem a partir
 
 A linguagem de programação utilizada para desenvolvimento do projeto foi Python pois existem muitas bibliotecas que auxiliam na criação de arquiteturas complexas de Inteligência Artificial como o \hyperref[sec:EfficientPS]{EfficientPS}.
 
-Utilizou-se o código aberto oficial do trabalho ciéntifico postado no repositório do Github \footnote{\url{https://github.com/DeepSceneSeg/EfficientPS}}.
+Utilizou-se o código aberto oficial do trabalho ciéntifico postado no repositório do Github \footnote{\url{https://github.com/DeepSceneSeg/EfficientPS}} que foi baseado no tópico \hyperref[sec:EfficientPS]{EfficientPS}.
 
-Percebe-se que o resultado do modelo proposto não foi o esperado pois objetos de mesma classe como carros tem a mesma cor com uma borda branca exemplificados na \cref{fig:resultado_inicial}. Logo tentou-se mudar o código para gerar uma saída com objetos de mesma classe com cores diferentes como na figura \cref{fig:segmantations_2}.
+Utilizou-se um arquivo pré treinado desse modelo contendo o aprendizado do conjunto de imagens do \textit{Cityscapes} para segmentação panóptica, a ideia inicial era treinar com pelo menos mais um conjunto de dados porém surgiu-se diversos desafios para serem solucionados, dentre eles: conseguir autorização para baixar conjuntos de dados específicos para segmentação panóptica, outro problema foi preparar esse conjunto de dados para processar o aprendizado, além de problemas de limitação de processamento bruto. Portante decidiu-se utilizar o próprio modelo salvo baixado do repositório.
+
+Percebeu-se que o resultado do modelo proposto não foi o esperado pois objetos de mesma classe como carros tem a mesma cor com uma borda branca exemplificados na \cref{fig:resultado_inicial}. Logo tentou-se mudar o código para gerar uma saída com objetos de mesma classe com cores diferentes como na figura \cref{fig:segmantations_2}.
 
 \begin{figure}[!ht]
 	\centering
@@ -32,25 +34,24 @@ Seguiu-se os passos citados numa publicação no repositório \footnote{\url{htt
 
 \subsection{Selecionar contorno}
 
-Para representar a seleção do contorno utilizou-se uma técnica chamada de imagem binária, explicaa no subtópico seguinte.
+Para representar a seleção do contorno utilizou-se uma técnica chamada de imagem binária.
+A imagem  binária contém  apenas duas cores, geralmente preto e  branco. Pode-se ser utilizada como uma máscara para auxiliar o processamento do  mapa no contorno desejado \cite{Aznag2020}.
 
-\subsubsection{Imagem binária}
-
-Uma imagem  binária contém  apenas duas cores, geralmente preto e  branco e para essa aplicação sera utilizado uma imagem binária como uma máscara para servir de auxilio ao  gerar o  mapa no contorno desejado \cite{Aznag2020}.
-
-Utilizou-se duas maneiras para selecionar o contorno, sendo eles: selecionar por cor e selecionar por preenchimento por inundação — ou  em inglês  flood fill —.
+Utilizou-se duas maneiras para selecionar o contorno, sendo eles: selecionar por cor e selecionar por preenchimento de inundação — ou  em inglês  flood fill —.
 
 \subsubsubsection*{Selecionar por cor}
 
 O metódo de selecionar por cor se baseia em pegar a cor específica do clique na imagem e percorrer a imagem comparando a cor alvo com a cor da imagem, caso seja a mesma pinte o mesmo pixel da nova imagem como branco e caso não seja pinte como preto.
 
+Uma maneira mais performática de selecionar por cor é definir um espectro de cores e aplicar uma mascára usando o método \textit{inRange} da biblioteca OpenCV, pode-se escolher apenas uma cor.
+
 \subsubsubsection*{Selecionar por preenchimento de inundação}
 
-O método de  selecionar por preenchimento por inundação é um algoritmo de expansão a partir de um pixel validando se contém a mesma cor.
+O método de  selecionar por preenchimento por inundação é um algoritmo de expansão a partir de um pixel, validando se contém a mesma cor.
 
 A implementação inicia uma matriz de zeros com tamanho 2 pixeis maior do que a imagem original.
 
-O clique na  imagem será a semente — ou em inglês  seed — e a partir disso o algoritmo começa uma expansão para os pixeis vizinhos — de cima, baixo, esquerda e direita — caso contenha o mesmo valor de cor pinta de cor branca, e refaz com os pixels marcados  anteriormente.
+O clique na  imagem será a semente — ou em inglês  seed — e a partir disso o algoritmo começa uma expansão para os pixeis vizinhos — de cima, baixo, esquerda e direita — caso contenha o mesmo valor de cor pinta de cor branca, e refaz com os pixels marcados  anteriormente até não ter mais o pontos brancos para marcar.
 
 \subsubsubsection*{Tratamento da imagem binária}
 
@@ -64,6 +65,16 @@ Após a saída dos algoritmos de seleção, o objeto selecionado é detectado e 
 	\label{fig:saidas_selecao}
 \end{figure}
 
+Porém há uma maneira mais performática para fazer isso, inclusive melhorando os resultados devido ao redimensionamento e a borda não chegarem a um bom cenário. Essa outra maneira usa um método para localizar o objeto na imagem binária e corta a imagem com as cordenadas e dimenões oferecidas. Ápos isso é acrescentado uma borda na altura ou largura com a folga entre as duas, tornando assim a imagem quadricular, depois é redimensionado para manter um padrão e acrescentado mais uma vez uma borda para representar o mar. É possível observar na \cref{fig:saidas_selecao_perf} que o objeto não foi distorcido como na método anterior e manteve-se centralizada na imagem final.
+
+\begin{figure}[!ht]
+	\centering
+    \caption{Passos da seleção da saída da inteligência  artificial mais performático.}
+	\includegraphics[width=1.0\textwidth]{figures/saidas_selecao.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:saidas_selecao_perf}
+\end{figure}
+
 \subsection{Geração procedural do mapa}
 
 Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:geracaoProcedural]{Polygonal Map Generation for Games} com uma implementação não oficial porém baseada no artigo feito em Python.
@@ -71,9 +82,6 @@ Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:ger
 \subsubsection{Ilha gerada no contorno}
 
 Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vertice, e a cor rosa representa a aresta do polígono.
-
-A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do algoritmo, sendo os pontos vermelhos os centroides que são ligados por linhas pretas, os pontos azuis são os vértices que se ligam com linha branca para tornar as arestas formando assim o polígono.
-
 
 \begin{figure}[!ht]
 	\centering
@@ -83,6 +91,8 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 	\label{fig:explicacao_vertice}
 \end{figure}
 
+A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do algoritmo, sendo os pontos vermelhos os centroides que são ligados por linhas pretas, os pontos azuis são os vértices que se ligam com linha branca para tornar as arestas formando assim o polígono.
+
 \begin{figure}[!ht]
 	\centering
     \caption{Ilustração do diagrama de Voronoi.}
@@ -91,9 +101,21 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 	\label{fig:diagrama_voronoi_pontos}
 \end{figure}
 
-Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada — ilustrada em \cref{fig:entrada_gerar_mapa} — e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano.
+Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano.
 
-Para definir a altura todos os cantos dos polígonos são estabelecidos como infinito, depois é feito uma busca em largura que começa dos cantos dos polígonos que se localizam na borda do mapa, todo começo de iteração é definido a altura da borda atual como zero. Para cada canto adjacente ao atual é verificado se não é um terreno de oceano ou lago então aumenta a elevação
+Para se calcular a elevação dos polígonos primeiramente é calculado a elevação das arestas de todos os polígonos, isso é feito a partir de uma busca em profundidade que possui o inicio em todas as arestas que tocam a borda do grafico. A toda nova iteração, as arestas que tocam os cantos são atribuidas com o valor 0, e assim defini-se uma evolução da altura conforme chega-se ao centro do mapa.
+Após isso é feito o calculo de redistribuição de elevação, que com base na elevação calculada anteriormente é feito uma lista ordenadas pela elevação, começando da menor para a maior. Cada item da lista é enumerado a partir de um índice i e com essa enumeração é calculado usando a \cref{eq:total_indexes}. Após isso é calculado a \cref{eq:vertex_elevation} sendo X a elevação do vertice.
+E por final para calcular a elevação do poligino é feito a média dos vertices que pertencem ao polígonos.
+
+\begin{equation}
+	\label{eq:total_indexes}
+	Y = i / total de indices
+\end{equation}
+
+\begin{equation}
+	\label{eq:vertex_elevation}
+	X = sqrt(fator) - sqrt(sqrt * (1 - Y))
+\end{equation}
 
 Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker} porém edita-se para chegar nos resultados da \cref{tab:biomes} \space\cite{amitp2010}.
 
@@ -118,16 +140,15 @@ Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada
 	\end{tabularx}
 \end{sidewaystable}
 
+Para gerar o mapa 3d é gerado uma imagem denominada de mapa de altura, construído com base nos dados de elevações do grafo. Basicamente gera-se uma imagem com tonalidades de cinza sendo o pixel branco com valor 255 o ponto mais alto do mapa e o pixel preto com valor 0 o ponto mais baixo. A \cref{fig:heightmap} ilustra uma saída de mapa de altura.
+
 \begin{figure}[!ht]
 	\centering
-    \caption{Entrada binária para gerar mapa.}
-	\includegraphics[width=0.6\textwidth]{figures/entrada_gerar_mapa.png}
+    \caption{Exemplo de mapa de altura.}
+	\includegraphics[width=0.6\textwidth]{figures/heightmap_eample.png}
     \legend{Fonte: \space Autoria própria}
-	\label{fig:entrada_gerar_mapa}
+	\label{fig:heightmap}
 \end{figure}
-
-\subsubsection{Mapa de altura}
-
 
 \subsubsection{Unity - Mapa 3d}
 
@@ -146,63 +167,58 @@ Criou-se um personagem com movimentação para andar pelo mapa baseado no \footn
 
 \subsubsection{Testes}
 
-Será feito um teste baseado no sutópico \hyperref[sec:uniaoSobInterseccao]{união sob intersecção} — ou IoU sigla em inglês — no qual irá comparar duas imagens binárias da entrada do algoritmo de geração procedural e a saída, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
+Será feito um teste baseado no sutópico \hyperref[sec:metricas_tecnicas]{métricas e técnicas} no qual irá comparar uma combinação de imagens podendo conter a imagem de entrada do algoritmo de geração procedural ou alguma saída, mapa de altura ou mapa 2d. Em maioria, será utilizado a métrica IoU pois esta é a que pior classifica nosso modelo e também facilita a percepção de melhora, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
 
-Para isso utilizou-se 5 imagens com o contorno desejado, e em cada imagem percorre-se uma lista contendo a quantidade de pontos para gerar o mapa, sendo eles 50, 100, 150, 200, 250 e 300 respectivamente. Para cada índice dessa lista executou-se três tentativas, em cada, será armazenado as informações de tempo de processamento em segundos da função de gerar o mapa e o resultado em porcentagem obtido pela métrica IoU. Essas informações são armazenadas em um dicionário, usando como chave a quantidade de pontos para gerar o mapa e o valor, uma lista contendo no índice zero o somatório dos valores IoU obtidos e no índice um o somatório da duração das execuções.
+Dentre essas métricas, será utilizado também uma métrica para o desfoque encontrado em uma imagem, aplica um filtro para detectar bordas em x e y, calcua o gradiente e resulta o desvio padrão. Outra métrica utilizada nos testes foi a duração do tempo no código, medida em segundos e apenas contabilizando a parte de geração procedura dos mapas.
 
-Para visualização da métrica IoU utilizou-se um método que aplica um filtro para obter imagens binárias a partir de uma imagem em tons de cinza e definindo-se uma divisão entre 0 e 255 no espectro de cores de preto ao branco. Definiu-se a imagem de entrada para representar o objeto — ilha — com a cor em escala de cinza como 1, já na imagem de saída identifica-se a ilha como valor 2. Após isso cria-se uma matriz do mesmo tamanho com auxilio de uma lista com quatro cores — que representam os conjuntos do IoU — populando essa matriz com as cores do índice derivado do cálculo da soma entre os pixéis da imagem binária de entrada e de saída.
+Criou-se um teste genérico para reutiizar em diversos testes e facilitar a reprodução caso algo mude. É definido na chamada do teste quais imagens será feito as métricas, com isso é possível definir todas combinações possíveis. Para cada combinação será executado 5 imagens de entrada pré-definidas e em cada imagem irá percorrer um laço baseado em algum modificador sendo eles, tamanho do filtro de desfoque, quantidade de pontos ou tamanho da borda no mapa 2d, em cada iteração do parâmetro modificador será executado três vezes.
 
-Obtém-se como resultado a \cref{fig:resultado_iou}, sendo as figuras da esquerda para direita a imagem binária de entrada para gerar o mapa, a segunda a imagem de saída da geração do mapa denominada de mapa de altura, a terceira é uma representação da máscara criada a partir do filtro no mapa de altura, e a quarta representa os conjuntos da métrica IoU sendo eles o verdadeiro positivo representado com branco, o verdadeiro negativo representado como cinza, o falso positivo representado como vermelho e por fim o falso negativo representado de verde.
+Em cada iteração de todos esses laços aninhados será gerado proceduralmente algum mapa ou os dois, processado as métricas e armazenado, após isso será calculado a média das métricas e criado uma tabela em latex como resultado.
 
-\begin{figure}[!ht]
-	\centering
-    \caption{Ilustração do passos da métrica IoU.}
-	\includegraphics[width=0.8\textwidth]{figures/passos_iou.png}
-    \legend{Fonte: \space Autoria própria}
-	\label{fig:resultado_iou}
-\end{figure}
+% Para visualização da classificação de conjuntos utilizou-se um método que aplica um filtro para obter imagens binárias a partir de uma imagem em tons de cinza e definindo-se uma divisão entre 0 e 255 no espectro de cores de preto ao branco. Definiu-se a imagem de entrada para representar o objeto — ilha — com a cor em escala de cinza como 1, já na imagem de saída identifica-se a ilha como valor 2. Após isso cria-se uma matriz do mesmo tamanho com auxilio de uma lista com quatro cores — que representam os conjuntos do IoU — populando essa matriz com as cores do índice derivado do cálculo da soma entre os pixéis da imagem binária de entrada e de saída.
 
-Após a execução desses laços aninhados calcula-se com a operação de divisão para cada valor do dicionário em prol de obter as médias.
+% Obtém-se como resultado a \cref{fig:resultado_iou}, sendo as figuras da esquerda para direita a imagem binária de entrada para gerar o mapa, a segunda a imagem de saída da geração do mapa denominada de mapa de altura, a terceira é uma representação da máscara criada a partir do filtro no mapa de altura, e a quarta representa os conjuntos da métrica IoU sendo eles o verdadeiro positivo representado com branco, o verdadeiro negativo representado como cinza, o falso positivo representado como vermelho e por fim o falso negativo representado de verde.
 
+% \begin{figure}[!ht]
+% 	\centering
+%     \caption{Ilustração do passos da métrica IoU.}
+% 	\includegraphics[width=0.8\textwidth]{figures/passos_iou.png}
+%     \legend{Fonte: \space Autoria própria}
+% 	\label{fig:resultado_iou}
+% \end{figure}
 
-\subsection{Interface gráfica}
+% Após a execução desses laços aninhados calcula-se com a operação de divisão para cada valor do dicionário em prol de obter as médias.
 
-Utilizou-se a biblioteca PyQt5 para criar uma interface gráfica na qual o usuário poderá interagir e criar um mapa a partir da seleção do contorno detectado pelo modelo de IA.
-
-Esse módulo é responsável para conectar todas as partes e obter o mapa. Portanto é necessário abrir uma imagem do diretório local, carregar e disparar a execução do processo de segmentação de imagem. Após o resultado da IA, permitir a seleção do contorno,  criar uma imagem binária a partir do contorno e envia-lá como argumento na geração procedural de mapas.
-
-Além disso para promever a usabilidade utilizou-se um loading específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
-
-\subsubsection{Pós processamento}
+\subsection{Pós processamento}
 Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Resultado no unity sem harmonia.}
+    \caption{Resultado no unity sem usar filtro de desfoque no mapa de altura.}
 	\includegraphics[width=0.8\textwidth]{figures/unity_entry.png}
     \legend{Fonte: \space Autoria própria}
 	\label{fig:unity_init}
 \end{figure}
 
-Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:unity_blur}. Porém se analisar a \cref{tab:resultados_blur_error} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico}.
+Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico}.
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Resultado no unity usando desfoque.}
+    \caption{Resultado no unity usando filtro de desfoque no mapa de altura.}
 	\includegraphics[width=0.8\textwidth]{figures/unity_blur.png}
     \legend{Fonte: \space Autoria própria}
 	\label{fig:unity_blur}
 \end{figure}
 
+\input{blur_error.tex}
+
 \begin{figure}[!ht]
 	\centering
-    \caption{Resultado comparando mapa de altura com e sem desfoque.}
+    \caption{Ilustração da classificação de conjuntos entre a iamgem de entrada e o mapa de altura}
 	\includegraphics[width=0.8\textwidth]{figures/comparacao_blur.png}
     \legend{Fonte: \space Autoria própria}
 	\label{fig:comparando_blur}
 \end{figure}
-
-\input{blur_error.tex}
 
 Logo para tratar esse problema adotou-se uma solução baseada em redimensionar a imagem e adicionar uma borda para que diminui-se assim o tamanho do mapa de altura. Portanto foi redimensionado uma imagem 1000x1000 para 800x800, reduzindo em 20\% e depois adicionado uma borda de cor preta em todos os lados de tamanho 100, logo retorna ao tamanho original. E para encontrar o melhor tamanho do filtro de desfoque para essas condições executou-se os testes alterando o tamanho do filtro apos a aplicação da técnica de diminuir o tamanho do mapa. Os resultados referentes aos testes encontram-se na \cref{tab:blur_solution_input_output_3d}. Para selecionar o melhor resultado definiu-se a quesito de ter a menor métrica de desfoque — que significa ter mais desfoque na imagem — e com a métrica IoU que varie no máximo 1\% da métrica sem o filtro de desfoque. Logo seleciona-se o restultado de filtro de tamanho 80 pois a métrica IoU tem 79\% assim como o tamanho de filtro 0. Percebe-se também que com a diminuição da borda resultou no comparrtilhamento entre os erros da imagem de entrada com o mapa de altura.
 
@@ -211,3 +227,11 @@ Logo para tratar esse problema adotou-se uma solução baseada em redimensionar 
 Após melhorar o resultado do mapa de entrada é necessário ajustar o mapa 2d visto que esse deve ser bem parecido com o mapa de altura, parar informar por exemplo a localização exata do personagem em jogo com visualização do mapa inteiro. Observa-se na \cref{tab:border_2d_solution_output_2d_output_3d} os resultados obtidos dos testes com o tamanho da borda adicionada ao mapa 2d e o maior valor de IoU obtido foi 60.
 
 \input{border_2d_solution.tex}
+
+\subsection{Interface gráfica}
+
+Utilizou-se a biblioteca PyQt5 para criar uma interface gráfica na qual o usuário poderá interagir e criar um mapa a partir da seleção do contorno detectado pelo modelo de IA.
+
+Esse módulo é responsável para conectar todas as partes e obter o mapa. Portanto é necessário abrir uma imagem do diretório local, carregar e disparar a execução do processo de segmentação de imagem. Após o resultado da IA, permitir a seleção do contorno,  criar uma imagem binária a partir do contorno e envia-lá como argumento na geração procedural de mapas.
+
+Além disso para promever a usabilidade utilizou-se um loading específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
