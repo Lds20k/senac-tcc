@@ -4,12 +4,25 @@ using System.IO;
 using com.heparo.terrain.toolkit;
 using UnityEditor;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class RawHeightmapLoader : MonoBehaviour
 {
     public Terrain terrain;
+
+    public Image imagem;
+
+
     void Start()
     {
+
+
+        Texture2D miniMapa2d = Resources.Load<Texture2D>("teste");
+
+        Sprite mapaSprite = Sprite.Create(miniMapa2d, new Rect(0.0f, 0.0f, 512,512), new Vector2(0.5f, 0.5f));
+
+        imagem.sprite = mapaSprite;
         if (terrain == null)
         {
             Debug.LogError("This script must be attached to a terrain object.");
