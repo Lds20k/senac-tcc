@@ -5,24 +5,24 @@ using com.heparo.terrain.toolkit;
 using UnityEditor;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 //using UnityEngine.UIElements;
 
 public class RawHeightmapLoader : MonoBehaviour
 {
     public Terrain terrain;
 
-    public Image imagem;
+    public GameObject gameObj;
 
 
     void Start()
     {
-
-
         Texture2D miniMapa2d = Resources.Load<Texture2D>("teste");
 
-        Sprite mapaSprite = Sprite.Create(miniMapa2d, new Rect(0.0f, 0.0f, 512,512), new Vector2(0.5f, 0.5f));
+        Sprite mapaSprite = Sprite.Create(miniMapa2d, new Rect(0.0f, 0.0f, miniMapa2d.width, miniMapa2d.height), new Vector2(0.5f, 0.5f));
 
-        imagem.sprite = mapaSprite;
+        gameObj.GetComponent<UnityEngine.UI.Image>().sprite = mapaSprite;
+
         if (terrain == null)
         {
             Debug.LogError("This script must be attached to a terrain object.");
@@ -57,5 +57,25 @@ public class RawHeightmapLoader : MonoBehaviour
 
         var toolKit = terrain.GetComponent<TerrainToolkit>();
         toolKit.TextureTerrain(slopeStops, heightStops, textures);
+    }
+
+    private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
+    {
+        Texture2D result = new Texture2D(targetWidth, targetHeight, source.format, false);
+
+        float incX = (1.0f / (float)targetWidth);
+        float incY = (1.0f / (float)targetHeight);
+
+        for (int i = 0; i < targetHeight; ++i)
+        {
+            for (int j = 0; j < targetWidth; ++j)
+            {
+                Color newColor = source.GetPixelBilinear((float)j / (float)targetWidth, (float)i / (float)targetHeight);
+                result.SetPixel(j, i, newColor);
+            }
+        }
+
+        result.Apply();
+        return result;
     }
 }
