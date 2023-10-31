@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import logging
 import queue
 from typing import *
 
@@ -15,6 +16,7 @@ from scipy.spatial import ConvexHull
 from map_geration.graph import *
 from map_geration.map_enums import *
 
+BORDER_SIZE = 75
 
 def convert_map_to_image(
     graph: Graph,
@@ -23,12 +25,13 @@ def convert_map_to_image(
     debug_moisture=False,
     downslope_arrows=False,
     rivers=True,
-    path:str=""
+    path:str="",
+    border_size=0
 ):
     """
     Here the next adjustments will be added to create a complete map.
     """
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 10), clear=True)
 
     polygons = [center_to_polygon(center, plot_type) for center in graph.centers]
     p = PatchCollection(polygons, match_original=True)
@@ -38,15 +41,15 @@ def convert_map_to_image(
     if debug_height:
         for corner in graph.corners:
             plt.annotate(
-                f"{round(corner.height, 1)}", (corner.x, corner.y), 
+                f"{round(corner.height, 1)}", (corner.x, corner.y),
                 color='white', backgroundcolor='black'
             )
-    
+
     # PLOT MOISTURE LABELS
     if debug_moisture:
         for center in graph.centers:
             plt.annotate(
-                f"{round(center.moisture, 1)}", (center.x, center.y), 
+                f"{round(center.moisture, 1)}", (center.x, center.y),
                 color='white', backgroundcolor='black'
             )
 
@@ -72,10 +75,11 @@ def convert_map_to_image(
                 X = (beg_x, end_x)
                 Y = (beg_y, end_y)
                 plt.plot(X, Y, linewidth=2+2*np.sqrt(edge.river), color='blue')
-                
+                #plt.clf()
+
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    
+
     plt.axis('off')
     plt.margins(0,0)
 
@@ -89,7 +93,10 @@ def convert_map_to_image(
     fig.canvas.draw()
     img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
     img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    plt.close(fig)
     img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
+    img= cv2.copyMakeBorder(img,border_size,border_size,border_size,border_size,cv2.BORDER_CONSTANT,value=(255,191,0))
+    img = cv2.resize(img, (1000, 1000))
     img = cv2.medianBlur(img, 21)
 
     if path != None and path != "":
@@ -97,7 +104,7 @@ def convert_map_to_image(
 
     return img
 
-def center_to_polygon(center, plot_type):
+def center_to_polygon(center: Center, plot_type):
     """
     Helper function for plotting, which takes the center and returns a polygon which can be plotted.
     """
@@ -111,7 +118,7 @@ def center_to_polygon(center, plot_type):
         color = center_to_biome_color(center)
     else:
         raise AttributeError(f'Unexpected plot type: {plot_type}')
-    
+
     corner_coordinates = np.array([[corner.x, corner.y] for corner in center.corners])
     if is_center_a_map_corner(center):
         corner_coordinates = np.append(corner_coordinates, nearest_map_corner(corner_coordinates))
@@ -192,8 +199,8 @@ def center_to_biome_color(center: Center):
     else:
         raise AttributeError(f'Unexpected biome type: {center.biome}')
     return color
- 
- 
+
+
 def nearest_map_corner(corner_coordinates):
     """
     Assumes that a coordinates belong to the corner being in the corner of the map.
@@ -208,7 +215,7 @@ def nearest_map_corner(corner_coordinates):
             return [1, 0]
         else:
             return [1, 1]
-      
+
 def create_rivers(graph: Graph, n, min_height):
     """
     Rivers flow from high elevations down to the coast.
@@ -224,9 +231,11 @@ def create_rivers(graph: Graph, n, min_height):
     """
 
     # reset previous rivers
+    logging.info("Reatribuindo rios dos poligonos")
     for edge in graph.edges:
         edge.river = 0
 
+    
     def suitable_for_river(c: Corner):
         good_tile = c.terrain_type == TerrainType.LAND or c.terrain_type == TerrainType.COAST
         neighbour_tiles = [nei.terrain_type for nei in c.adjacent]
@@ -241,7 +250,7 @@ def create_rivers(graph: Graph, n, min_height):
         ]
 
         return good_tile and all(good_neighbours) and all(good_touches)
-    
+
     for corner in graph.corners:
         if corner.terrain_type == TerrainType.LAND or corner.terrain_type == TerrainType.COAST:
             neighbors_heights = [nei.height for nei in corner.adjacent]
@@ -259,7 +268,7 @@ def create_rivers(graph: Graph, n, min_height):
 
     if len(good_beginnings) < n:
         heighest = max([
-            c.height for c in graph.corners 
+            c.height for c in graph.corners
             if c.terrain_type == TerrainType.LAND or c.terrain_type == TerrainType.COAST
         ])
         print(f'Found only {len(good_beginnings)} river beginnings. Lower min_height.')
@@ -271,7 +280,7 @@ def create_rivers(graph: Graph, n, min_height):
         while True:
             if corner.downslope is None or not suitable_for_river(corner):
                 break
-            
+
             next_corner = corner.adjacent[corner.downslope]
             if next_corner.terrain_type != TerrainType.LAND and next_corner.terrain_type != TerrainType.COAST:
                 break
@@ -281,7 +290,7 @@ def create_rivers(graph: Graph, n, min_height):
             # Notice that this line will modify this object in self.edges
             mutable_edge.river += 1
             corner = next_corner
-            
+
     assign_corner_river(graph)
 
 def assign_corner_river(graph: Graph):
@@ -291,15 +300,15 @@ def assign_corner_river(graph: Graph):
             edge.v1.river = max(edge.v0.river, edge.river)
 
 def assign_moisture(graph: Graph, redistribute=True, distance_decay=0.9, river_weight=0.25, lake_value=1.0, ocean_value=1.0):
-    assign_corner_moisture(distance_decay, river_weight, lake_value, ocean_value)
-    
+    assign_corner_moisture(graph, distance_decay, river_weight, lake_value, ocean_value)
+
     for center in graph.centers:
         if center.terrain_type == TerrainType.LAND or center.terrain_type == TerrainType.COAST:
             center.moisture = np.mean(np.array([min(1.0, corner.moisture) for corner in center.corners]))
-            
+
     if redistribute:
         redistribute_moisture(graph)
-   
+
 
 def assign_corner_moisture(graph: Graph, distance_decay, river_weight, lake_value, ocean_value):
     q = queue.Queue()
@@ -328,7 +337,7 @@ def redistribute_moisture(graph: Graph):
     sorted_centers = sorted(graph.centers, key = lambda c: c.moisture)
     for i, center in enumerate(sorted_centers):
         center.moisture = i / (len(sorted_centers)-1)
-     
+
 def assign_biomes(graph: Graph):
         for center in graph.centers:
             if center.terrain_type == TerrainType.COAST:

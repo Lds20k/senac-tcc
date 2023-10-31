@@ -49,11 +49,12 @@ public class RawHeightmapLoader : MonoBehaviour
             }
         }
 
+        terrain.terrainData.SetHeights(0, 0, heights);
+
         float[] slopeStops = new float[] { 60.0f, 75.0f };
         float[] heightStops = new float[] { 0.01648352f, 0.06593407f, 0.2527473f, 0.6483517f };
 
         Texture2D[] textures = Resources.LoadAll<Texture2D>("Textures");
-        terrain.terrainData.SetHeights(0, 0, heights);
 
         var toolKit = terrain.GetComponent<TerrainToolkit>();
         toolKit.TextureTerrain(slopeStops, heightStops, textures);

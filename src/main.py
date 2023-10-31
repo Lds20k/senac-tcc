@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import *
 from pyqtspinner import WaitingSpinner
 
 from efficientps_cityscapes import execute_efficientps
-from generate_map import generate
+from generate_map import generate, OUTPUT
 
 
 class EfficientPSWorker(QObject):
@@ -33,11 +33,11 @@ class MapWorker(QObject):
     finished = pyqtSignal()
     result = pyqtSignal(QImage)
     image = None
-    points = 250
+    points = 1000
 
     def run(self):
         logging.info("MapWorker em execução")
-        result_image = generate(self.image, points=self.points)
+        result_image = generate(self.image, points=self.points, output=OUTPUT.MAP_BIOME)
         logging.info(f"Imagem pos processamento com {result_image.shape[1]}x{result_image.shape[0]}")
         qtImage = QImage(result_image.data, result_image.shape[1], result_image.shape[0], QImage.Format_RGB888).rgbSwapped()
         self.result.emit(qtImage)
@@ -148,33 +148,20 @@ class QImageViewer(QMainWindow):
         img_in = cv2.imread('output.png', 0)
         height, width = img_in.shape
         x, y, w, h = cv2.boundingRect(img_in)
+        croped_image = img_in[y:y+h, x:x+w]
 
-        # Create new blank image and shift ROI to new coordinates
-        mask = np.zeros(img_in.shape, dtype=np.uint8)
-        ROI = img_in[y:y+h, x:x+w]
-        x = width//2 - ROI.shape[0]//2
-        y = height//2 - ROI.shape[1]//2
-        if x > 0 and y > 0:
-            mask[y:y+h, x:x+w] = ROI
-            cv2.imwrite('output_centralized.png', mask)
+        diff = abs(w-h) // 2
+        if w > h:
+            im = cv2.copyMakeBorder(croped_image, diff, diff, 0, 0, cv2.BORDER_CONSTANT,value=(0,0,0))
         else:
-            shutil.move("output.png", "output_centralized.png")
+            im = cv2.copyMakeBorder(croped_image, 0, 0, diff, diff, cv2.BORDER_CONSTANT,value=(0,0,0))
 
-        im = Image.open('output_centralized.png')
-        width, height = im.size   # Get dimensionsimg
+        im = cv2.resize(im, (200, 200))
+        im = cv2.copyMakeBorder(im, 50, 50, 50, 50, cv2.BORDER_CONSTANT, value=(0,0,0))
+        cv2.imwrite('output_croped.png', im)
 
-        left = (width - w * 1.5)/2
-        top = (height - h * 1.5)/2
-        right = (width + w * 1.5)/2
-        bottom = (height + h * 1.5)/2
-
-        # Crop the center of the image
-        im = im.crop((left, top, right, bottom))
-
-        im = im.resize((300, 300))
-        im.save('output_croped.png')
-
-        self.runMapWorker(im)
+        im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+        self.runMapWorker(Image.fromarray(im))
 
     def print_(self):
         dialog = QPrintDialog(self.printer, self)

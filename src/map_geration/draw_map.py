@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import logging
 import math
 from typing import *
+from enum import Enum
 
 import numpy as np
 import cv2
@@ -13,19 +14,22 @@ from map_geration.map_enums import *
 from map_geration.map import is_center_a_map_corner, nearest_map_corner
 
 # KERNEL_SIZE = (75, 75)
-BORDER_SIZE = 150
+BORDER_SIZE = 100
+
+class MODE(Enum):
+    RAW = 1
+    BLUR = 2
+    BLUR_BORDER = 3
 
 def pos_processing(image, mode, kernel_size):
     img = np.array(image)
-
-    if mode > 1:
+    img = cv2.medianBlur(img, 21)
+    if mode == 3:
+        img = cv2.resize(img, (800, 800))
         img= cv2.copyMakeBorder(img,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,BORDER_SIZE,cv2.BORDER_CONSTANT,value=(0,0,0))
-        img = cv2.resize(img, (1000, 1000))
-        if mode > 2:
-            img = cv2.blur(img, (kernel_size, kernel_size))
-
+    if mode > 1 and kernel_size > 0:
+        img = cv2.blur(img, (kernel_size, kernel_size))
     img.astype('int8').tofile("unity/3d_map/Assets/output_3d.raw")
-
     return Image.fromarray(img)
 
 

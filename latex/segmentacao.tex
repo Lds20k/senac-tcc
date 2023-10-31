@@ -44,10 +44,12 @@ Um problema encontrado na segmentação semântica é que objetos de mesma class
 Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Cityscapes, Mapillary Vistas, ADE20K, e Indian Driving Dataset. Cada conjunto de dados possui diversas classes para o modelo aprender \space\cite{v7labs2022panoptic}.
 
 \subsubsubsection*{Métricas e técnicas}
+\label{sec:metricas_tecnicas}
 
-No ramo de segmentação existem diversas métricas que podem ser usadas
+No ramo de segmentação existem diversas métricas que podem ser usadas, dentre elas algumas serão destacas nesta monografia a seguir:
 
 \subsubsubsection*{Classificação de conjuntos}
+\label{sec:classificacao_conjuntos}
 
 A classificação de conjuntos é uma técnica para criar relações entre a imagem de predição e a imagem do conjunto de dados. Ela se divide em quatro conjuntos sendo eles: Positivo Verdadeiro — ou True Positive(TP) —
 % sendo o requisito ter uma intersecção significativa entre classes iguais, \emph{i.e.}, IoU > 0.5
@@ -136,7 +138,7 @@ Multiplicando a \cref{eq:pq_metric} por $\frac{|TP|}{|TP|}$ tem-se:
 
 Portanto pode-se concluir que PQ é apenas uma simplificação para uma fórmula que contém uma relação entre métricas de segmentação semântica e de instância.
 
-Com base no subtópico \hyperref[sec:segmentacao]{Segmentação} percebe-se que a segmentação panóptica é a mais completa e por efeito de estudos será utilizado o mesmo para concluir o trabalho. Como nesse nicho existem várias alternativas será utilizado a métrica demonstrada na \cref{eq:pq_metric} para analizar resultados e selecionar o modelo.
+Com base no subtópico \hyperref[sec:segmentacao]{Segmentação} percebe-se que a segmentação panóptica é a mais completa e por efeito de estudos será utilizado o mesmo para concluir o trabalho. Como nesse nicho existem várias alternativas será utilizado a métrica demonstrada na \cref{eq:pq_metric} para analisar resultados e selecionar o modelo.
 
 \subsubsubsection*{Resultados de modelos do nicho de segmentação panóptica}
 
