@@ -70,7 +70,7 @@ Porém há uma maneira mais performática para fazer isso, inclusive melhorando 
 \begin{figure}[!ht]
 	\centering
     \caption{Passos da seleção da saída da inteligência  artificial mais performático.}
-	\includegraphics[width=1.0\textwidth]{figures/saidas_selecao.png}
+	\includegraphics[width=1.0\textwidth]{figures/saidas_selecao_2.png}
     \legend{Fonte: \space Autoria própria}
 	\label{fig:saidas_selecao_perf}
 \end{figure}
@@ -81,14 +81,14 @@ Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:ger
 
 \subsubsection{Ilha gerada no contorno}
 
-Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vertice, e a cor rosa representa a aresta do polígono.
+Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vértice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vértice, e a cor rosa representa a aresta do polígono.
 
 \begin{figure}[!ht]
 	\centering
     \caption{Ilustração do cálculo para definir a localização dos vértices.}
 	\includegraphics[width=0.6\textwidth]{figures/explicacao_vertice.png}
     \legend{Fonte: \space Autoria própria}
-	\label{fig:explicacao_vertice}
+	\label{fig:explicacao_vértice}
 \end{figure}
 
 A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do algoritmo, sendo os pontos vermelhos os centroides que são ligados por linhas pretas, os pontos azuis são os vértices que se ligam com linha branca para tornar as arestas formando assim o polígono.
@@ -104,8 +104,8 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano.
 
 Para se calcular a elevação dos polígonos primeiramente é calculado a elevação das arestas de todos os polígonos, isso é feito a partir de uma busca em profundidade que possui o inicio em todas as arestas que tocam a borda do grafico. A toda nova iteração, as arestas que tocam os cantos são atribuidas com o valor 0, e assim defini-se uma evolução da altura conforme chega-se ao centro do mapa.
-Após isso é feito o calculo de redistribuição de elevação, que com base na elevação calculada anteriormente é feito uma lista ordenadas pela elevação, começando da menor para a maior. Cada item da lista é enumerado a partir de um índice i e com essa enumeração é calculado usando a \cref{eq:total_indexes}. Após isso é calculado a \cref{eq:vertex_elevation} sendo X a elevação do vertice.
-E por final para calcular a elevação do poligino é feito a média dos vertices que pertencem ao polígonos.
+Após isso é feito o calculo de redistribuição de elevação, que com base na elevação calculada anteriormente é feito uma lista ordenadas pela elevação, começando da menor para a maior. Cada item da lista é enumerado a partir de um índice i e com essa enumeração é calculado usando a \cref{eq:total_indexes}. Após isso é calculado a \cref{eq:vertex_elevation} sendo X a elevação do vértice.
+E por final para calcular a elevação do poligino é feito a média dos vértices que pertencem ao polígonos.
 
 \begin{equation}
 	\label{eq:total_indexes}
@@ -116,6 +116,17 @@ E por final para calcular a elevação do poligino é feito a média dos vertice
 	\label{eq:vertex_elevation}
 	X = sqrt(fator) - sqrt(sqrt * (1 - Y))
 \end{equation}
+
+Para criação dos rios busca-se os vértices do tipo terra e litoral que possuem uma elevação minima definida, ou se os vértices se localizam proximos de um lago, então armazena-se em uma lista. Seleciona-se de forma pseudoaleatória uma quantidade de vértices e verifica-se se o tipo de terreno dos vizinhos dos vértices e das arestas que foram tocados pelos vértices. Para cada um desses é verificado se o tipo de terrenho é terra ou litoral. Após isso, busca-se em todas as arestas a dona do vértice, ao encontrar é marcado como sendo um rio.
+
+Na geração de umidade é atribuído um valor para cada vértice que possui uma aresta do tipo rio, ou se é vizinho de um lago, e é colocado esse item em uma fila. Logo em seguida, busca-se em profundidade, em todos os vértices adjacentes dos itens da fila, e é calculado uma nova umidade a partir de uma multiplicação de um fator com o valor da umidade anteriormente atribuida, e verifica-se se os vértices adjacentes possuem uma umidade maior que a nova umidade calculada, se forem é colocado o vértice adjacente na fila e é atribuido o valor da nova umidade. Para terrenos do tipo oceano é atribuido o valor máximo de umidade.
+Por fim, é atribuido o valor da umidade para os polígonos e é redistribuido a umidade a partir de uma lista polígonos com umidades ordenadas, para cada item i executa-se a \cref{eq:umidade} e assim é calculado o valor final da umidade.
+
+\begin{equation}
+	\label{eq:umidade}
+	i / tamanho(lista) - 1
+\end{equation}
+
 
 Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker} porém edita-se para chegar nos resultados da \cref{tab:biomes} \space\cite{amitp2010}.
 
@@ -152,19 +163,24 @@ Para gerar o mapa 3d é gerado uma imagem denominada de mapa de altura, constru�
 
 \subsubsection{Unity - Mapa 3d}
 
-Para demonstrar uma aplicação das imagens utilizou-se o motor gráfico Unity. Criou-se uma automatização entre a geração do mapa e a atualização no projeto Unity. Este processo pode ser dividido em duas partes sendo elas o terreno em 3d e a jogabilidade.
+Para demonstrar uma aplicação das imagens utilizou-se o motor gráfico Unity. Criou-se uma automatização entre a geração do mapa e a atualização no projeto Unity. Este processo pode ser dividido em três partes sendo elas o terreno, minimapa em 3d e a jogabilidade.
+
+
+\subsubsubsection{Terreno}
+Para atualizar o terreno usou-se primeiramente o pacote \textit{Terrain Tools} que faciita pois é possível usar um mapa de altura em png ou raw para criar um terreno, ao executar cria-se um terreno no qual o pixel mais branco (255) corresponde a altura mais alta.
+
+Porém esse processo era manual e a ideia era que fosse automatizado, logo utilizou-se um algoritmo ligado a câmera do personagem que toda vez em que inicia-se a cena atualiza-se o terreno com a nova imagem de mapa 3d em raw. O algoritmo abre a imagem e percorre anotando o relevo proporcional a uma matriz e depois aplica no terreno.
+
+Além da funcionalidade de relevo adicionou-se um pacote para alterar a textura de acordo com a altura para diferenciar o oceano da ilha e o bioma de floresta. Utilizou-se o pacote denominado de \textit{Terrain Toolkit 2017}, no script é carregado as texturas e definido alguns parâmetros para atualizar com o terreno.
+
+\subsubsubsection{Minimapa}
+A saída da geração procedural visa dois principais resultados, sendo eles: o mapa de altura para definir o terreno e o mapa 2d que pode ser usado como minimapa.
+
+Para usar o mapa 2d como minimapa de forma automatizada foi necessário adicionar nos scripts uma conversão de uma imagem em formato PNG para um Sprite (2D e UI) e atualizar nas propriedades do objeto de jogo. Possibilitando a localização de um ícone representando o jogador nesse minimapa por meio da projeção das coordenadas 3D do mundo do jogo em um mapa 2D.
 
 \subsubsubsection{Jogabilidade}
 
 Criou-se um personagem com movimentação para andar pelo mapa baseado no \footnote{\url{https://www.youtube.com/watch?v=yl2Tv72tV7U}}. Adicionando os objetos e o script principal além de criar uma tag de chão para detectar a colisão é possível jogar no mapa andando em todas as direções e pulando.
-
-\subsubsubsection{Terreno}
- Para atualizar o terreno usou-se primeiramente o pacote \textit{Terrain Tools} que faciita pois é possível usar um mapa de altura em png ou raw para criar um terreno, ao executar cria-se um terreno no qual o pixel mais branco (255) corresponde a altura mais alta.
-
- Porém esse processo era manual e a ideia era que fosse automatizado, logo utilizou-se um algoritmo ligado a câmera do personagem que toda vez em que inicia-se a cena atualiza-se o terreno com a nova imagem de mapa 3d em raw. O algoritmo abre a imagem e percorre anotando o relevo proporcional a uma matriz e depois aplica no terreno.
-
- Além da funcionalidade de relevo adicionou-se um pacote para alterar a textura de acordo com a altura para diferenciar o oceano da ilha e o bioma de floresta. Utilizou-se o pacote denominado de \textit{Terrain Toolkit 2017}, no script é carregado as texturas e definido alguns parâmetros para atualizar com o terreno.
-
 \subsubsection{Testes}
 
 Será feito um teste baseado no sutópico \hyperref[sec:metricas_tecnicas]{métricas e técnicas} no qual irá comparar uma combinação de imagens podendo conter a imagem de entrada do algoritmo de geração procedural ou alguma saída, mapa de altura ou mapa 2d. Em maioria, será utilizado a métrica IoU pois esta é a que pior classifica nosso modelo e também facilita a percepção de melhora, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
@@ -174,20 +190,6 @@ Dentre essas métricas, será utilizado também uma métrica para o desfoque enc
 Criou-se um teste genérico para reutiizar em diversos testes e facilitar a reprodução caso algo mude. É definido na chamada do teste quais imagens será feito as métricas, com isso é possível definir todas combinações possíveis. Para cada combinação será executado 5 imagens de entrada pré-definidas e em cada imagem irá percorrer um laço baseado em algum modificador sendo eles, tamanho do filtro de desfoque, quantidade de pontos ou tamanho da borda no mapa 2d, em cada iteração do parâmetro modificador será executado três vezes.
 
 Em cada iteração de todos esses laços aninhados será gerado proceduralmente algum mapa ou os dois, processado as métricas e armazenado, após isso será calculado a média das métricas e criado uma tabela em latex como resultado.
-
-% Para visualização da classificação de conjuntos utilizou-se um método que aplica um filtro para obter imagens binárias a partir de uma imagem em tons de cinza e definindo-se uma divisão entre 0 e 255 no espectro de cores de preto ao branco. Definiu-se a imagem de entrada para representar o objeto — ilha — com a cor em escala de cinza como 1, já na imagem de saída identifica-se a ilha como valor 2. Após isso cria-se uma matriz do mesmo tamanho com auxilio de uma lista com quatro cores — que representam os conjuntos do IoU — populando essa matriz com as cores do índice derivado do cálculo da soma entre os pixéis da imagem binária de entrada e de saída.
-
-% Obtém-se como resultado a \cref{fig:resultado_iou}, sendo as figuras da esquerda para direita a imagem binária de entrada para gerar o mapa, a segunda a imagem de saída da geração do mapa denominada de mapa de altura, a terceira é uma representação da máscara criada a partir do filtro no mapa de altura, e a quarta representa os conjuntos da métrica IoU sendo eles o verdadeiro positivo representado com branco, o verdadeiro negativo representado como cinza, o falso positivo representado como vermelho e por fim o falso negativo representado de verde.
-
-% \begin{figure}[!ht]
-% 	\centering
-%     \caption{Ilustração do passos da métrica IoU.}
-% 	\includegraphics[width=0.8\textwidth]{figures/passos_iou.png}
-%     \legend{Fonte: \space Autoria própria}
-% 	\label{fig:resultado_iou}
-% \end{figure}
-
-% Após a execução desses laços aninhados calcula-se com a operação de divisão para cada valor do dicionário em prol de obter as médias.
 
 \subsection{Pós processamento}
 Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.

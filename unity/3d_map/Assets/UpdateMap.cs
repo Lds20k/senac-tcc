@@ -17,7 +17,7 @@ public class RawHeightmapLoader : MonoBehaviour
 
     void Start()
     {
-        Texture2D miniMapa2d = Resources.Load<Texture2D>("teste");
+        Texture2D miniMapa2d = Resources.Load<Texture2D>("output_2d");
 
         Sprite mapaSprite = Sprite.Create(miniMapa2d, new Rect(0.0f, 0.0f, miniMapa2d.width, miniMapa2d.height), new Vector2(0.5f, 0.5f));
 
