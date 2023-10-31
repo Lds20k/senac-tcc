@@ -30,6 +30,7 @@ output_croped.png
 output_biomes-shaped.png
 output_biomes.png
 output_fig.png
+texto.md
 **/*.pyc
 ## Intermediate documents:
 *.dvi
