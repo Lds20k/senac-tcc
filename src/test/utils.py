@@ -51,7 +51,7 @@ def sortDict(curr_dict, column, reverse = False):
     return dict(sorted(curr_dict.items(), key=lambda x: x[1][column], reverse=reverse))
 
 def selectGtAndPrediction(input, im_comb):
-    map_2d = cv2.imread("output_2d.png")
+    map_2d = cv2.imread("unity/3d_map/Assets/Resources/output_2d.png")
     ocean_color = (255,191,0)
     mask = cv2.inRange(map_2d, ocean_color, ocean_color)
     map_2d = cv2.bitwise_not(mask)
