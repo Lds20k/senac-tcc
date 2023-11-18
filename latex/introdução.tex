@@ -33,6 +33,10 @@ No cenário de jogos, os mapas desempenham um papel fundamental, fornecendo orie
 % No entanto, a criação de mapas usando esse método ainda encontram dificuldades, sendo elas, variedade e autenticidade \space\cite{geracao_procedural_jogos_2d}.
 % aqui adicionar uma explicação do porque é um desafio a geração procedeural de conteudo
 
+Contextualizando, a área de Geometria Computacional é um ramo da ciência da computação que estuda algoritmos e estruturas de dados, servindo para resolução computacional de problemas geométricos. O diagrama de Voronoi é um dos tópicos mais discutidos dessa
+área e possui uma gama de utilizações, dentre elas pode ser utilizado para resolver alguns problemas relacionados a jogos como por exemplo marcar pontos no mapa, desses pontos criar regiões, e a partir dessas regiões criar biomas gerando um mapa \space\cite{diagrama_voronoi_jogos}.
+
+
 % introduz a relação de ia para personalização dentro de métodos procedurais em jogos
 De acordo com \space\citeonline{jogo_procedural} é muito comum usar técnicas procedurais combinado com inteligência artificial para melhorar ou personalizar a experiência do jogador. Por exemplo, o jogo RimWorld é um simulador de colônia que gera um planeta de forma procedural e utiliza uma IA para narrar a história, abrangendo psicologia, ecologia, combate e diplomacia, dentre outros. Logo, essa combinação entre IA e a geração procedural cria uma jogabilidade única ao jogador.
 
@@ -46,9 +50,16 @@ Na aplicação de carros autônomos é necessário identificar humanos para toma
 
 Logo, se torna um tópico relevante dentro de visão computacional, no qual pode ter diversas aplicações no mundo real \space\cite{kirillov2019panoptic, dp_semantic_segmantation}.
 
-Por conseguinte, a combinação entre inteligência artificial e geração procedural de mapas pode abrir novas possibilidades de personalização nos jogos. Imagine um jogo em que, a partir da segmentação de imagens por meio de redes neurais convolucionais, os jogadores possam criar mapas únicos e personalizados para suas aventuras. Com uma foto, o modelo treinado segmentaria a imagem para selecionar um contorno reconhecido, e a partir dele se criar um mapa de maneira procedural contendo biomas no mesmo formato escolhido.
+Com base na contextualização é possível perceber que o mercado de jogos está em ascensão, o mapa é um recurso importante e pode ser usado a técnica de geração procedural para diversificar, o diagrama de Voronoi pode ser usado para gerar biomas em mapas no processo de geração procedural, a técnica de geração procedural de conteúdo unido a inteligência artificial é muito utilizado em jogos para criar personalizações, no ramo de inteligência artificial a segmentação está em ascensão. Logo pode-se perceber a relevância desses temas no curso de ciência da computação e na atualidade, propõe-se uma solução para personalizar mapas de jogos utilizando um modelo de IA da área de segmentação.
 
-No contexto da geração procedural de mapas, explorar a relação entre IA e personalização de jogos contribuirá para o avanço dessas áreas de pesquisa, proporcionando aos jogadores experiências mais ricas e variadas.
+Para isso decidiu-se criar uma solução para gerar proceduralmente mapas com biomas utilizando segmentação para delimitar o contorno da ilha. A partir disso é possível o uso de um desenvolvedor de jogos para criar um protótipo de mapa rapidamente ou para aprimorar e usar esse recurso no jogo, possibilitando o jogador tirar ou selecionar uma foto e escolher um contorno para gerar um mapa com aquele formato.
+
+Como hipótese tem-se que quantos mais pontos o diagrama de Voronoi tiver maior será a precisão da compatibilidade entre o mapa e o contorno escolhido, para isso definiu-se alguns testes com métricas para mensurar a qualidade da geração procedural com a proposta de ter o mesmo contorno.
+
+
+% Por conseguinte, a combinação entre inteligência artificial e geração procedural de mapas pode abrir novas possibilidades de personalização nos jogos. Imagine um jogo em que, a partir da segmentação de imagens por meio de redes neurais convolucionais, os jogadores possam criar mapas únicos e personalizados para suas aventuras. Com uma foto, o modelo treinado segmentaria a imagem para selecionar um contorno reconhecido, e a partir dele se criar um mapa de maneira procedural contendo biomas no mesmo formato escolhido.
+
+% No contexto da geração procedural de mapas, explorar a relação entre IA e personalização de jogos contribuirá para o avanço dessas áreas de pesquisa, proporcionando aos jogadores experiências mais ricas e variadas.
 
 % Adicionar uma parte explicando a parte de visão computacional e porque o tema da nossa Ia é identificação de pessoas
 
