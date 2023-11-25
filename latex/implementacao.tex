@@ -192,31 +192,31 @@ Criou-se um teste genérico para reutiizar em diversos testes e facilitar a repr
 Em cada iteração de todos esses laços aninhados será gerado proceduralmente algum mapa ou os dois, processado as métricas e armazenado, após isso será calculado a média das métricas e criado uma tabela em latex como resultado.
 
 \subsection{Pós processamento}
-Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
+Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:Unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Resultado no unity sem usar filtro de desfoque no mapa de altura.}
-	\includegraphics[width=0.8\textwidth]{figures/unity_entry.png}
+    \caption{Resultado no Unity sem usar filtro de desfoque no mapa de altura.}
+	\includegraphics[width=0.8\textwidth]{figures/Unity_entry.png}
     \legend{Fonte: \space Autoria própria}
-	\label{fig:unity_init}
+	\label{fig:Unity_init}
 \end{figure}
 
-Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico}.
+Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:Unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico}.
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Resultado no unity usando filtro de desfoque no mapa de altura.}
-	\includegraphics[width=0.8\textwidth]{figures/unity_blur.png}
+    \caption{Resultado no Unity usando filtro de desfoque no mapa de altura.}
+	\includegraphics[width=0.8\textwidth]{figures/Unity_blur.png}
     \legend{Fonte: \space Autoria própria}
-	\label{fig:unity_blur}
+	\label{fig:Unity_blur}
 \end{figure}
 
 \input{blur_error.tex}
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Ilustração da classificação de conjuntos entre a iamgem de entrada e o mapa de altura}
+    \caption{Ilustração da classificação de conjuntos entre a imagem de entrada e o mapa de altura}
 	\includegraphics[width=0.8\textwidth]{figures/comparacao_blur.png}
     \legend{Fonte: \space Autoria própria}
 	\label{fig:comparando_blur}

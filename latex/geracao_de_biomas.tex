@@ -1,7 +1,7 @@
 \subsection{Geração de biomas no diagrama de Voronoi}
 \label{sec:geracaoProcedural}
 
-Biomas são regiões ecológicas que possuem uma fauna e flora com atributos estruturais semelhantes \space\cite{maestrovirtuale}. Segundo \space\citeonline{amitp2010} o primeiro passo para gerar o mapa e os biomas é gerar o litoral, os litorais serão as bordas que irão dizer o que é água e o que é solo. Existem algumas formas de gerar o formato da ilha:
+Biomas são regiões ecológicas que possuem uma fauna e flora com atributos estruturais semelhantes \space\cite{maestrovirtuale}. Segundo \citeonline{amitp2010} o primeiro passo para gerar o mapa e os biomas é gerar o litoral, os litorais serão as bordas que irão dizer o que é água e o que é solo. Na \cref{fig:voronoi-land-water} mostra-se essa separação, sendo os polígonos pintados de marrom é o solo e o polígonos azuis representam o mar. Existem algumas formas de gerar o formato da ilha:
 
 \begin{itemize}
     \item Radial: gera ilhas circulares através de ondas senoidais.
@@ -9,23 +9,23 @@ Biomas são regiões ecológicas que possuem uma fauna e flora com atributos est
     \item Quadrado: preenche o mapa inteiro com solo.
 \end{itemize}
 
-É possível utilizar qualquer formato para gerar as ilhas, como ilustrado na \cref{fig:voronoi-land-water} \space\cite{amitp2010}.
+É possível utilizar qualquer formato para gerar as ilhas \space\cite{amitp2010}.
 
 \begin{figure}[ht]
 	\caption{Diagrama de Voronoi separado em solo e mar}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=0.8\textwidth]{figures/voronoi-land-water.png} % leia abaixo
-	\legend{Fonte: \space\citeonline{amitp2010}}
+	\legend{Fonte: \citeonline{amitp2010}}
 	\label{fig:voronoi-land-water}
 \end{figure}
 
-O proximo passo é calcular a elevação do terreno. A elevação será calculada através da distancia de um polígono indicado como solo até o litoral, a elevação é definida pelos cantos dos polígonos \space\cite{amitp2010}. Exemplificado na \cref{fig:downslopes}.
+O próximo passo é calcular a elevação do terreno. A elevação será calculada através da distancia de um polígono indicado como solo até o litoral, a elevação é definida pelos cantos dos polígonos \space\cite{amitp2010}. Na \cref{fig:downslopes}
 
 \begin{figure}[ht]
 	\caption{Diagrama de Voronoi separado em solo e mar com os cantos dos polígonos indicando a direção para o litoral}
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/downslopes.png}
-	\legend{Fonte: \space\citeonline{amitp2010}}
+	\legend{Fonte: \citeonline{amitp2010}}
 	\label{fig:downslopes}
 \end{figure}
 
@@ -39,7 +39,7 @@ O diagrama de Whittaker é uma forma de dividir os terrenos gerados a partir da 
 	\caption{Diagrama de Whittaker}
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/diagrama-whittaker.png}
-	\legend{Fonte: \space\citeonline{mendes2019}}
+	\legend{Fonte: \citeonline{mendes2019}}
 	\label{fig:diagrama-whittaker}
 \end{figure}
 
@@ -49,7 +49,7 @@ Usando a elevação como representante da temperatura de um bioma, é possível 
 	\caption{Resultado final da geração do mapa}
 	\centering
 	\includegraphics[width=0.5\textwidth]{figures/biomes.png}
-	\legend{Fonte: \space\citeonline{amitp2010}}
+	\legend{Fonte: \citeonline{amitp2010}}
 	\label{fig:biomes}
 \end{figure}
 

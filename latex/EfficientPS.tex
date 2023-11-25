@@ -1,13 +1,13 @@
 \subsubsubsection*{EfficientPS}
 \label{sec:EfficientPS}
 
-EfficientPS é uma solução para a segmentação panóptica proposta no artigo \space\citeonline{mohan2020efficientps}, o trabalho apresenta uma arquitetura que se inicia com um backbone — parte para identificar características — usando uma Rede de Pirâmide de Características(RPC)\footnote{Estrutura de pirâmide para extrair características em várias escalas de uma imagem \space\cite{piramide}} de 2 caminhos seguido de dois cabeçotes paralelos um para uma arquitetura de segmentação semântica que é autoria deles e outra de instância com modificações baseadas na topologia Mask R-CNN e finalmente a saída dos dois cabeçotes são combinadas no módulo de fusão panóptica para gerar a saída final com a imagem de segmentação panóptica, esta arquitetura é ilustrada na \cref{fig:arqEP}.
+EfficientPS é uma solução para a segmentação panóptica proposta no artigo \citeonline{mohan2020efficientps}, o trabalho apresenta uma arquitetura que se inicia com um backbone — parte para identificar características — usando uma Rede de Pirâmide de Características(RPC)\footnote{Estrutura de pirâmide para extrair características em várias escalas de uma imagem \space\cite{piramide}} de 2 caminhos seguido de dois cabeçotes paralelos um para uma arquitetura de segmentação semântica que é autoria deles e outra de instância com modificações baseadas na topologia Mask R-CNN e finalmente a saída dos dois cabeçotes são combinadas no módulo de fusão panóptica para gerar a saída final com a imagem de segmentação panóptica, esta arquitetura é ilustrada na \cref{fig:arqEP}.
 
 \begin{figure}[ht]
 	\caption{Arquitetura geral do EfficientPS}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=15cm]{figures/arqEP.png} % leia abaixo
-	\legend{Fonte: \space\citeonline{mohan2020efficientps}}
+	\legend{Fonte: \citeonline{mohan2020efficientps}}
 	\label{fig:arqEP}
 \end{figure}
 

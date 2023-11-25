@@ -1,6 +1,6 @@
 \subsubsubsection{Redes neurais convolucionais}
 
-Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \space\cite{oshea2015introduction}. 
+Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \space\cite{oshea2015introduction}.
 
 Uma arquitetura básica de uma rede neural convolucional tem as seguintes camadas: convolucional, agrupamento e totalmente conectada. Ilustrada na \cref{fig:arquitetura_cnn} \space\cite{dp_overview}.
 
@@ -8,21 +8,21 @@ Uma arquitetura básica de uma rede neural convolucional tem as seguintes camada
 	\caption{Camadas principais de uma rede neural convolucional}
 	\centering % para centralizarmos a figura
 	\includegraphics[width=15cm]{figures/arquitetura_cnn.png} % leia abaixo
-	\legend{Fonte: \space\citeonline{dp_overview}}
+	\legend{Fonte: \citeonline{dp_overview}}
 	\label{fig:arquitetura_cnn}
 \end{figure}
 
 \subsubsubsection*{Camada convolucional}
 
-Segundo \space\citeonline{computation11030052} camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características. O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída \space\cite{computation11030052}.
+Segundo \citeonline{computation11030052} camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características. O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída \space\cite{computation11030052}.
 
 \begin{gather}
     \mathbf{I}x - \mathbf{F}x + 1 = \mathbf{S}x \notag \\
     \mathbf{I}y - \mathbf{F}y + 1 = \mathbf{S}y
 \end{gather}
 
-    
-A seguir um exemplo dos passos para construir a matriz resultante baseado em \space\citeonline{Alzubaidi2021}.
+
+A seguir um exemplo dos passos para construir a matriz resultante baseado em \citeonline{Alzubaidi2021}.
 
 \clearpage
 
@@ -106,7 +106,7 @@ O preenchimento — ou padding — é uma técnica utilizada para manter o mesmo
 
 A camada de agrupamento — ou pooling — tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características, porém preservando os padrões mais relevantes. Dentre os recursos essenciais dessa camada estão o tamanho do agrupamento e a operação que será realizada. O maior problema dessa camada é pelo fato dela apenas identificar onde essas características estão e se existem ou não, \emph{i.e.}, dependendo de qual operação e a quantidade de camadas pode não ser possível guardar as principais características de forma integra causando uma redução no desempenho final da predição \space\cite{dp_overview}.
 
-Existem vários tipos de agrupamento, os mais utilizados são: agrupamento máximo, agrupamento médio e agrupamento global médio que estão explicados abaixo em exemplos baseados em \space\citeonline{Alzubaidi2021}.
+Existem vários tipos de agrupamento, os mais utilizados são: agrupamento máximo, agrupamento médio e agrupamento global médio que estão explicados abaixo em exemplos baseados em \citeonline{Alzubaidi2021}.
 
 \subsubsubsection*{Agrupamento máximo}
 
@@ -122,7 +122,7 @@ $$
     };
     \draw (M-1-1.north west) rectangle (M-2-2.south east);
 \end{tikzpicture}
-= 
+=
 \begin{bmatrix}
 	\boxed{25} & 44 \\
 	17 & 34 \\
@@ -143,7 +143,7 @@ $$
     };
     \draw (M-1-1.north west) rectangle (M-2-2.south east);
 \end{tikzpicture}
-= 
+=
 \begin{bmatrix}
 	\boxed{12} & 23 \\
 	9 & 20 \\
@@ -163,7 +163,7 @@ $$
         5 & 13 & 24 & 7 \\
     };
 \end{tikzpicture}
-= 
+=
 \begin{bmatrix}
 	16
    \end{bmatrix}
@@ -175,7 +175,7 @@ A camada totalmente conectada geralmente é utilizada no final da arquitetura e 
 
 \subsubsubsection*{Aperfeiçoamento}
 
-Segundo \space\citeonline{Alzubaidi2021, computation11030052} existem algumas técnicas para aperfeiçoar os resultados do modelo, sendo elas:
+Segundo \citeonline{Alzubaidi2021, computation11030052} existem algumas técnicas para aperfeiçoar os resultados do modelo, sendo elas:
 
 \begin{itemize}
     \item Dropout: Muito utilizada para evitar sobreajuste pois está técnica irá desligar um neurônio aleatoriamente colocando a saída dele como zero no processo de treinamento e portanto forçara o modelo a aprender a identificar características diferentes em outros neurônios possibilitando a generalização do modelo.
@@ -185,4 +185,3 @@ Segundo \space\citeonline{Alzubaidi2021, computation11030052} existem algumas t�
     \item Aumentar a profundidade ou largura da arquitetura
     \item Ajustar os hiperparâmetros
 \end{itemize}
-    

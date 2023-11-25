@@ -34,7 +34,7 @@ A função de ativação retorna a saída de um neurônio \space\cite{haykin1999
 	\legend{Fonte: Criação própria}
 	\label{fig:grafico_sigmoid}
 	\end{figure}
-	Segundo \space\citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e para valores muito extremos causa problemas na previsão.
+	Segundo \citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e para valores muito extremos causa problemas na previsão.
 
 	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \space\cite{rizzo2020inteligencia}.
 	\begin{figure}[ht]
@@ -70,7 +70,7 @@ A função de ativação retorna a saída de um neurônio \space\cite{haykin1999
 	\label{fig:grafico_relu}
 	\end{figure}
 	A função \textit{ReLu} é computacionalmente eficiente e converge rapidamente, porém quando a entrada da função se aproxima de zero a rede neural não consegue executar o retropropagação, sendo assim não há aprendizado \space\cite{gharat2019what}.
-	
+
 	\item Função \textit{Leaky ReLU} (Unidade Linear Retificada com Vazamento), função não-linear variante da \textit{ReLU} que retorna um valor positivo ou $\upsilon/a_i$, sendo $a_i$ um valor na faixa $(1,\infty)$ \space\cite{xu2015empirical}.
 	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{ReLu}.}
@@ -82,7 +82,7 @@ A função de ativação retorna a saída de um neurônio \space\cite{haykin1999
 				\begin{cases}
 				\upsilon & \text{if } \upsilon_k \geq 0 \\
 				\frac{\upsilon}{a_k} & \text{if } \upsilon_k < 0
-				\end{cases}    
+				\end{cases}
 			\end{gather}
 		\end{minipage}
 		\hfill
