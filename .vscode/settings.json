@@ -1,4 +1,11 @@
 {
     "cSpell.language": "en,pt-BR",
-    "cSpell.enabled": true
+    "cSpell.enabled": true,
+    "cSpell.words": [
+        "Cityscapes",
+        "Github",
+        "panóptica",
+        "Voronoi",
+        "Youtube"
+    ]
 }
