@@ -81,14 +81,14 @@ Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:ger
 
 \subsubsection{Ilha gerada no contorno}
 
-Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vértice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vértice, e a cor rosa representa a aresta do polígono.
+Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vértice, e a cor rosa representa a aresta do polígono.
 
 \begin{figure}[!ht]
 	\centering
     \caption{Ilustração do cálculo para definir a localização dos vértices.}
 	\includegraphics[width=0.6\textwidth]{figures/explicacao_vertice.png}
     \legend{Fonte: \space Autoria própria}
-	\label{fig:explicacao_vértice}
+	\label{fig:explicacao_vertice}
 \end{figure}
 
 A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do algoritmo, sendo os pontos vermelhos os centroides que são ligados por linhas pretas, os pontos azuis são os vértices que se ligam com linha branca para tornar as arestas formando assim o polígono.
@@ -202,7 +202,7 @@ Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:Unity_init} pe
 	\label{fig:Unity_init}
 \end{figure}
 
-Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:Unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{sub tópico}.
+Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:Unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{subtópico}.
 
 \begin{figure}[!ht]
 	\centering
