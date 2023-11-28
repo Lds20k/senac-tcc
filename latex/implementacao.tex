@@ -4,7 +4,7 @@ Pode-se dividir a implementação em cinco partes, sendo elas: segmentar imagens
 
 \subsection{Segmentar imagens}
 
-A segmentação da imagem é usada para classificar os pixels da imagem a partir de padrões reconhecidos por uma inteligência artificial. A partir disso é possível o usuário selecionar o contorno para gerar o mapa.
+A segmentação da imagem é usada para classificar os píxeis da imagem a partir de padrões reconhecidos por uma inteligência artificial. A partir disso é possível o usuário selecionar o contorno para gerar o mapa.
 
 A linguagem de programação utilizada para desenvolvimento do projeto foi Python pois existem muitas bibliotecas que auxiliam na criação de arquiteturas complexas de Inteligência Artificial como o \hyperref[sec:EfficientPS]{EfficientPS}.
 
@@ -51,7 +51,7 @@ O método de  selecionar por preenchimento por inundação é um algoritmo de ex
 
 A implementação inicia uma matriz de zeros com tamanho 2 pixeis maior do que a imagem original.
 
-O clique na  imagem será a semente — ou em inglês  seed — e a partir disso o algoritmo começa uma expansão para os pixeis vizinhos — de cima, baixo, esquerda e direita — caso contenha o mesmo valor de cor pinta de cor branca, e refaz com os pixels marcados  anteriormente até não ter mais o pontos brancos para marcar.
+O clique na  imagem será a semente — ou em inglês  seed — e a partir disso o algoritmo começa uma expansão para os pixeis vizinhos — de cima, baixo, esquerda e direita — caso contenha o mesmo valor de cor pinta de cor branca, e refaz com os pixeis marcados  anteriormente até não ter mais o pontos brancos para marcar.
 
 \subsubsubsection*{Tratamento da imagem binária}
 
@@ -117,7 +117,7 @@ E por final para calcular a elevação do polígino é feito a média dos vérti
 	X = sqrt(fator) - sqrt(sqrt * (1 - Y))
 \end{equation}
 
-Para criação dos rios busca-se os vértices do tipo terra e litoral que possuem uma elevação minima definida, ou se os vértices se localizam próximos de um lago, então armazena-se em uma lista. Seleciona-se de forma pseudoaleatória uma quantidade de vértices e verifica-se se o tipo de terreno dos vizinhos dos vértices e das arestas que foram tocados pelos vértices. Para cada um desses é verificado se o tipo de terrenho é terra ou litoral. Após isso, busca-se em todas as arestas a dona do vértice, ao encontrar é marcado como sendo um rio.
+Para criação dos rios busca-se os vértices do tipo terra e litoral que possuem uma elevação miníma definida, ou se os vértices se localizam próximos de um lago, então armazena-se em uma lista. Seleciona-se de forma pseudoaleatória uma quantidade de vértices e verifica-se se o tipo de terreno dos vizinhos dos vértices e das arestas que foram tocados pelos vértices. Para cada um desses é verificado se o tipo de terrenho é terra ou litoral. Após isso, busca-se em todas as arestas a dona do vértice, ao encontrar é marcado como sendo um rio.
 
 Na geração de umidade é atribuído um valor para cada vértice que possui uma aresta do tipo rio, ou se é vizinho de um lago, e é colocado esse item em uma fila. Logo em seguida, busca-se em profundidade, em todos os vértices adjacentes dos itens da fila, e é calculado uma nova umidade a partir de uma multiplicação de um fator com o valor da umidade anteriormente atribuída, e verifica-se se os vértices adjacentes possuem uma umidade maior que a nova umidade calculada, se forem é colocado o vértice adjacente na fila e é atribuído o valor da nova umidade. Para terrenos do tipo oceano é atribuído o valor máximo de umidade.
 Por fim, é atribuído o valor da umidade para os polígonos e é redistribuído a umidade a partir de uma lista polígonos com umidades ordenadas, para cada item i executa-se a \cref{eq:umidade} e assim é calculado o valor final da umidade.
@@ -176,7 +176,7 @@ Além da funcionalidade de relevo adicionou-se um pacote para alterar a textura 
 \subsubsubsection{Minimapa}
 A saída da geração procedural visa dois principais resultados, sendo eles: o mapa de altura para definir o terreno e o mapa 2d que pode ser usado como minimapa.
 
-Para usar o mapa 2d como minimapa de forma automatizada foi necessário adicionar nos scripts uma conversão de uma imagem em formato PNG para um Sprite (2D e UI) e atualizar nas propriedades do objeto de jogo. Possibilitando a localização de um ícone representando o jogador nesse minimapa por meio da projeção das coordenadas 3D do mundo do jogo em um mapa 2D.
+Para usar o mapa 2d como minimapa de forma automatizada foi necessário adicionar nos \textit{scripts} uma conversão de uma imagem em formato PNG para um Sprite (2D e UI) e atualizar nas propriedades do objeto de jogo. Possibilitando a localização de um ícone representando o jogador nesse minimapa por meio da projeção das coordenadas 3D do mundo do jogo em um mapa 2D.
 
 \subsubsubsection{Jogabilidade}
 
@@ -189,7 +189,7 @@ Dentre essas métricas, será utilizado também uma métrica para o desfoque enc
 
 Criou-se um teste genérico para reutilizar em diversos testes e facilitar a reprodução caso algo mude. É definido na chamada do teste quais imagens será feito as métricas, com isso é possível definir todas combinações possíveis. Para cada combinação será executado 5 imagens de entrada pré-definidas e em cada imagem irá percorrer um laço baseado em algum modificador sendo eles, tamanho do filtro de desfoque, quantidade de pontos ou tamanho da borda no mapa 2d, em cada iteração do parâmetro modificador será executado três vezes.
 
-Em cada iteração de todos esses laços aninhados será gerado proceduralmente algum mapa ou os dois, processado as métricas e armazenado, após isso será calculado a média das métricas e criado uma tabela em latex como resultado.
+Em cada iteração de todos esses laços aninhados será gerado proceduralmente algum mapa ou os dois, processado as métricas e armazenado, após isso será calculado a média das métricas e criado uma tabela em \LaTeX como resultado.
 
 \subsection{Pós processamento}
 Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:Unity_init} percebe-se que não existe uma harmonia entre os biomas e por isso gerou-se uma solução aplicando um desfoque na imagem de mapa de altura para suavizar a mudança de biomas.
@@ -236,4 +236,4 @@ Utilizou-se a biblioteca PyQt5 para criar uma interface gráfica na qual o usuá
 
 Esse módulo é responsável para conectar todas as partes e obter o mapa. Portanto é necessário abrir uma imagem do diretório local, carregar e disparar a execução do processo de segmentação de imagem. Após o resultado da IA, permitir a seleção do contorno,  criar uma imagem binária a partir do contorno e envia-lá como argumento na geração procedural de mapas.
 
-Além disso para promover a usabilidade utilizou-se um loading específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
+Além disso para promover a usabilidade utilizou-se um \textit{loading} específico para PyQt5 e para isso teve-se que usar threads, criando classes para rodar as tarefas de forma separada e síncrona.
