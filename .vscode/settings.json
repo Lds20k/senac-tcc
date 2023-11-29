@@ -82,5 +82,8 @@
         "west",
         "Whittaker",
         "Youtube"
+    ],
+    "cSpell.enableFiletypes": [
+        "!python"
     ]
 }

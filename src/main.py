@@ -14,6 +14,12 @@ from pyqtspinner import WaitingSpinner
 from efficientps_cityscapes import execute_efficientps
 from generate_map import generate, OUTPUT
 
+def cv2ImageToQImage(cv2_image):
+    height, width, channel = cv2_image.shape
+    bytes_per_line = 3 * width
+    q_image = QImage(cv2_image.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    q_image = q_image.rgbSwapped()
+    return q_image
 
 class EfficientPSWorker(QObject):
     finished = pyqtSignal()
@@ -33,7 +39,7 @@ class MapWorker(QObject):
     finished = pyqtSignal()
     result = pyqtSignal(QImage)
     image = None
-    points = 1000
+    points = 300
 
     def run(self):
         logging.info("MapWorker em execução")
@@ -86,15 +92,25 @@ class QImageViewer(QMainWindow):
 
     def open(self):
         options = QFileDialog.Options()
-        # fileName = QFileDialog.getOpenFileName(self, "Open File", QDir.currentPath())
-        fileName, _ = QFileDialog.getOpenFileName(self, 'QFileDialog.getOpenFileName()', '',
-                                                  'Images (*.png *.jpeg *.jpg *.bmp *.gif)', options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self,
+            'QFileDialog.getOpenFileName()',
+            '',
+            'Images (*.png *.jpeg *.jpg *.bmp *.gif)',
+            options=options
+        )
+
         if fileName:
-            self.img = QImage(fileName)
-            if self.img.isNull():
-                QMessageBox.information(
-                    self, "Image Viewer", "Cannot load %s." % fileName)
+            SCALE = 0.6
+
+            image = cv2.imread(fileName)
+            if image is None:
+                QMessageBox.information(self, "Erro", "Não foi possivel carregar a imagem %s." % fileName)
                 return
+
+            new_width = int(1000)
+            new_height = int((image.shape[0] * 1000) / image.shape[1])
+            image = cv2.resize(image, (new_width, new_height))
+            self.img = cv2ImageToQImage(image)
 
             self.imageLabel.setPixmap(QPixmap.fromImage(self.img))
             self.toggleMousePressEvent()
@@ -160,8 +176,7 @@ class QImageViewer(QMainWindow):
         im = cv2.copyMakeBorder(im, 50, 50, 50, 50, cv2.BORDER_CONSTANT, value=(0,0,0))
         cv2.imwrite('output_croped.png', im)
 
-        im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-        self.runMapWorker(Image.fromarray(im))
+        self.runMapWorker(im)
 
     def print_(self):
         dialog = QPrintDialog(self.printer, self)
@@ -289,6 +304,7 @@ class QImageViewer(QMainWindow):
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.result.connect(self.update_screen_image)
 
+        logging.info("Executando EfficientPSWorker")
         self.thread.start()
 
         self.thread.finished.connect(self.stop_loading)
@@ -316,6 +332,7 @@ class QImageViewer(QMainWindow):
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.result.connect(self.update_screen_image)
 
+        logging.info("Executando MapWorker")
         self.thread.start()
 
         self.thread.finished.connect(self.stop_loading)
