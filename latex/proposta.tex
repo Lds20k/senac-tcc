@@ -16,21 +16,23 @@ No resultado apenas será identificado os pixeis de classes contidas nos conjunt
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Imagem saída de um modelo de segmentação panóptica de segmentação panóptica.}
+    \caption{Imagem saída de um modelo de segmentação panóptica.}
 	\includegraphics[width=0.6\textwidth]{figures/segmantations_2.png}
     \legend{Fonte: \citeonline{kirillov2019panoptic}}
 	\label{fig:segmantations_2}
 \end{figure}
 
-Após a segmentação da imagem o usuário poderá selecionar qual parte da imagem será utilizada para gerar a ilha.
+Após a segmentação da imagem — como ilustra a \cref{fig:segmantations_2} — o usuário poderá selecionar uma das áreas coloridas da imagem que será utilizada para gerar a ilha.
 
-Feito a seleção será gerado um diagrama de Voronoi que funcionará como um filtro em cima dessa imagem, assim gerando a ilha e os biomas.
+Em seguida será criado um diagrama de Voronoi (pode ser observado na \cref{fig:diagrama_voronoi}), esse diagrama será utilizado para marcar a localização da ilha, assim gerando o mapa e os biomas a partir da atribuição de propriedades para cada ponto, polígono e reta do diagrama.
+
+O resultado esperado pode ser contemplado na \cref{fig:resultado_geracao}, onde o azul representa o oceano, o verde retrata a floresta e o cinza caracteriza uma montanha.
 
 \begin{figure}[!ht]
 	\centering
     \caption{Ilha gerada a partir da segmentação panóptica e aplicando um filtro com o diagrama de Voronoi, azul representa oceano, verde floresta, cinza montanhas.}
 	\includegraphics[width=0.6\textwidth]{figures/segmantations_pnl.png}
     \legend{Fonte: Criação própria}
-	\label{fig:segmantations_pnl}
+	\label{fig:resultado_geracao}
 \end{figure}
 
