@@ -29,12 +29,10 @@ def generate(image, points=25, mode = 3, output: OUTPUT = OUTPUT.BOTH, kernel_si
     if output == OUTPUT.MAP_BIOME:
         logging.info("Gerando biomas")
 
-        loc = {}
-        exec(f"number_of_rivers = {math.floor(points/8)} {random.choice(['+', '-'])} {math.floor(points/16)}", globals(), loc)
-        number_of_rivers = loc['number_of_rivers']
+        number_of_rivers = 10
 
         logging.info(f"Sera gerado um total de {number_of_rivers} rios")
-        create_rivers(graph, 10, 0.6)
+        create_rivers(graph, number_of_rivers, 0.6)
 
         logging.info(f"Calculando umidade")
         assign_moisture(graph)
