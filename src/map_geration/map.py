@@ -8,14 +8,11 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import plotly.graph_objs as go
-from matplotlib.collections import PatchCollection
-from matplotlib.patches import Polygon
-from scipy.spatial import ConvexHull
 
 from map_geration.graph import *
 from map_geration.map_enums import *
 
+IMAGE_SIZE = 1000
 BORDER_SIZE = 75
 
 def convert_map_to_image(
@@ -31,11 +28,10 @@ def convert_map_to_image(
     """
     Here the next adjustments will be added to create a complete map.
     """
-    fig, ax = plt.subplots(figsize=(10, 10), clear=True)
+    image = np.zeros((IMAGE_SIZE, IMAGE_SIZE, 3), dtype=np.uint8)
 
-    polygons = [center_to_polygon(center, plot_type) for center in graph.centers]
-    p = PatchCollection(polygons, match_original=True)
-    ax.add_collection(p)
+    for center in graph.centers:
+        center_to_polygon(center, plot_type, image)
 
     # PLOT HEIGHT LABELS
     if debug_height:
@@ -75,59 +71,33 @@ def convert_map_to_image(
                 X = (beg_x, end_x)
                 Y = (beg_y, end_y)
                 plt.plot(X, Y, linewidth=2+2*np.sqrt(edge.river), color='blue')
-                #plt.clf()
 
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
+    return image
 
-    plt.axis('off')
-    plt.margins(0,0)
-
-    plt.gca().xaxis.set_major_locator(plt.NullLocator())
-    plt.gca().yaxis.set_major_locator(plt.NullLocator())
-
-    if path != None and path != "":
-        plt.savefig(f"{path}-shaped.png", bbox_inches = 'tight', pad_inches = 0)
-
-    fig.subplots_adjust(0,0,1,1)
-    fig.canvas.draw()
-    img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-    img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
-    plt.close(fig)
-    img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
-    img= cv2.copyMakeBorder(img,border_size,border_size,border_size,border_size,cv2.BORDER_CONSTANT,value=(255,191,0))
-    img = cv2.resize(img, (1000, 1000))
-    img = cv2.medianBlur(img, 21)
-
-    if path != None and path != "":
-        cv2.imwrite(f"{path}.png", img)
-
-    return img
-
-def center_to_polygon(center: Center, plot_type):
+def center_to_polygon(center: Center, plot_type, image):
     """
     Helper function for plotting, which takes the center and returns a polygon which can be plotted.
     """
     if plot_type == 'terrain':
-        color = center_to_terrain_color(center)
+        color = terrainColors[center.terrain_type](center.height)
     elif plot_type == 'moisture':
         color = center_to_moisture_color(center)
     elif plot_type == 'height':
         color = center_to_height_color(center)
     elif plot_type == 'biome':
-        color = center_to_biome_color(center)
+        color = biomeColors[center.biome]
     else:
         raise AttributeError(f'Unexpected plot type: {plot_type}')
 
     corner_coordinates = np.array([[corner.x, corner.y] for corner in center.corners])
     if is_center_a_map_corner(center):
-        corner_coordinates = np.append(corner_coordinates, nearest_map_corner(corner_coordinates))
+        corner_coordinates = np.insert(corner_coordinates, -2, nearest_map_corner(corner_coordinates))
         corner_coordinates = corner_coordinates.reshape(-1, 2)
-    hull = ConvexHull(corner_coordinates)
-    vertices = hull.vertices
-    vertices = np.append(vertices, vertices[0])
-    xs, ys = corner_coordinates[vertices, 0], corner_coordinates[vertices, 1]
-    return Polygon(np.c_[xs, ys], facecolor=color)
+    corner_coordinates = corner_coordinates * IMAGE_SIZE
+    corner_coordinates = corner_coordinates.astype(np.int32)
+    corner_coordinates = corner_coordinates.reshape((-1, 1, 2))
+
+    cv2.fillPoly(image, [corner_coordinates], color)
 
 def center_to_terrain_color(center: Center):
     if center.terrain_type is TerrainType.LAND:
@@ -271,8 +241,8 @@ def create_rivers(graph: Graph, n, min_height):
             c.height for c in graph.corners
             if c.terrain_type == TerrainType.LAND or c.terrain_type == TerrainType.COAST
         ])
-        print(f'Found only {len(good_beginnings)} river beginnings. Lower min_height.')
-        print(f'min_height={min_height} | Heighest mountain has height={heighest}')
+        # print(f'Found only {len(good_beginnings)} river beginnings. Lower min_height.')
+        # print(f'min_height={min_height} | Heighest mountain has height={heighest}')
         return
 
     start_corners = np.random.choice(good_beginnings, n, replace=False)

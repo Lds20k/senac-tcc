@@ -1,10 +1,8 @@
 import logging
-import shutil
 import sys
 
 import cv2
 import numpy as np
-from PIL import Image
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtPrintSupport import *
@@ -14,7 +12,7 @@ from pyqtspinner import WaitingSpinner
 from efficientps_cityscapes import execute_efficientps
 from generate_map import generate, OUTPUT
 
-def cv2ImageToQImage(cv2_image):
+def cv2image_to_qimage(cv2_image):
     height, width, channel = cv2_image.shape
     bytes_per_line = 3 * width
     q_image = QImage(cv2_image.data, width, height, bytes_per_line, QImage.Format_RGB888)
@@ -23,21 +21,20 @@ def cv2ImageToQImage(cv2_image):
 
 class EfficientPSWorker(QObject):
     finished = pyqtSignal()
-    result = pyqtSignal(QImage)
+    result = pyqtSignal(np.ndarray)
     image = None
 
     def run(self):
         logging.info("EfficientPSWorker em execução")
         result_image = execute_efficientps(self.image)
         logging.info(f"Imagem pos processamento com {result_image.shape[1]}x{result_image.shape[0]}")
-        qtImage = QImage(result_image.data, result_image.shape[1], result_image.shape[0], QImage.Format_RGB888).rgbSwapped()
-        self.result.emit(qtImage)
+        self.result.emit(result_image)
         self.finished.emit()
         logging.info("EfficientPSWorker finalizou a execução")
 
 class MapWorker(QObject):
     finished = pyqtSignal()
-    result = pyqtSignal(QImage)
+    result = pyqtSignal(np.ndarray)
     image = None
     points = 300
 
@@ -45,8 +42,7 @@ class MapWorker(QObject):
         logging.info("MapWorker em execução")
         result_image = generate(self.image, points=self.points, output=OUTPUT.MAP_BIOME)
         logging.info(f"Imagem pos processamento com {result_image.shape[1]}x{result_image.shape[0]}")
-        qtImage = QImage(result_image.data, result_image.shape[1], result_image.shape[0], QImage.Format_RGB888).rgbSwapped()
-        self.result.emit(qtImage)
+        self.result.emit(result_image)
         self.finished.emit()
         logging.info("MapWorker finalizou a execução")
 
@@ -56,7 +52,6 @@ class QImageViewer(QMainWindow):
 
         self.spinner = None
         self.printer = QPrinter()
-        self.scaleFactor = 0.0
 
         self.imageLabel = QLabel()
         self.imageLabel.setBackgroundRole(QPalette.Base)
@@ -100,34 +95,22 @@ class QImageViewer(QMainWindow):
         )
 
         if fileName:
-            SCALE = 0.6
-
             image = cv2.imread(fileName)
             if image is None:
                 QMessageBox.information(self, "Erro", "Não foi possivel carregar a imagem %s." % fileName)
                 return
 
-            new_width = int(1000)
-            new_height = int((image.shape[0] * 1000) / image.shape[1])
+            geometria = self.geometry()
+            new_width = geometria.width() - 16
+            new_height = int((image.shape[0] * new_width) / image.shape[1])
             image = cv2.resize(image, (new_width, new_height))
-            self.img = cv2ImageToQImage(image)
+            self.update_screen_image(image)
 
-            self.imageLabel.setPixmap(QPixmap.fromImage(self.img))
+            # Mudar
             self.toggleMousePressEvent()
 
-            self.scaleFactor = 1.0
-
             self.scrollArea.setVisible(True)
-            self.printAct.setEnabled(True)
-            self.fitToWindowAct.setEnabled(True)
-            self.updateActions()
-
-            if not self.fitToWindowAct.isChecked():
-                self.imageLabel.adjustSize()
-
-            image = self.qimage_to_cv2(self.img)
-
-            self.runEfficientPSWorker(image)
+            self.methodMenu.setEnabled(True)
 
     def qimage_to_cv2(self, qimage):
         buffer = np.array(qimage.bits().asarray(
@@ -137,16 +120,13 @@ class QImageViewer(QMainWindow):
         cv2_image = cv2.cvtColor(buffer, cv2.COLOR_BGR2RGB)
         return cv2_image
 
-    def createMask(self, event):
-
+    def create_mask(self, event):
         x = event.pos().x()
         y = event.pos().y()
-        c = self.img.pixel(x, y)
+        # c = self.img.pixel(x, y)
 
-        width = int(self.img.width())
-        height = int(self.img.height())
-
-        image = self.qimage_to_cv2(self.img)
+        width = int(self.image.shape[1])
+        height = int(self.image.shape[0])
 
         seed = (x, y)
         mask = np.zeros((height+2, width+2), np.uint8)
@@ -155,8 +135,7 @@ class QImageViewer(QMainWindow):
         floodflags |= cv2.FLOODFILL_MASK_ONLY
         floodflags |= (255 << 8)
 
-        _, _, mask, _ = cv2.floodFill(
-            image, mask, seed, (255, 0, 0), (10,)*3, (10,)*3, floodflags)
+        _, _, mask, _ = cv2.floodFill(self.image, mask, seed, (255, 0, 0), (10,)*3, (10,)*3, floodflags)
         _, binary_mask = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
 
         cv2.imwrite("output.png", binary_mask)
@@ -178,36 +157,6 @@ class QImageViewer(QMainWindow):
 
         self.runMapWorker(im)
 
-    def print_(self):
-        dialog = QPrintDialog(self.printer, self)
-        if dialog.exec_():
-            painter = QPainter(self.printer)
-            rect = painter.viewport()
-            size = self.imageLabel.pixmap().size()
-            size.scale(rect.size(), Qt.KeepAspectRatio)
-            painter.setViewport(rect.x(), rect.y(),
-                                size.width(), size.height())
-            painter.setWindow(self.imageLabel.pixmap().rect())
-            painter.drawPixmap(0, 0, self.imageLabel.pixmap())
-
-    def zoomIn(self):
-        self.scaleImage(1.25)
-
-    def zoomOut(self):
-        self.scaleImage(0.8)
-
-    def normalSize(self):
-        self.imageLabel.adjustSize()
-        self.scaleFactor = 1.0
-
-    def fitToWindow(self):
-        fitToWindow = self.fitToWindowAct.isChecked()
-        self.scrollArea.setWidgetResizable(fitToWindow)
-        if not fitToWindow:
-            self.normalSize()
-
-        self.updateActions()
-
     def about(self):
         QMessageBox.about(self, "About Image Viewer",
                           "<p>The <b>Image Viewer</b> example shows how to combine "
@@ -227,20 +176,17 @@ class QImageViewer(QMainWindow):
     def createActions(self):
         self.openAct = QAction(
             "&Open...", self, shortcut="Ctrl+O", triggered=self.open)
-        self.printAct = QAction(
-            "&Print...", self, shortcut="Ctrl+P", enabled=False, triggered=self.print_)
         self.exitAct = QAction(
             "E&xit", self, shortcut="Ctrl+Q", triggered=self.close)
-        self.zoomInAct = QAction(
-            "Zoom &In (25%)", self, shortcut="Ctrl++", enabled=False, triggered=self.zoomIn)
-        self.zoomOutAct = QAction(
-            "Zoom &Out (25%)", self, shortcut="Ctrl+-", enabled=False, triggered=self.zoomOut)
-        self.normalSizeAct = QAction(
-            "&Normal Size", self, shortcut="Ctrl+S", enabled=False, triggered=self.normalSize)
-        self.fitToWindowAct = QAction("&Fit to Window", self, enabled=False, checkable=True, shortcut="Ctrl+F",
-                                      triggered=self.fitToWindow)
         self.aboutAct = QAction("&About", self, triggered=self.about)
         self.aboutQtAct = QAction("About &Qt", self, triggered=qApp.aboutQt)
+
+        self.efficientPSFloodFill = QAction("Floodfill", self, triggered=self.runEfficientPSWorker)
+        self.efficientPSColor = QAction("Color", self, triggered=self.create_mask)
+
+        self.floodFill = QAction("Floodfill", self, triggered=self.create_mask)
+        self.color = QAction("Color", self, triggered=self.create_mask)
+
 
     def start_loading(self):
         self.spinner.start()
@@ -251,7 +197,6 @@ class QImageViewer(QMainWindow):
     def createMenus(self):
         self.fileMenu = QMenu("&File", self)
         self.fileMenu.addAction(self.openAct)
-        self.fileMenu.addAction(self.printAct)
         self.fileMenu.addSeparator()
         self.fileMenu.addAction(self.exitAct)
 
@@ -259,42 +204,38 @@ class QImageViewer(QMainWindow):
         self.helpMenu.addAction(self.aboutAct)
         self.helpMenu.addAction(self.aboutQtAct)
 
+        self.methodMenu = QMenu("&Method", self)
+        self.methodMenu.addSection("EfficientPS")
+        self.methodMenu.addAction(self.efficientPSFloodFill)
+        self.methodMenu.addAction(self.efficientPSColor)
+        self.methodMenu.addSection("Selection")
+        self.methodMenu.addAction(self.floodFill)
+        self.methodMenu.addAction(self.color)
+        self.methodMenu.setEnabled(False)
+
         self.menuBar().addMenu(self.fileMenu)
+        self.menuBar().addMenu(self.methodMenu)
         self.menuBar().addMenu(self.helpMenu)
-
-    def updateActions(self):
-        self.zoomInAct.setEnabled(not self.fitToWindowAct.isChecked())
-        self.zoomOutAct.setEnabled(not self.fitToWindowAct.isChecked())
-        self.normalSizeAct.setEnabled(not self.fitToWindowAct.isChecked())
-
-    def scaleImage(self, factor):
-        self.scaleFactor *= factor
-        self.imageLabel.resize(
-            self.scaleFactor * self.imageLabel.pixmap().size())
-
-        self.adjustScrollBar(self.scrollArea.horizontalScrollBar(), factor)
-        self.adjustScrollBar(self.scrollArea.verticalScrollBar(), factor)
-
-        self.zoomInAct.setEnabled(self.scaleFactor < 3.0)
-        self.zoomOutAct.setEnabled(self.scaleFactor > 0.333)
 
     def adjustScrollBar(self, scrollBar, factor):
         scrollBar.setValue(int(factor * scrollBar.value()
                                + ((factor - 1) * scrollBar.pageStep() / 2)))
 
-    def update_screen_image(self, image: QImage):
-        self.img = image
-        self.imageLabel.setPixmap(QPixmap.fromImage(self.img))
+    def update_screen_image(self, image):
+        self.image = image
+
+        qImg = cv2image_to_qimage(image)
+        self.imageLabel.setPixmap(QPixmap.fromImage(qImg))
         self.imageLabel.adjustSize()
 
-    def runEfficientPSWorker(self, image):
+    def runEfficientPSWorker(self):
         logging.info("Criando EfficientPSWorker")
 
         self.start_loading()
         self.thread = QThread()
 
         self.worker = EfficientPSWorker()
-        self.worker.image = image
+        self.worker.image = self.image
 
         self.worker.moveToThread(self.thread)
 
@@ -310,8 +251,8 @@ class QImageViewer(QMainWindow):
         self.thread.finished.connect(self.stop_loading)
 
     def toggleMousePressEvent(self):
-        if self.imageLabel.mousePressEvent != self.createMask:
-            self.imageLabel.mousePressEvent = self.createMask
+        if self.imageLabel.mousePressEvent != self.create_mask:
+            self.imageLabel.mousePressEvent = self.create_mask
         else:
             self.imageLabel.mousePressEvent = None
 
