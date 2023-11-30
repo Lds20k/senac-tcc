@@ -5,9 +5,10 @@ import math
 import queue
 
 import numpy as np
+import cv2
+
 from map_geration.graph import *
-from shapely.geometry import Point
-from shapely.geometry.polygon import Polygon
+from map_geration.map import is_center_a_map_corner, nearest_map_corner
 from map_geration.map_enums import *
 
 def assign_terrain_from_image(image, graph: Graph):
@@ -31,33 +32,32 @@ def assign_terrain_from_image(image, graph: Graph):
             
             generate_coast(neighbor)
 
-    logging.info("Convertendo poligonos")
-    polygons = []
-    for center in graph.centers:
-        points = []
-        for corner in center.corners:
-            points.append([corner.x, corner.y])
-            
-        polygons.append(Polygon(points))
-
-    image = image.convert("RGB")
-
     logging.info("Assinando poligonos como LAND")
-    for y in range(image.size[1]):
-        for x in range(image.size[0]):
-            pixel = image.getpixel((x, y))
-            if(0 in pixel): continue
+    image_size = image.shape[1]
 
-            x_convert = np.divide(x, image.size[0])
-            y_convert = np.divide(image.size[1] - y, image.size[1])
-            point = Point(x_convert, y_convert)
-            for i in range(len(polygons)):
-                if polygons[i].contains(point):
-                    break
-            
-            center: Center = graph.centers[i]
+    flag = True
+    index = 0
+    for center in graph.centers:
+        image_aux = np.zeros((image_size, image_size, 3), dtype=np.uint8)
+
+        points = np.array([[corner.x, corner.y] for corner in center.corners])
+        if is_center_a_map_corner(center):
+            points = np.insert(points, -2, nearest_map_corner(points))
+            points = points.reshape(-1, 2)
+        points = points * image_size
+        points = points.astype(np.int32)
+        points = points.reshape((-1, 1, 2))
+
+        cv2.fillPoly(image_aux, [points], [1, 1, 1])
+        mask = cv2.inRange(image_aux, (1, 1, 1), (1, 1, 1))
+        result = cv2.bitwise_and(image, image, mask=mask)
+
+        if(np.sum(result) > 0):
             center.terrain_type = TerrainType.LAND
-            for corner in center.corners: corner.terrain_type = TerrainType.LAND
+            if flag:
+                cv2.imwrite(f"src/output/mask/mask_{index}.png", mask)
+                cv2.imwrite(f"src/output/result/result_{index}.png", result)
+                index += 1
 
     logging.info("Procurando o primeiro poligono LAND")
     a_land_center = graph.centers[0]
