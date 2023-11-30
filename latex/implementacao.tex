@@ -34,24 +34,9 @@ Seguiu-se os passos citados em uma publicação de \citeonline{efficientps_issue
 
 \subsection{Selecionar contorno}
 
-Para representar a seleção do contorno utilizou-se uma técnica chamada de imagem binária.
-A imagem  binária contém  apenas duas cores, geralmente preto e  branco. Pode-se ser utilizada como uma máscara para auxiliar o processamento do  mapa no contorno desejado \cite{Aznag2020}.
+Para representar a seleção do contorno utilizou-se uma técnica chamada de \hyperref[subsec:mascara_binaria]{imagem binária}, descrita na seção de \hyperref[sec:visao_comp]{Visão computacional}. Pode-se ser utilizada como uma máscara para auxiliar o processamento do  mapa no contorno desejado \cite{Aznag2020}.
 
-Utilizou-se duas maneiras para selecionar o contorno, sendo eles: selecionar por cor e selecionar por preenchimento de inundação — ou  em inglês  flood fill —.
-
-\subsubsubsection*{Selecionar por cor}
-
-O método de selecionar por cor se baseia em pegar a cor específica do clique na imagem e percorrer a imagem comparando a cor alvo com a cor da imagem, caso seja a mesma pinte o mesmo pixel da nova imagem como branco e caso não seja pinte como preto.
-
-Uma maneira mais performática de selecionar por cor é definir um espectro de cores e aplicar uma mascara usando o método \textit{inRange} da biblioteca OpenCV, pode-se escolher apenas uma cor.
-
-\subsubsubsection*{Selecionar por preenchimento de inundação}
-
-O método de  selecionar por preenchimento por inundação é um algoritmo de expansão a partir de um pixel, validando se contém a mesma cor.
-
-A implementação inicia uma matriz de zeros com tamanho 2 pixeis maior do que a imagem original.
-
-O clique na  imagem será a semente — ou em inglês  seed — e a partir disso o algoritmo começa uma expansão para os pixeis vizinhos — de cima, baixo, esquerda e direita — caso contenha o mesmo valor de cor pinta de cor branca, e refaz com os pixeis marcados  anteriormente até não ter mais o pontos brancos para marcar.
+Utilizou-se duas maneiras para selecionar o contorno, sendo eles: \hyperref[subsubsec:sel_cor]{selecionar por cor} e \hyperref[subsubsec:sel_floodFill]{selecionar por preenchimento de inundação}, ambos explicados na seção de \hyperref[sec:visao_comp]{Visão computacional}.
 
 \subsubsubsection*{Tratamento da imagem binária}
 
@@ -183,7 +168,7 @@ Para usar o mapa 2d como minimapa de forma automatizada foi necessário adiciona
 Criou-se um personagem com movimentação para andar pelo mapa baseado no vídeo no Youtube de \citeonline{firstPersonMovement}. Adicionando os objetos e o script principal além de criar uma tag de chão para detectar a colisão é possível jogar no mapa andando em todas as direções e pulando.
 \subsection{Testes}
 
-Será feito um teste baseado no subtópico \hyperref[sec:metricas_tecnicas]{métricas e técnicas} no qual irá comparar uma combinação de imagens podendo conter a imagem de entrada do algoritmo de geração procedural ou alguma saída, mapa de altura ou mapa 2d. Em maioria, será utilizado a métrica IoU pois esta é a que pior classifica nosso modelo e também facilita a percepção de melhora, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
+Será feito um teste baseado no subtópico \hyperref[sec:metricas_tecnicas]{Métricas e técnicas} no qual irá comparar uma combinação de imagens podendo conter a imagem de entrada do algoritmo de geração procedural ou alguma saída, mapa de altura ou mapa 2d. Em maioria, será utilizado a métrica IoU pois esta é a que pior classifica nosso modelo e também facilita a percepção de melhora, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
 
 Dentre essas métricas, será utilizado também uma métrica para o desfoque encontrado em uma imagem, aplica um filtro para detectar bordas em x e y, calcula o gradiente e resulta o desvio padrão. Outra métrica utilizada nos testes foi a duração do tempo no código, medida em segundos e apenas contabilizando a parte de geração procedura dos mapas.
 
@@ -202,7 +187,7 @@ Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:Unity_init} pe
 	\label{fig:Unity_init}
 \end{figure}
 
-Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:Unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no \hyperref[sec:classificacao_conjuntos]{subtópico}.
+Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:Unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no subtópico \hyperref[sec:classificacao_conjuntos]{Classificação de conjuntos}.
 
 \begin{figure}[!ht]
 	\centering
