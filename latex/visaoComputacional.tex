@@ -52,7 +52,9 @@ No processamento de computação visual, as imagens são adquiridas e representa
 
 Os algoritmos de visão computacional utilizados atualmente são fundamentados em reconhecimento de padrões. O procedimento consiste em treinar computadores por meio de uma vasta quantidade de dados visuais. Os computadores processam imagens, rotulam os objetos nelas contidos e identificam padrões entre esses objetos \space\cite{content_Human_Vision}.
 
-Em visão computacional é comum usar algumas técnicas para separar objetos de interesse, e para isso utiliza-se um técnica chamada de máscara binária.
+Esse processo de treinamento e reconhecimento de padrões permite que os computadores identifiquem objetos e compreendam seu contexto visual. Com essa capacidade, o computador consegue realizar tarefas como, por exemplo, reconhecimento facial \cref{fig:imagem_a}.
+
+Em visão computacional é comum usar algumas técnicas para separar objetos de interesse pois a partir disso é possível aplicar alterações em objetos específicos, e para isso utiliza-se um técnica chamada de máscara binária \cite{NVIDIA,Embarcados}.
 
 \subsection{Máscara binária}
 \label{subsec:mascara_binaria}
@@ -70,8 +72,6 @@ O método de selecionar por cor se baseia em pegar a cor específica do clique n
 \label{subsubsec:sel_floodFill}
 
 O método de  selecionar por preenchimento por inundação é um algoritmo de expansão a partir de um pixel, validando se contém a mesma cor. A implementação inicia uma matriz de zeros com tamanho 2 pixeis maior do que a imagem original. O clique na  imagem será a semente — ou em inglês  seed — e a partir disso o algoritmo começa uma expansão para os pixeis vizinhos — de cima, baixo, esquerda e direita — caso contenha o mesmo valor de cor pinta de cor branca, e refaz com os pixeis marcados  anteriormente até não ter mais o pontos brancos para marcar \cite{OpenCVFloodFill}.
-
-Esse processo de treinamento e reconhecimento de padrões permite que os computadores identifiquem objetos e compreendam seu contexto visual. Com essa capacidade, o computador consegue realizar tarefas como, por exemplo, reconhecimento facial \cref{fig:imagem_a}.
 
 
 
