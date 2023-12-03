@@ -2,7 +2,9 @@
 
 Este trabalho propõe a criação de um protótipo destinado a gerar um mapa de forma procedural, cujo contorno é selecionado a partir de uma imagem processada por um modelo de segmentação panóptica \footnote{No resultado apenas será identificado os pixeis de classes contidas nos conjuntos de dados escolhidos, e todos citados no capítulo 2 são de contexto urbano}. O mapa resultante replicará o contorno da seleção em 2D e 3D.
 
-A \cref{fig:etapas_proposta} apresenta os passos dessa abordagem, onde a imagem a representa a entrada para o processo de segmentação panóptica, e a imagem b é o resultado desse processo. O modelo utilizado para a segmentação panóptica é o EfficientPS, conforme detalhado no subtópico \hyperref[sec:EfficientPS]{EfficientPS}, e pode ser encontrado no GitHub dos próprios autores \citeonline{mohan2020efficientps}. Após a segmentação da imagem, o usuário terá a capacidade de selecionar um contorno, resultando em uma máscara binária, conforme ilustrado na imagem c, que representa a escolha do segmento, como, por exemplo, o carro amarelo da imagem b. Subsequentemente, um mapa procedural será gerado com o contorno escolhido, conforme evidenciado na imagem d. Essa representação incluirá uma sobreposição do contorno do veículo, meramente para ilustrar que a ilha gerada terá um contorno semelhante. As cores na representação indicam o oceano (azul), a floresta (verde) e as montanhas (cinza). Além disso, será automatizado para atualizar o relevo de um mapa em 3D.
+A \cref{fig:etapas_proposta} apresenta os passos dessa abordagem, onde a imagem a representa a entrada para o processo de segmentação panóptica, e a imagem b é o resultado desse processo. Utilizou-se o modelo de segmentação panóptica EfficientPS criado por \citeonline{mohan2020efficientps}, uma solução eficiente para segmentação panóptica e de acordo com \citeonline{datasetResults} possui a melhor classificação da métrica de qualidade panóptica definida por \citeonline{kirillov2019panoptic} para classificar pessoas, o que é importante em um contexto atual segundo \citeonline{dp_semantic_segmantation}
+% conforme detalhado no subtópico \hyperref[sec:EfficientPS]{EfficientPS}
+, e pode ser encontrado no GitHub dos próprios autores \citeonline{mohan2020efficientps}. Após a segmentação da imagem, o usuário terá a capacidade de selecionar um contorno, resultando em uma máscara binária, conforme ilustrado na imagem c, que representa a escolha do segmento, como, por exemplo, o carro amarelo da imagem b. Subsequentemente, um mapa procedural será gerado com o contorno escolhido, conforme evidenciado na imagem d. Essa representação incluirá uma sobreposição do contorno do veículo, meramente para ilustrar que a ilha gerada terá um contorno semelhante. As cores na representação indicam o oceano (azul), a floresta (verde) e as montanhas (cinza). Além disso, será automatizado para atualizar o relevo de um mapa em 3D.
 
 % footnote?
 %
@@ -17,7 +19,7 @@ A \cref{fig:etapas_proposta} apresenta os passos dessa abordagem, onde a imagem 
 	\centering
     \caption{Etapas da proposta}
 	\includegraphics[width=0.9\textwidth]{figures/etapas_proposta.png}
-    \legend{Fonte: \citeonline{kirillov2019panoptic}}
+    \legend{Fonte: \citeonline{kirillov2019panoptic} e autoria própria}
 	\label{fig:etapas_proposta}
 \end{figure}
 
