@@ -42,9 +42,9 @@ Seguiu-se os passos citados em uma publicação de \citeonline{efficientps_issue
 
 \subsection{Selecionar contorno}
 
-Para representar a seleção do contorno utilizou-se uma técnica chamada de \hyperref[subsec:mascara_binaria]{imagem binária}, descrita na seção de \hyperref[sec:visao_comp]{Visão computacional}. Pode-se ser utilizada como uma máscara para auxiliar o processamento do  mapa no contorno desejado \cite{Aznag2020}.
+Para representar a seleção do contorno utilizou-se uma técnica chamada de imagem binária, segundo \citeonline{Embarcados} consiste em isolar um objeto da imagem. Pode-se ser utilizada como uma máscara para auxiliar o processamento do  mapa no contorno desejado \cite{Aznag2020}.
 
-Utilizou-se duas maneiras para selecionar o contorno, sendo eles: \hyperref[subsubsec:sel_cor]{selecionar por cor} e \hyperref[subsubsec:sel_floodFill]{selecionar por preenchimento de inundação}, ambos explicados na seção de \hyperref[sec:visao_comp]{Visão computacional}.
+Utilizou-se duas maneiras para selecionar o contorno, sendo elas: selecionar por cor e selecionar por preenchimento de inundação. Selecionar por cor segundo \citeonline{OpenCVInRange} consiste em isolar tudo na imagem com aquela cor, já selecionar por preenchimento de inundação segundo \citeonline{OpenCVFloodFill} consiste em um algoritmo de expansão comparando com uma faixa delimitada de cores. Ambos tem-se como saída uma imagem binária.
 
 \subsubsubsection*{Tratamento da imagem binária}
 
