@@ -1,4 +1,5 @@
 \subsection{Diagrama de Voronoi}
+\label{subsec:diagrama_de_voronoi}
 
 Segundo \citeonline{rodrigues_diagrama_2019} diagrama de Voronoi é o particionamento do espaço onde cada região é associada a um ponto do conjunto.
 
@@ -9,7 +10,7 @@ ponto mais próximo, calcular a precipitação de uma área, estudar os padrões
 Seja um conjunto de índices $I_n = \{1, 2, 3, ..., n\}$ e $A = \{p_1, p_2, ..., p_n\} \subset \mathbb{R}^2$ um conjunto de pontos onde $2 \leq n < \infty$, define-se então como região de Voronoi o conjunto de pontos associado a $p_i$, onde d é a distancia euclidiana
 
 \begin{equation}
-	V(p_i) = \{p|d(p_i,p) \leq d(p_i,p);i \neq j, i, j \in I_n\},
+	V(p_i) = \{p|d(p_i,p) \leq d(p_j,p);i \neq j, i, j \in I_n\},
 \end{equation}
 
 Tem-se um conjunto formado por essas regiões sendo $V(A) = {V(1), V(2), ..., V(n)}$ \space\cite{rodrigues_diagrama_2019}.

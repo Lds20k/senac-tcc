@@ -70,7 +70,7 @@ Porém há uma maneira mais performática para fazer isso, inclusive melhorando 
 
 \subsection{Geração procedural do mapa}
 
-Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:geracaoProcedural]{Polygonal Map Generation for Games} com uma implementação não oficial porém baseada no artigo feito em Python.
+Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:geracao_procedural_biomas]{Polygonal Map Generation for Games} com uma implementação feita em Python por \citeonline{polygonal-map-generation}.
 
 \subsubsection{Ilha gerada no contorno}
 
@@ -80,7 +80,7 @@ Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama p
 	\centering
     \caption{Ilustração do cálculo para definir a localização dos vértices.}
 	\includegraphics[width=0.6\textwidth]{figures/explicacao_vertice.png}
-    \legend{Fonte: \space Autoria própria}
+    \legend{Fonte: Autoria própria}
 	\label{fig:explicacao_vertice}
 \end{figure}
 
@@ -90,7 +90,7 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 	\centering
     \caption{Ilustração do diagrama de Voronoi.}
 	\includegraphics[width=0.6\textwidth]{figures/diagrama_voronoi_pontos.png}
-    \legend{Fonte: \space Autoria própria}
+    \legend{Fonte: Autoria própria}
 	\label{fig:diagrama_voronoi_pontos}
 \end{figure}
 
@@ -121,7 +121,7 @@ Por fim, é atribuído o valor da umidade para os polígonos e é redistribuído
 \end{equation}
 
 
-Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker} porém edita-se para chegar nos resultados da \cref{tab:biomes} \space\cite{amitp2010}.
+Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker} porém edita-se para chegar nos resultados da \cref{tab:biomes} \cite{amitp2010}.
 
 \begin{sidewaystable}
 	\centering
@@ -144,7 +144,7 @@ Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada
 	\end{tabularx}
 \end{sidewaystable}
 
-Para gerar o mapa 3d é gerado uma imagem denominada de mapa de altura, construído com base nos dados de elevações do grafo. Basicamente gera-se uma imagem com tonalidades de cinza sendo o pixel branco com valor 255 o ponto mais alto do mapa e o pixel preto com valor 0 o ponto mais baixo. A \cref{fig:heightmap} ilustra uma saída de mapa de altura.
+Para gerar o mapa 3d é gerado uma imagem denominada de mapa de altura, construído com base nos dados de elevações do grafo. Gera-se uma imagem com tonalidades de cinza sendo o pixel branco com valor 255 o ponto mais alto do mapa e o pixel preto com valor 0 o ponto mais baixo. A \cref{fig:heightmap} ilustra uma saída de mapa de altura.
 
 \begin{figure}[!ht]
 	\centering

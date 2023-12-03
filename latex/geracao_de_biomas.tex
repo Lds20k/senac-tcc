@@ -1,15 +1,9 @@
 \subsection{Geração de biomas no diagrama de Voronoi}
-\label{sec:geracaoProcedural}
+\label{sec:geracao_procedural_biomas}
 
-Biomas são regiões ecológicas que possuem uma fauna e flora com atributos estruturais semelhantes \space\cite{maestrovirtuale}. Segundo \citeonline{amitp2010} o primeiro passo para gerar o mapa e os biomas é gerar o litoral, os litorais serão as bordas que irão dizer o que é água e o que é solo. Na \cref{fig:voronoi-land-water} mostra-se essa separação, sendo os polígonos pintados de marrom é o solo e o polígonos azuis representam o mar. Existem algumas formas de gerar o formato da ilha:
+Biomas são regiões ecológicas que possuem uma fauna e flora com atributos estruturais semelhantes \cite{maestrovirtuale}. Segundo \citeonline{amitp2010} gera-se um mapa e seus biomas definindo-se o litoral, os litorais são as bordas que irão separa a água e o solo. Na \cref{fig:voronoi-land-water} mostra-se essa separação, sendo os polígonos marrom o solo e os polígonos azuis o mar.
 
-\begin{itemize}
-    \item Radial: gera ilhas circulares através de ondas senoidais.
-    \item Perlin: utiliza o Perlin Noise para controlar a forma da ilha.
-    \item Quadrado: preenche o mapa inteiro com solo.
-\end{itemize}
-
-É possível utilizar qualquer formato para gerar as ilhas \space\cite{amitp2010}.
+É possível utilizar qualquer formato para gerar as ilhas, como formas geométricas e funções de ruídos como o Perlin Noise \cite{amitp2010}.
 
 \begin{figure}[ht]
 	\caption{Diagrama de Voronoi separado em solo e mar}
@@ -19,7 +13,7 @@ Biomas são regiões ecológicas que possuem uma fauna e flora com atributos est
 	\label{fig:voronoi-land-water}
 \end{figure}
 
-O próximo passo é calcular a elevação do terreno. A elevação será calculada através da distancia de um polígono indicado como solo até o litoral, a elevação é definida pelos cantos dos polígonos \space\cite{amitp2010}. Na \cref{fig:downslopes}
+A elevação do mapa é definida pelos cantos dos polígonos e é calculada através da distancia de todos polígono indicado como solo até o litoral \cite{amitp2010}. A \cref{fig:downslopes} representa essa elevação, sendo os polígonos azuis o mar, os níveis da elevação são os polígonos de verde(mais baixo) a branco(mais alto) e as setas são as direções das encostas.
 
 \begin{figure}[ht]
 	\caption{Diagrama de Voronoi separado em solo e mar com os cantos dos polígonos indicando a direção para o litoral}
@@ -29,11 +23,11 @@ O próximo passo é calcular a elevação do terreno. A elevação será calcula
 	\label{fig:downslopes}
 \end{figure}
 
-Com a elevação, é possível gerar os biomas. Um exemplo seria elevações altas significa que é uma montanha, logo ela deve possuir neve. Adicionando mais uma camada, além da elevação, como a de umidade, podemos gerar uma variedade maior de biomas. A umidade é calculada de quão longe o polígino está de um corpo d'água.
+A elevação é utilizada para gerar os biomas. Um exemplo seria elevações altas significa que é uma montanha, logo ela deve possuir neve. Adicionando mais uma camada, além da elevação, como a de umidade, podemos gerar uma variedade maior de biomas. A umidade é calculada de quão longe o polígino está de um corpo d'água \cite{amitp2010}.
 
 \subsection*{Diagrama de Whittaker}
 
-O diagrama de Whittaker é uma forma de dividir os terrenos gerados a partir da técnica de geração procedural. Esse diagrama inclui valores de temperatura e umidade para separar os biomas, exemplificado na \cref{fig:diagrama-whittaker} \space\cite{wikidotwhittakerdiagram}.
+O diagrama de Whittaker é uma forma de dividir os terrenos gerados a partir da técnica de geração procedural. Esse diagrama inclui valores de temperatura e umidade para separar os biomas, exemplificado na \cref{fig:diagrama-whittaker} \cite{wikidotwhittakerdiagram}.
 
 \begin{figure}[ht]
 	\caption{Diagrama de Whittaker}
@@ -43,7 +37,7 @@ O diagrama de Whittaker é uma forma de dividir os terrenos gerados a partir da 
 	\label{fig:diagrama-whittaker}
 \end{figure}
 
-Usando a elevação como representante da temperatura de um bioma, é possível utilizar o diagrama de Whittaker. Fazendo alterações nesse diagrama, é possível adicionar ou remover biomas. Com essa nova camada possibilita a adição de rios ao mapa \space\cite{amitp2010} e assim obtendo o resultado apresentado na figura \ref{fig:biomes}.
+Usando a elevação como representante da temperatura de um bioma, é possível utilizar o diagrama de Whittaker. Fazendo alterações nesse diagrama, é possível adicionar ou remover biomas. Com essa nova camada possibilita a adição de rios ao mapa \cite{amitp2010} e assim obtendo o resultado apresentado na figura \ref{fig:biomes}.
 
 \begin{figure}[ht]
 	\caption{Resultado final da geração do mapa}
