@@ -65,6 +65,27 @@ class QImageViewer(QMainWindow):
 
         self.setCentralWidget(self.scrollArea)
 
+        system_palette = self.palette()
+        system_window_color = system_palette.color(QPalette.Window)
+
+        self.footer = QWidget(self)
+        self.footer.setStyleSheet(f"background-color: {system_window_color.name()};")
+        self.footer.setFixedWidth(self.width())
+        self.footer.setFixedHeight(30)
+        self.footer.move(0, 0)
+
+        self.footer.sliderText = QLabel("Tolerance", self.footer)
+        self.footer.sliderText.move(10, self.footer.height()/2 - 10)
+
+        self.footer.slider = QSlider(Qt.Horizontal, self.footer)
+        self.footer.slider.setMaximum(5)
+        self.footer.slider.setValue(2)
+        self.footer.slider.move(self.footer.sliderText.width() - 10, self.footer.height()/2 - 6)
+        self.footer.slider.setEnabled(False)
+        self.footer.slider.setFixedWidth(150)
+
+        self.range = 0
+
         self.createActions()
         self.createMenus()
 
@@ -83,7 +104,10 @@ class QImageViewer(QMainWindow):
             line_width=20,
             speed=1.5707963267948966
         )
-
+    
+    def resizeEvent(self, event):
+        self.footer.setFixedWidth(self.width() - 15)
+        self.footer.move(0, self.height() - self.footer.height())
 
     def open(self):
         options = QFileDialog.Options()
@@ -106,11 +130,9 @@ class QImageViewer(QMainWindow):
             image = cv2.resize(image, (new_width, new_height))
             self.update_screen_image(image)
 
-            # Mudar
-            self.toggleMousePressEvent()
-
             self.scrollArea.setVisible(True)
             self.methodMenu.setEnabled(True)
+                
 
     def qimage_to_cv2(self, qimage):
         buffer = np.array(qimage.bits().asarray(
@@ -120,10 +142,14 @@ class QImageViewer(QMainWindow):
         cv2_image = cv2.cvtColor(buffer, cv2.COLOR_BGR2RGB)
         return cv2_image
 
-    def create_mask(self, event):
+    def floodFill(self, event):
+        if self.executionType == "FloodFill":
+            self.range = self.footer.slider.value()
+        self.executionType = None
+        self.toggleMousePressEvent()
+
         x = event.pos().x()
         y = event.pos().y()
-        # c = self.img.pixel(x, y)
 
         width = int(self.image.shape[1])
         height = int(self.image.shape[0])
@@ -135,13 +161,28 @@ class QImageViewer(QMainWindow):
         floodflags |= cv2.FLOODFILL_MASK_ONLY
         floodflags |= (255 << 8)
 
-        _, _, mask, _ = cv2.floodFill(self.image, mask, seed, (255, 0, 0), (10,)*3, (10,)*3, floodflags)
+        _, _, mask, _ = cv2.floodFill(self.image, mask, seed, (255, 0, 0), (self.range,)*3, (self.range,)*3, floodflags)
         _, binary_mask = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
 
         cv2.imwrite("output.png", binary_mask)
 
-        img_in = cv2.imread('output.png', 0)
-        height, width = img_in.shape
+        self.preparete(binary_mask)
+
+    def getByColor(self, event):
+        self.executionType = None
+        self.toggleMousePressEvent()
+
+        x = event.pos().x()
+        y = event.pos().y()
+        r, g, b, _ = self.qImg.pixelColor(x, y).getRgb()
+        bgr = np.array([b, g, r], dtype=np.uint8)
+
+        mask = cv2.inRange(self.image, bgr, bgr)
+        cv2.imwrite("output.png", mask)
+
+        self.preparete(mask)
+
+    def preparete(self, img_in):
         x, y, w, h = cv2.boundingRect(img_in)
         croped_image = img_in[y:y+h, x:x+w]
 
@@ -181,18 +222,39 @@ class QImageViewer(QMainWindow):
         self.aboutAct = QAction("&About", self, triggered=self.about)
         self.aboutQtAct = QAction("About &Qt", self, triggered=qApp.aboutQt)
 
-        self.efficientPSFloodFill = QAction("Floodfill", self, triggered=self.runEfficientPSWorker)
-        self.efficientPSColor = QAction("Color", self, triggered=self.create_mask)
+        self.efficientPSFloodFillOption = QAction("Floodfill", self, triggered=self.executeEfficientPSFloodFill)
+        self.efficientPSColorOption = QAction("Color", self, triggered=self.executeEfficientPSColor)
 
-        self.floodFill = QAction("Floodfill", self, triggered=self.create_mask)
-        self.color = QAction("Color", self, triggered=self.create_mask)
+        self.floodFillOption = QAction("Floodfill", self, triggered=self.executeFloodFill)
+        self.colorOption = QAction("Color", self, triggered=self.executeColor)
 
+    def executeEfficientPSFloodFill(self):
+        self.range = 0
+        self.executionType="FloodFillEfficientPS"
+        self.runEfficientPSWorker()
+    
+    def executeEfficientPSColor(self):
+        self.executionType="Color"
+        self.runEfficientPSWorker()
+        
+    def executeFloodFill(self):
+        self.executionType="FloodFill"
+        self.footer.slider.setEnabled(True)
+        self.toggleMousePressEvent()
+        
+    def executeColor(self):
+        self.executionType="Color"
+        self.toggleMousePressEvent()
 
     def start_loading(self):
         self.spinner.start()
 
     def stop_loading(self):
         self.spinner.stop()
+
+    def set_selection(self):
+        self.stop_loading()
+        self.toggleMousePressEvent()
 
     def createMenus(self):
         self.fileMenu = QMenu("&File", self)
@@ -206,11 +268,11 @@ class QImageViewer(QMainWindow):
 
         self.methodMenu = QMenu("&Method", self)
         self.methodMenu.addSection("EfficientPS")
-        self.methodMenu.addAction(self.efficientPSFloodFill)
-        self.methodMenu.addAction(self.efficientPSColor)
+        self.methodMenu.addAction(self.efficientPSFloodFillOption)
+        self.methodMenu.addAction(self.efficientPSColorOption)
         self.methodMenu.addSection("Selection")
-        self.methodMenu.addAction(self.floodFill)
-        self.methodMenu.addAction(self.color)
+        self.methodMenu.addAction(self.floodFillOption)
+        self.methodMenu.addAction(self.colorOption)
         self.methodMenu.setEnabled(False)
 
         self.menuBar().addMenu(self.fileMenu)
@@ -224,8 +286,8 @@ class QImageViewer(QMainWindow):
     def update_screen_image(self, image):
         self.image = image
 
-        qImg = cv2image_to_qimage(image)
-        self.imageLabel.setPixmap(QPixmap.fromImage(qImg))
+        self.qImg = cv2image_to_qimage(image)
+        self.imageLabel.setPixmap(QPixmap.fromImage(self.qImg))
         self.imageLabel.adjustSize()
 
     def runEfficientPSWorker(self):
@@ -248,11 +310,13 @@ class QImageViewer(QMainWindow):
         logging.info("Executando EfficientPSWorker")
         self.thread.start()
 
-        self.thread.finished.connect(self.stop_loading)
+        self.thread.finished.connect(self.set_selection)
 
     def toggleMousePressEvent(self):
-        if self.imageLabel.mousePressEvent != self.create_mask:
-            self.imageLabel.mousePressEvent = self.create_mask
+        if self.executionType in ["FloodFill", "FloodFillEfficientPS"]:
+            self.imageLabel.mousePressEvent = self.floodFill
+        elif self.executionType == "Color":
+            self.imageLabel.mousePressEvent = self.getByColor
         else:
             self.imageLabel.mousePressEvent = None
 
