@@ -41,7 +41,7 @@ A arquitetura Mask R-CNN é derivado do Fast R-CNN — aprimoramento do R-CNN ap
 \subsubsubsection*{Segmentação panóptica}
 
 Um problema encontrado na segmentação semântica é que objetos de mesma classe não são separados como na segmentação de instância, logo surgiu uma ideia para criar uma solução usando as duas técnicas. Esse conceito surgiu do trabalho \citeonline{kirillov2019panoptic} e consiste na definição geral da ideia, uma métrica — que será explicada posteriormente — unificada para classificar os resultados do modelo além de fazer a distinção entre coisas — ou stuff — que não são contáveis, como o céu e os objetos — ou things — que são contáveis como carros, pessoas, etc.
-Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Cityscapes, Mapillary Vistas, ADE20K, e Indian Driving Dataset. Cada conjunto de dados possui diversas classes para o modelo aprender \space\cite{v7labs2022panoptic}.
+Os principais conjunto de dados para tarefa panóptica são COCO-Panoptic, Cityscapes, Mapillary Vistas, ADE20K, e Indian Driving Dataset. Cada conjunto de dados possui diversas classes para o modelo aprender e todos são de contexto urbano que apesar de ser amplo ainda tem suas limitações \space\cite{v7labs2022panoptic}.
 
 \subsubsubsection*{Métricas e técnicas}
 \label{sec:metricas_tecnicas}
