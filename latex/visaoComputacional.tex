@@ -56,6 +56,8 @@ Esse processo de treinamento e reconhecimento de padrões permite que os computa
 
 Em visão computacional é comum usar algumas técnicas para separar objetos de interesse pois a partir disso é possível aplicar alterações em objetos específicos, e para isso utiliza-se um técnica chamada de máscara binária \cite{NVIDIA,Embarcados}.
 
+Ademais, existem diversas opções de ferramentas que auxiliam na criação de interfaces gráficas para visualização e manipulação de imagens, fornecendo funções e modelos para criar telas, sendo uma das mais utilizadas o PyQt5 \cite{uniteai2023}.
+
 \subsection{Máscara binária}
 \label{subsec:mascara_binaria}
 
@@ -63,15 +65,24 @@ A máscara binária — ou imagem binária — contém apenas duas cores, geralm
 
 Será abordado dois algoritmos com propostas parecidas para selecionar um objeto e destaca-lo em uma imagem binária, sendo eles selecionar imagem por cor e por inundação, ambos utilizando o biblioteca em python OpenCV, uma biblioteca multiplataforma para visão computacional, tendo métodos para auxiliar na manipulação por exemplo de imagens \cite{OpenCV}.
 
-\subsubsection*{Selecionar por cor}
+\subsubsection{Selecionar por cor}
 \label{subsubsec:sel_cor}
 
 O método de selecionar por cor se baseia em pegar a cor específica do clique na imagem e percorrer a imagem comparando a cor alvo com a cor da imagem, caso seja a mesma pinte o mesmo pixel da nova imagem como branco e caso não seja pinte como preto. Uma maneira performática de selecionar por cor é definir um espectro de cores e aplicar uma mascara usando o método \textit{inRange} da biblioteca OpenCV, pode-se escolher apenas uma cor \cite{OpenCVInRange}.
 
-\subsubsection*{Selecionar por preenchimento de inundação}
+\subsubsection{Selecionar por preenchimento de inundação}
 \label{subsubsec:sel_floodFill}
 
 O método de  selecionar por preenchimento por inundação é um algoritmo de expansão a partir de um pixel, validando se contém a mesma cor. A implementação inicia uma matriz de zeros com tamanho 2 pixeis maior do que a imagem original. O clique na  imagem será a semente — ou em inglês  seed — e a partir disso o algoritmo começa uma expansão para os pixeis vizinhos — de cima, baixo, esquerda e direita — caso contenha o mesmo valor de cor pinta de cor branca, e refaz com os pixeis marcados  anteriormente até não ter mais o pontos brancos para marcar \cite{OpenCVFloodFill}.
+
+\subsection{PyQt5}
+
+O projeto incorpora as bibliotecas Qt em C++, proporcionando recursos para o desenvolvimento multiplataforma. Isso simplifica a criação de interfaces em Python em diversos ambientes, como Windows, Mac, Linux e dispositivos móveis \cite{pyqt5}.
+
+
+
+
+
 
 
 
