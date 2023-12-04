@@ -46,7 +46,7 @@ Utilizou-se duas maneiras para selecionar o contorno, sendo elas: selecionar por
 
 \subsubsubsection*{Tratamento da imagem binária}
 
-Após a saída dos algoritmos de seleção, o objeto selecionado é detectado e centralizado em uma nova imagem, depois recortamos e redimensionamos a partir do centro de forma que fique quadrada. Todos os passos são observáveis na \cref{fig:saidas_selecao}.
+De acordo com \citeonline{Embarcados}, após a saída dos algoritmos de seleção, o objeto selecionado é detectado e centralizado em uma nova imagem, depois recortamos e redimensionamos a partir do centro de forma que fique quadrada. Todos os passos são observáveis na \cref{fig:saidas_selecao}.
 
 \begin{figure}[!ht]
 	\centering
@@ -56,7 +56,7 @@ Após a saída dos algoritmos de seleção, o objeto selecionado é detectado e 
 	\label{fig:saidas_selecao}
 \end{figure}
 
-Porém há uma maneira mais performática para fazer isso, inclusive melhorando os resultados devido ao redimensionamento e a borda não chegarem a um bom cenário. Essa outra maneira usa um método para localizar o objeto na imagem binária e corta a imagem com as coordenadas e dimensões oferecidas. Após isso é acrescentado uma borda na altura ou largura com a folga entre as duas, tornando assim a imagem quadricular, depois é redimensionado para manter um padrão e acrescentado mais uma vez uma borda para representar o mar. É possível observar na \cref{fig:saidas_selecao_perf} que o objeto não foi distorcido como na método anterior e manteve-se centralizada na imagem final.
+Porém há uma maneira mais performática para fazer isso, inclusive melhorando os resultados devido ao redimensionamento e a borda não chegarem a um bom cenário. Essa outra maneira usa um método para localizar o objeto na imagem binária e corta a imagem com as coordenadas e dimensões oferecidas. Após isso é acrescentado uma borda na altura ou largura com a folga entre as duas, tornando assim a imagem quadricular, depois é redimensionado para manter um padrão e acrescentado mais uma vez uma borda para representar o mar. É possível observar na \cref{fig:saidas_selecao_perf} que o objeto não foi distorcido como na método anterior e manteve-se centralizada na imagem final \cite{Embarcados}.
 
 \begin{figure}[!ht]
 	\centering
@@ -72,7 +72,7 @@ Usou-se como base para a geração procedural do mapa o artigo de \citeonline{am
 
 \subsubsection{Ilha gerada no contorno}
 
-Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, esses pontos vizinhos são encontrados a partir de uma circunferência no ponto e se existir algum ponto é marcado como vizinho e esse local é chamado de região como descrito na \cref{eq:voronoi_regiao}, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vértice, e a cor rosa representa a aresta do polígono.
+Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, esses pontos vizinhos são encontrados a partir de uma circunferência no ponto e se existir algum ponto é marcado como vizinho e esse local é chamado de região como descrito na \cref{eq:voronoi_regiao}, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vértice, e a cor rosa representa a aresta do polígono \cite{amitp2010,rodrigues_diagrama_2019}.
 
 \begin{figure}[!ht]
 	\centering
@@ -92,11 +92,11 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 	\label{fig:diagrama_voronoi_pontos}
 \end{figure}
 
-Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano.
+Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano \cite{amitp2010}.
 
 Para se calcular a elevação dos polígonos primeiramente é calculado a elevação das arestas de todos os polígonos, isso é feito a partir de uma busca em profundidade que possui o inicio em todas as arestas que tocam a borda do gráfico. A toda nova iteração, as arestas que tocam os cantos são atribuídas com o valor 0, e assim defini-se uma evolução da altura conforme chega-se ao centro do mapa.
 Após isso é feito o calculo de redistribuição de elevação, que com base na elevação calculada anteriormente é feito uma lista ordenadas pela elevação, começando da menor para a maior. Cada item da lista é enumerado a partir de um índice i e com essa enumeração é calculado usando a \cref{eq:total_indexes}. Após isso é calculado a \cref{eq:vertex_elevation} sendo X a elevação do vértice.
-E por final para calcular a elevação do polígino é feito a média dos vértices que pertencem ao polígonos.
+E por final para calcular a elevação do polígino é feito a média dos vértices que pertencem ao polígonos \cite{amitp2010}.
 
 \begin{equation}
 	\label{eq:total_indexes}
@@ -108,10 +108,11 @@ E por final para calcular a elevação do polígino é feito a média dos vérti
 	X = sqrt(fator) - sqrt(sqrt * (1 - Y))
 \end{equation}
 
-Para criação dos rios busca-se os vértices do tipo terra e litoral que possuem uma elevação miníma definida, ou se os vértices se localizam próximos de um lago, então armazena-se em uma lista. Seleciona-se de forma pseudoaleatória uma quantidade de vértices e verifica-se se o tipo de terreno dos vizinhos dos vértices e das arestas que foram tocados pelos vértices. Para cada um desses é verificado se o tipo de terrenho é terra ou litoral. Após isso, busca-se em todas as arestas a dona do vértice, ao encontrar é marcado como sendo um rio.
+Para criação dos rios busca-se os vértices do tipo terra e litoral que possuem uma elevação miníma definida, ou se os vértices se localizam próximos de um lago, então armazena-se em uma lista. Seleciona-se de forma pseudoaleatória uma quantidade de vértices e verifica-se se o tipo de terreno dos vizinhos dos vértices e das arestas que foram tocados pelos vértices. Para cada um desses é verificado se o tipo de terrenho é terra ou litoral. Após isso, busca-se em todas as arestas a dona do vértice, ao encontrar é marcado como sendo um rio \cite{amitp2010}.
 
-Na geração de umidade é atribuído um valor para cada vértice que possui uma aresta do tipo rio, ou se é vizinho de um lago, e é colocado esse item em uma fila. Logo em seguida, busca-se em profundidade, em todos os vértices adjacentes dos itens da fila, e é calculado uma nova umidade a partir de uma multiplicação de um fator com o valor da umidade anteriormente atribuída, e verifica-se se os vértices adjacentes possuem uma umidade maior que a nova umidade calculada, se forem é colocado o vértice adjacente na fila e é atribuído o valor da nova umidade. Para terrenos do tipo oceano é atribuído o valor máximo de umidade.
-Por fim, é atribuído o valor da umidade para os polígonos e é redistribuído a umidade a partir de uma lista polígonos com umidades ordenadas, para cada item i executa-se a \cref{eq:umidade} e assim é calculado o valor final da umidade.
+Na geração de umidade é atribuído um valor para cada vértice que possui uma aresta do tipo rio, ou se é vizinho de um lago, e é colocado esse item em uma fila. Logo em seguida, busca-se em profundidade, em todos os vértices adjacentes dos itens da fila, e é calculado uma nova umidade a partir de uma multiplicação de um fator com o valor da umidade anteriormente atribuída, e verifica-se se os vértices adjacentes possuem uma umidade maior que a nova umidade calculada, se forem é colocado o vértice adjacente na fila e é atribuído o valor da nova umidade. Para terrenos do tipo oceano é atribuído o valor máximo de umidade \cite{amitp2010}.
+
+Por fim, é atribuído o valor da umidade para os polígonos e é redistribuído a umidade a partir de uma lista polígonos com umidades ordenadas, para cada item i executa-se a \cref{eq:umidade} e assim é calculado o valor final da umidade \cite{amitp2010}.
 
 \begin{equation}
 	\label{eq:umidade}
@@ -119,7 +120,7 @@ Por fim, é atribuído o valor da umidade para os polígonos e é redistribuído
 \end{equation}
 
 
-Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a função descrita na \cref{fig:diagrama-whittaker} porém edita-se para chegar nos resultados da \cref{tab:biomes} \cite{amitp2010}.
+Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada um desses parâmetros liga-se um determinado bioma. E para atribuição final aplica-se a classificação descrita na \cref{fig:diagrama-whittaker}, porem editou-se o eixo de temperatura para elevação para chegar nos resultados da \cref{tab:biomes}, pois o diagrama de Whittaker não leva em consideração a elevação \cite{amitp2010}.
 
 \begin{sidewaystable}
 	\centering
@@ -142,7 +143,7 @@ Para assinalar os biomas verifica-se o tipo do terreno, altura e a umidade, cada
 	\end{tabularx}
 \end{sidewaystable}
 
-Para gerar o mapa 3d é gerado uma imagem denominada de mapa de altura, construído com base nos dados de elevações do grafo. Gera-se uma imagem com tonalidades de cinza sendo o pixel branco com valor 255 o ponto mais alto do mapa e o pixel preto com valor 0 o ponto mais baixo. A \cref{fig:heightmap} ilustra uma saída de mapa de altura.
+Para gerar o mapa de três dimensões é gerado uma imagem denominada de mapa de altura, construído com base nos dados de elevações do grafo. Gera-se uma imagem com tonalidades de cinza sendo o pixel branco com valor 255 o ponto mais alto do mapa e o pixel preto com valor 0 o ponto mais baixo, é possível observar isso na \cref{fig:heightmap} \cite{planetzoo}.
 
 \begin{figure}[!ht]
 	\centering
@@ -154,20 +155,19 @@ Para gerar o mapa 3d é gerado uma imagem denominada de mapa de altura, constru�
 
 \subsubsection{Unity - Mapa 3d}
 
-Para demonstrar uma aplicação das imagens utilizou-se o motor gráfico Unity. Criou-se uma automatização entre a geração do mapa e a atualização no projeto Unity. Este processo pode ser dividido em três partes sendo elas o terreno, minimapa em 3d e a jogabilidade.
-
+Para demonstrar uma aplicação das imagens utilizou-se o motor gráfico Unity. Criou-se uma automatização entre a geração do mapa e a atualização no projeto Unity. Este processo pode ser dividido em três partes sendo elas o terreno, minimapa em 3D e a jogabilidade \cite{unitywebpage}.
 
 \subsubsubsection{Terreno}
-Para atualizar o terreno usou-se primeiramente o pacote \textit{Terrain Tools} que facilita pois é possível usar um mapa de altura em png ou raw para criar um terreno, ao executar cria-se um terreno no qual o pixel mais branco (255) corresponde a altura mais alta.
+Para atualizar o terreno usou-se primeiramente o pacote \textit{Terrain Tools} que facilita pois é possível usar um mapa de altura em png ou raw para criar um terreno, ao executar cria-se um terreno no qual o pixel mais branco (255) corresponde a altura mais alta \cite{unity-terrain-tools}.
 
-Porém esse processo era manual e a ideia era que fosse automatizado, logo utilizou-se um algoritmo ligado a câmera do personagem que toda vez em que inicia-se a cena atualiza-se o terreno com a nova imagem de mapa 3d em raw. O algoritmo abre a imagem e percorre anotando o relevo proporcional a uma matriz e depois aplica no terreno.
+Porém esse processo era manual e a ideia era que fosse automatizado, logo utilizou-se um algoritmo ligado a câmera do personagem que toda vez em que inicia-se a cena atualiza-se o terreno com a nova imagem de mapa 3d em raw. O algoritmo abre a imagem e percorre anotando o relevo proporcional a uma matriz e depois aplica no terreno \cite{unity-terrain-tools}.
 
-Além da funcionalidade de relevo adicionou-se um pacote para alterar a textura de acordo com a altura para diferenciar o oceano da ilha e o bioma de floresta. Utilizou-se o pacote denominado de \textit{Terrain Toolkit 2017}, no script é carregado as texturas e definido alguns parâmetros para atualizar com o terreno.
+Além da funcionalidade de relevo adicionou-se um pacote para alterar a textura de acordo com a altura para diferenciar o oceano da ilha e o bioma de floresta. Utilizou-se o pacote denominado de \textit{Terrain Toolkit 2017}, no script é carregado as texturas e definido alguns parâmetros para atualizar com o terreno \cite{unity-terrain-toolkit}.
 
 \subsubsubsection{Minimapa}
-A saída da geração procedural visa dois principais resultados, sendo eles: o mapa de altura para definir o terreno e o mapa 2d que pode ser usado como minimapa.
+A saída da geração procedural visa dois principais resultados, sendo eles: o mapa de altura para definir o terreno e o mapa 2d que pode ser usado como minimapa \cite{unitywebpage}.
 
-Para usar o mapa 2d como minimapa de forma automatizada foi necessário adicionar nos \textit{scripts} uma conversão de uma imagem em formato PNG para um Sprite (2D e UI) e atualizar nas propriedades do objeto de jogo. Possibilitando a localização de um ícone representando o jogador nesse minimapa por meio da projeção das coordenadas 3D do mundo do jogo em um mapa 2D.
+Para usar o mapa 2d como minimapa de forma automatizada foi necessário adicionar nos \textit{scripts} uma conversão de uma imagem em formato PNG para um Sprite (2D e UI) e atualizar nas propriedades do objeto de jogo. Possibilitando a localização de um ícone representando o jogador nesse minimapa por meio da projeção das coordenadas 3D do mundo do jogo em um mapa 2D \cite{unitywebpage}.
 
 \subsubsubsection{Jogabilidade}
 
