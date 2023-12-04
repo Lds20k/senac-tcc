@@ -74,11 +74,11 @@ Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:ger
 
 \subsubsection{Ilha gerada no contorno}
 
-Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vértice, e a cor rosa representa a aresta do polígono.
+Para gerar o mapa da ilha é preciso gerar um diagrama de Voronoi. No diagrama primeiro é definido os pontos de quantidade preestabelecida e de localização pseudo-aleatória, esses pontos serão os centroides dos polígonos. Os vértices dos polígonos são gerados a partir da intersecção entre retas perpendiculares aos pontos médios entre os nós vizinhos, esses pontos vizinhos são encontrados a partir de uma circunferência no ponto e se existir algum ponto é marcado como vizinho e esse local é chamado de região como descrito na \cref{eq:voronoi_regiao}, logo é criado outro grafo com esses pontos. A definição dos vértices é ilustrada na \cref{fig:explicacao_vertice}, sendo os pontos vermelhos os centroides que são ligados por linhas pretas para gerar pontos médios, representados por pontos amarelos para traçar uma reta perpendicular, depois é calculado a intersecção representado pelo ponto azul que se torna o vértice, e a cor rosa representa a aresta do polígono.
 
 \begin{figure}[!ht]
 	\centering
-    \caption{Ilustração do cálculo para definir a localização dos vértices.}
+    \caption{Ilustração do processo de criação do polígono.}
 	\includegraphics[width=0.6\textwidth]{figures/explicacao_vertice.png}
     \legend{Fonte: Autoria própria}
 	\label{fig:explicacao_vertice}
