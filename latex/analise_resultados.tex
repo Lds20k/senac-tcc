@@ -1,9 +1,10 @@
-\section{Analise dos resultados}
+\section{Análise dos resultados}
 
-Percebe-se com os dados das \crefrange{tab:final_input_output_2d}{tab:final_output_2d_output_3d} que os resultados são bem parecidos e que quanto mais pontos forem usados melhor a precisão em todas as métricas, porém demora mais segundos em média para executar. Portanto deve-se analisar o cenário para o processamento e qual o melhor custo benefício.
+Com dos dados e observações da \cref{tab:final_input_output_2d} e da \cref{tab:final_input_output_3d} é possível afirmar que a hipótese inicial se concluiu, pois quanto mais pontos o diagrama de Voronoi tiver maior será a compatibilidade com o contorno. É possível afirmar isso devido a tendência entre as métricas dessas duas tabelas, as métricas IoU, Acc, F1 e MCC aumentam a cada linha e as métricas FDR  e FNR diminuem o erro encontrado. Outra métrica importante é a duração da geração procedural que quanto mais pontos maior a duração em segundos. Portanto deve-se analisar o cenário para o processamento e qual o melhor custo benefício.
 
-Isso se comprova nas ilustrações da última execução — com 300 pontos — de cada combinação de imagens nas \cref{fig:combs_result}, percebe-se que os erros ilustrados com cores vermelha e verde são poucos e os acertos em branco e cinza prevalecem na grande maioria da imagem.
+O resultado satisfatório se comprova nas ilustrações da última execução — com 300 pontos — de cada combinação de imagens nas \cref{fig:combs_result}, percebe-se que os erros ilustrados com cores vermelha e verde são poucos e os acertos em branco e cinza prevalecem na grande maioria da imagem.
 
+Além disso a \cref{tab:final_output_2d_output_3d} mostra-se com as observações que se mantém a confiabilidade entre a imagem 2d (minimapa) e o mapa de altura (que formará o mapa 3d) para que possa ter a funcionalidade de localização em tempo real dentro da execução do jogo.
 
 % destacar com logica que a duração maior é para criar o grafo com os biomas e que gerar os mapas é a parte que demora pouco
 

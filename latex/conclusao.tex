@@ -1,6 +1,12 @@
 \section{Conclusão}
 
-Esta monografia apresentou uma solução capaz de cria mapas 2d e 3d a partir de um contorno de uma imagem utilizando segmentação panóptica. Pode-se dividir em 4 fases sendo elas: segmentação da imagem, seleção de um contorno, geração procedural dos mapas e a automação para o terreno no Unity.
+Esta monografia apresentou uma solução capaz de cria mapas 2d e 3d a partir de um contorno de uma imagem utilizando segmentação panóptica. A implementação do projeto pode ser categorizada em seis fases distintas: primeiramente, a segmentação de imagens; em seguida, a seleção de contornos; a terceira fase envolve a geração procedural de mapas com biomas variados; a quarta etapa consiste em desenvolver testes para avaliar a eficácia da geração procedural; a quinta fase aborda a análise de casos de pós-processamento; finalmente, a sexta e última etapa se concentra na integração das ferramentas mencionadas por meio de uma interface gráfica intuitiva.
+
+Os trabalhos relacionados foram de extrema importância para concluir esta monografia por o trabalho proposto por \citeonline{kirillov2019panoptic} proporcionou o entendimento e base para segmentação panóptica que é a junção entre a segmentação de instância e semântica além de dar base para a técnica de classificação de conjuntos que possibilitou todas as métricas usadas para validar a hipótese inicial. O modelo eficiente de segmentação panóptica descrito por \citeonline{mohan2020efficientps} auxiliou para segmentar as imagens e poder seleciona-lás em prol de criar um mapa proceduralmente para jogos descrito por \citeonline{amitp2010} com o contorno selecionado.
+
+Com essa fundamentação teórica foi possível construir o protótipo e os testes propostos.
+
+Além disso a proposta inicial foi provada, caso aumente os pontos do diagrama de Voronoi para gerar proceduralmente o mapa terá como resultado final uma aproximação maior do contorno da ilha gerado com o contorno selecionado a partir de técnicas de segmentação.
 
 Portanto pode-se afirmar que o objetivo do trabalho foi concluído com um resultado satisfatório. Porém pelo fato de existir uma proporção entre adicionar mais pontos e melhorar os resultados junto com o tempo de execução, pode ser um problema em algum cenário com um equipamento com processamento inferior. Além do fato do fato da inteligência artificial ter sido desenvolvimento usando a biblioteca CUDA Toolkit que pode limitar ainda mais o devido as condições do cenário ideal.
 
