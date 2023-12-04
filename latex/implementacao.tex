@@ -4,11 +4,9 @@ Pode-se dividir a implementação em cinco partes, sendo elas: segmentar imagens
 
 \subsection{Segmentar imagens}
 
-A segmentação da imagem é usada para classificar os píxeis da imagem a partir de padrões reconhecidos por uma inteligência artificial. A partir disso é possível o usuário selecionar o contorno para gerar o mapa.
+A segmentação da imagem é usada para classificar os píxeis da imagem a partir de padrões reconhecidos por uma inteligência artificial. A partir disso é possível o usuário selecionar o contorno para gerar o mapa \cite{dp_semantic_segmantation, lapix}.
 
-A linguagem de programação utilizada para desenvolvimento do projeto foi Python pois existem muitas bibliotecas que auxiliam na criação de arquiteturas complexas de Inteligência Artificial como o \hyperref[sec:EfficientPS]{EfficientPS}.
-
-Utilizou-se o código aberto oficial do trabalho cientifico postado no repositório de \citeonline{efficientpsGit} que foi baseado no tópico \hyperref[sec:EfficientPS]{EfficientPS}.
+Utilizou-se o modelo EfficientPS que segundo \citeonline{mohan2020efficientps} é uma solução eficiente para a segmentação panóptica. E também o código postado no repositório de \citeonline{efficientpsGit}.
 
 Utilizou-se um arquivo pré treinado desse modelo contendo o aprendizado do conjunto de imagens do \textit{Cityscapes} para segmentação panóptica, a ideia inicial era treinar com pelo menos mais um conjunto de dados porém surgiu-se diversos desafios para serem solucionados, dentre eles: conseguir autorização para baixar conjuntos de dados específicos para segmentação panóptica, outro problema foi preparar esse conjunto de dados para processar o aprendizado, além de problemas de limitação de processamento bruto. Portante decidiu-se utilizar o próprio modelo salvo baixado do repositório.
 
@@ -70,7 +68,7 @@ Porém há uma maneira mais performática para fazer isso, inclusive melhorando 
 
 \subsection{Geração procedural do mapa}
 
-Usou-se como base para a geração procedural do mapa o artigo \hyperref[sec:geracao_procedural_biomas]{Polygonal Map Generation for Games} com uma implementação feita em Python por \citeonline{polygonal-map-generation}.
+Usou-se como base para a geração procedural do mapa o artigo de \citeonline{amitp2010} com uma implementação feita em Python por \citeonline{polygonal-map-generation}.
 
 \subsubsection{Ilha gerada no contorno}
 
@@ -174,13 +172,26 @@ Para usar o mapa 2d como minimapa de forma automatizada foi necessário adiciona
 \subsubsubsection{Jogabilidade}
 
 Criou-se um personagem com movimentação para andar pelo mapa baseado no vídeo no Youtube de \citeonline{firstPersonMovement}. Adicionando os objetos e o script principal além de criar uma tag de chão para detectar a colisão é possível jogar no mapa andando em todas as direções e pulando.
+
 \subsection{Testes}
 
-Será feito um teste baseado no subtópico \hyperref[sec:metricas_tecnicas]{Métricas e técnicas} no qual irá comparar uma combinação de imagens podendo conter a imagem de entrada do algoritmo de geração procedural ou alguma saída, mapa de altura ou mapa 2d. Em maioria, será utilizado a métrica IoU pois esta é a que pior classifica nosso modelo e também facilita a percepção de melhora, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
+Criou-se testes para comparar uma combinação de imagens, podendo conter a imagem de entrada do algoritmo de geração procedural ou alguma saída, mapa de altura ou mapa 2d. Para mensurar a qualidade usou-se como base a técnica descrita por \citeonline{kirillov2019panoptic} chamada de classificação dos conjuntos, na qual cria uma nova imagem em que cada pixel será de algum conjunto dentre quatro: Verdadeiros positivos, Verdadeiros negativos, Falsos positivos e Falsos negativos. A \cref{fig:representacao} apresenta a ilustração da classificação dos conjuntos, sendo a imagem a, a imagem de entrada para geração procedural (saída da seleção), a imagem b, o mapa de altura que é uma das saídas da geração procedural, a imagem c, o filtro binário a partir do mapa de altura, ou seja, apenas os pixeis com cor monocromática zero serão mantidos como preto e qualquer alteração será marcado como branco, a imagem d, é a ilustração dos conjuntos entre a imagem de entrada e o filtro binário do mapa de altura, sendo a cor cinza o união entre cores pretas, a cor branca é a união de cores brancas, a cor verde quando a imagem de entrada tem cor branca porém o filtro binário tem cor preta e por fim a cor vermelha é quando o filtro tem a cor branca porém na imagem de entrada tem a cor preta.
 
-Dentre essas métricas, será utilizado também uma métrica para o desfoque encontrado em uma imagem, aplica um filtro para detectar bordas em x e y, calcula o gradiente e resulta o desvio padrão. Outra métrica utilizada nos testes foi a duração do tempo no código, medida em segundos e apenas contabilizando a parte de geração procedura dos mapas.
+\begin{figure}[!ht]
+	\centering
+    \caption{Ilustração da classificação de conjuntos}
+	\includegraphics[width=0.8\textwidth]{figures/representacao_classificacao.png}
+    \legend{Fonte: \space Autoria própria}
+	\label{fig:representacao}
+\end{figure}
 
-Criou-se um teste genérico para reutilizar em diversos testes e facilitar a reprodução caso algo mude. É definido na chamada do teste quais imagens será feito as métricas, com isso é possível definir todas combinações possíveis. Para cada combinação será executado 5 imagens de entrada pré-definidas e em cada imagem irá percorrer um laço baseado em algum modificador sendo eles, tamanho do filtro de desfoque, quantidade de pontos ou tamanho da borda no mapa 2d, em cada iteração do parâmetro modificador será executado três vezes.
+Depois foi contabilizado esses pixeis com cores diferentes para utilizar em diversas métricas baseadas na classificação dos conjuntos, sendo elas: F1 Score, Coeficiente de correlação de Matthews, Taxa de descoberta falsa, Taxa de Falso Negativo, Acurácia, União sobre intersecção, Qualidade panóptica \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}.
+
+% A métrica IoU pois esta é a que pior classifica nosso modelo e também facilita a percepção de melhora, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
+
+Além dessas métricas, utilizou-se também uma métrica para o desfoque encontrado em uma imagem, aplica-se um filtro para detectar bordas em x e y, calcula o gradiente e resulta o desvio padrão, isso serve para mensurar a harmonia do mapa de alturas. Outra métrica utilizada nos testes foi a duração do tempo no código, medida em segundos e apenas contabilizando a parte de geração procedura dos mapas.
+
+Criou-se um teste genérico para reutilizar em diversos testes e facilitar a reprodução caso haja mudanças. É definido na chamada do teste as imagens e métricas, com isso é possível definir todas combinações possíveis. Para cada combinação será executado 5 imagens de entrada pré-definidas e em cada imagem irá percorrer um laço baseado em alguma variável de geração procedural sendo elas: tamanho do filtro de desfoque, quantidade de pontos ou tamanho da borda no mapa 2d. Em cada iteração da variável, será executado três vezes.
 
 Em cada iteração de todos esses laços aninhados será gerado proceduralmente algum mapa ou os dois, processado as métricas e armazenado, após isso será calculado a média das métricas e criado uma tabela em \LaTeX como resultado.
 
