@@ -30,7 +30,7 @@ Percebeu-se que o resultado do modelo proposto não foi o esperado pois objetos 
 	\label{fig:expectativa}
 \end{figure}
 
-Seguiu-se os passos citados em uma publicação de \citeonline{efficientps_issue23} no repositório de \citeonline{efficientpsGit} porém o resultado obtido não foi satisfatório pois não possível discernir quais segmentos pertenciam as respectivas classes, o resultado é ilustrado na \cref{fig:resultado_obtido}.
+Seguiu-se os passos citados em uma publicação de \citeonline{efficientps_issue23} no repositório de \citeonline{efficientpsGit} porém o resultado obtido não foi satisfatório pois não foi possível discernir quais segmentos pertenciam as respectivas classes, o resultado é ilustrado na \cref{fig:resultado_obtido}.
 
 \begin{figure}[!ht]
 	\centering
@@ -58,7 +58,7 @@ Após a saída dos algoritmos de seleção, o objeto selecionado é detectado e 
 	\label{fig:saidas_selecao}
 \end{figure}
 
-Porém há uma maneira mais performática para fazer isso, inclusive melhorando os resultados devido ao redimensionamento e a borda não chegarem a um bom cenário. Essa outra maneira usa um método para localizar o objeto na imagem binária e corta a imagem com as coordenadas e dimensões oferecidas. Após isso é acrescentado uma borda na altura ou largura com a folga entre as duas, tornando assim a imagem quadricular, depois é redimensionado para manter um padrão e acrescentado mais uma vez uma borda para representar o mar. É possível observar na \cref{fig:saidas_selecao_perf} que o objeto não foi distorcido como na método anterior e manteve-se centralizada na imagem final.
+Porém há uma maneira mais performática para fazer isso, inclusive melhorando os resultados devido ao redimensionamento e a borda não chegarem a um bom cenário. Essa outra maneira usa um método para localizar o objeto na imagem binária e corta a imagem com as coordenadas e dimensões oferecidas. Após isso é acrescentado uma borda na altura ou largura com a folga entre as duas, tornando assim a imagem quadricular, depois é redimensionado para manter um padrão e acrescentado mais uma vez uma borda para representar o mar. É possível observar na \cref{fig:saidas_selecao_perf} que o objeto não foi distorcido como no método anterior e manteve-se centralizada na imagem final.
 
 \begin{figure}[!ht]
 	\centering
