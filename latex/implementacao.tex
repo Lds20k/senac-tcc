@@ -193,7 +193,7 @@ Criou-se testes para comparar uma combinação de imagens, podendo conter a imag
 	\label{fig:representacao}
 \end{figure}
 
-Depois foi contabilizado esses pixeis com cores diferentes para utilizar em diversas métricas baseadas na classificação dos conjuntos, sendo elas: F1 Score, Coeficiente de correlação de Matthews, Taxa de descoberta falsa, Taxa de Falso Negativo, Acurácia, União sobre intersecção, Qualidade panóptica \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}.
+Depois foi contabilizou-se esses pixeis com cores diferentes para utilizar em diversas métricas baseadas na classificação dos conjuntos, sendo elas: F1 Score, Coeficiente de correlação de Matthews, Taxa de descoberta falsa, Taxa de Falso Negativo, Acurácia e União sobre intersecção \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}.
 
 % A métrica IoU pois esta é a que pior classifica nosso modelo e também facilita a percepção de melhora, metrificando a semelhança obtida do contorno desejado. Portanto quanto maior essa métrica maior a compatibilidade com o contorno inicialmente proposto.
 
@@ -214,7 +214,7 @@ Analisando-se o resultado gerado no Unity do mapa 3d na \cref{fig:Unity_init} pe
 	\label{fig:Unity_init}
 \end{figure}
 
-Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:Unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual dos conjuntos definidos no subtópico \hyperref[sec:classificacao_conjuntos]{Classificação de conjuntos}.
+Aplicando um filtro — ou kernel — de desfoque com tamanho 100x100, obteve-se o resultado ilustrado na \cref{fig:Unity_blur}. Porém se analisar a \cref{tab:blur_error_input_output_3d} pode-se observar que o resultado piorou as métricas, conclui-se que o desfoque piorou a qualidade de equivalência de contornos, aumentando um problema de escala, visto que apenas o erro do mapa de altura foi encontrado. Na \cref{fig:comparando_blur} observa-se uma representação visual da classificação dos conjuntos definido em \citeonline{kirillov2019panoptic}, sendo a imagem a, o resultado da comparação entre a imagem de entrada e a saída do mapa de altura sem desfoque, sendo o vermelho o erro encontrado no mapa de altura (está branco no mapa de altura mas preto no de entrada), e a imagem b, sendo o mesmo caso porém aplicando o filtro de desfoque.
 
 \begin{figure}[!ht]
 	\centering
