@@ -46,7 +46,9 @@ Utilizou-se duas maneiras para selecionar o contorno, sendo elas: selecionar por
 
 \subsubsubsection*{Tratamento da imagem binária}
 
-De acordo com \citeonline{Embarcados}, após a saída dos algoritmos de seleção, o objeto selecionado é detectado e centralizado em uma nova imagem, depois recortamos e redimensionamos a partir do centro de forma que fique quadrada. Todos os passos são observáveis na \cref{fig:saidas_selecao}.
+Existem duas forma de tratar a imagem binária.
+
+A primeira, não utilizada pois causa distorção segue após a saída dos algoritmos de seleção, o objeto selecionado é detectado e centralizado em uma nova imagem, depois recortamos e redimensionamos a partir do centro de forma que fique quadrada. Todos os passos são observáveis na \cref{fig:saidas_selecao} \cite{Embarcados}.
 
 \begin{figure}[!ht]
 	\centering
@@ -56,7 +58,7 @@ De acordo com \citeonline{Embarcados}, após a saída dos algoritmos de seleçã
 	\label{fig:saidas_selecao}
 \end{figure}
 
-Porém há uma maneira mais performática para fazer isso, inclusive melhorando os resultados devido ao redimensionamento e a borda não chegarem a um bom cenário. Essa outra maneira usa um método para localizar o objeto na imagem binária e corta a imagem com as coordenadas e dimensões oferecidas. Após isso é acrescentado uma borda na altura ou largura com a folga entre as duas, tornando assim a imagem quadricular, depois é redimensionado para manter um padrão e acrescentado mais uma vez uma borda para representar o mar. É possível observar na \cref{fig:saidas_selecao_perf} que o objeto não foi distorcido como na método anterior e manteve-se centralizada na imagem final \cite{Embarcados}.
+Já A segunda e mais performática para fazer isso, inclusive melhorando os resultados devido ao redimensionamento e a borda não chegarem a um bom cenário, usa um método para localizar o objeto na imagem binária e corta a imagem com as coordenadas e dimensões oferecidas. Após isso é acrescentado uma borda na altura ou largura com a folga entre as duas, tornando assim a imagem quadricular, depois é redimensionado para manter um padrão e acrescentado mais uma vez uma borda para representar o mar. É possível observar na \cref{fig:saidas_selecao_perf} que o objeto não foi distorcido como na método anterior e manteve-se centralizada na imagem final \cite{Embarcados}.
 
 \begin{figure}[!ht]
 	\centering
@@ -92,7 +94,13 @@ A \cref{fig:diagrama_voronoi_pontos} ilustra o modelo do diagrama de Voronoi do 
 	\label{fig:diagrama_voronoi_pontos}
 \end{figure}
 
-Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano, depois percorre-se todos os pontos da imagem de entrada e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados. Se os pontos participarem, marca-se o terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano \cite{amitp2010}.
+Cada polígono criado será nomeado de região e basta definir o tipo do terreno, elevação e umidade. Na lógica, marca-se todos os polígonos com o terreno de tipo oceano. Existem duas formas de selecionar o contorno da image.
+
+A primeira, mais lenta pois necessita verificar todos o pixeis da imagem, percorre-se todos os pontos da imagem de entrada e verifica-se se cada pixel que está contido no objeto da imagem binária encontra-se nos polígonos gerados, se for encontrado adiciona-se o polígono em uma lista de marcação \cite{OpenCV}.
+
+E a segunda, mais performática, pois se utiliza as bibliotecas do OpenCV, faz-se um iteração na lista de polígonos e para cada um é criado uma imagem que é desenhado o polígono da iteração e é feito uma comparação com imagem binaria — o resultado dessa comparação é uma imagem com os pixeis que existem nas duas imagens(binaria e do polígono) —, verifica-se se existe pixeis branco na imagem resultado, se houver adiciona-se o polígono em uma lista de marcação \cite{OpenCV}.
+
+Para os polígonos dentro da lista de marcação, marca-se o tipo do terreno como tipo terra, e em seguida checa-se em quais polígonos do tipo terra são vizinhos do tipo oceano, se sim, define-se como do tipo litoral, e também assina-se os pontos desses polígonos que encontram-se no polígono do tipo oceano \cite{amitp2010,Embarcados}.
 
 Para se calcular a elevação dos polígonos primeiramente é calculado a elevação das arestas de todos os polígonos, isso é feito a partir de uma busca em profundidade que possui o inicio em todas as arestas que tocam a borda do gráfico. A toda nova iteração, as arestas que tocam os cantos são atribuídas com o valor 0, e assim defini-se uma evolução da altura conforme chega-se ao centro do mapa.
 Após isso é feito o calculo de redistribuição de elevação, que com base na elevação calculada anteriormente é feito uma lista ordenadas pela elevação, começando da menor para a maior. Cada item da lista é enumerado a partir de um índice i e com essa enumeração é calculado usando a \cref{eq:total_indexes}. Após isso é calculado a \cref{eq:vertex_elevation} sendo X a elevação do vértice.
