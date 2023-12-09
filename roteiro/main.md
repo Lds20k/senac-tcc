@@ -1,6 +1,59 @@
+# Capitulo 1
+
+## Introdução
+
+Vamos começar falando sobre a indústria de jogos digitais que vem crescendo a cada ano e cada vez mais tempo é necessário para desenvolvimento de jogos, uma parte em especial do desenvolvimento são os mapas, que são responsáveis por trazer imersão e a sensação de progresso na jornada do jogo. 
+
+E geração procedural de mapa tem um papel de enriquecimento na experiencia e interação com o mundo do jogador, um exemplo de jogo que utiliza como pilar a geração procedural mapa é o Minecraft. 
+
+E uma das técnicas para geração procedural de mapas é o diagrama de Voronoi que no ramo de Geometria Computacional é um dos tópicos mais discutidos. 
+
+Agora em Inteligência Artificial o ramo de segmentação de imagens está em ascensão e também é muito comum utilizar a geração procedural em conjunto com a inteligência artificial para melhorar e personalizar a experiencia do jogador trazendo história e cenários únicos. 
+
+Para criar esses mapas existem técnicas e algoritmos que fazem esse papel e por isso gostaríamos de adicionar a nossa contribuição, desenvolvendo um programa capaz de segmentar e gerar um mapa através da seleção do usuário. 
+
+E para juntar tudo temos como hipótese de que quanto maior for a quantidade de pontos no diagrama de Voronoi maior será a precisão.
+
+## Objetivos
+
+E temos os seguintes objetivos 
+
+- Selecionar e analisar conjuntos de dados contendo classes relevantes, como pessoas, carros, entre outros, para treinar um modelo de rede neural convolucional específico para segmentação de imagens.
+
+- Utilizar algoritmos para criar diagramas de Voronoi.
+
+- Aplicar um algoritmo para reconhecer a imagem com o contorno selecionado e gerar como resultado a imagem do mapa gerado.
+
+- Utilizar o resultado da segmentação para selecionar indicar o que é terreno em cima do diagrama de Voronoi.
+
+- Gerar os biomas no diagrama de Voronoi.
+
+- Criar testes em prol de mensurar a semelhança entre o contorno do mapa gerado com o contorno escolhido.
 
 # Capitulo 2
 Será abordada uma breve fundamentação para compreensão do desenvolvimento.
+
+## Geração procedural de conteúdo
+
+A geração procedural de conteúdo constitui-se de métodos e automações para gerar conteúdo em jogos.
+
+### Diagrama de Voronoi
+
+O diagrama de Voronoi é gerado a partir de um conjunto de pontos onde é calculada distancia euclidianas entre de os pontos vizinhos e pego a interseção do ponto médio da distancia.
+A formala a seguir descrive uma região de Voronoi, onde pi são os pontos, e de é a distancia euclidiana.
+Nessa imagem conseguimos ver a relação do conjunto de pontos com o diagrama.
+
+### Geração de biomas no diagrama de Voronoi
+
+Primeiro biomas são regiões ecológicas que possuem fauna e flora semelhantes. 
+
+Agora para gerar biomas no diagrama de Voronoi é necessario dividir a terra e o mar, calcular a elevação e umidade para cada poligono.
+
+#### Diagrama de Whittaker
+
+E para parte final é utilizar tanto a umidade quanto a elevação em um diagrama de Whittaker (Apontar para imagem), onde para é feito uma classificação do bioma de acordo com a elevação e a umidade.
+
+E por final teremos um resultado parecidos com esse (Apontar para imagem)
 
 ## Visão computacional
 Uma área que visa interpretação de imagens por meio de algoritmos e técnicas de processamento de imagens.
@@ -50,6 +103,32 @@ Trabalho citado anteriormente com um solução de segmentação panóptica efici
 
 
 # Capitulo 3
+
+## Geração procedural do mapa
+
+### Ilha gerada no contorno 
+
+Antes de tudo vamos falar como gerar o diagrama de Voronoi, nessa imagem (Apontar para imagem 1) tem essa demonstração, basicamente é selecionado um conjunto de pontos vizinhos através de um disco no ponto, após isso é calculado o ponto médio entre o ponto e seus vizinhos, nesses pontos médios é feita uma reta perpendicular, onde houver uma intersecção é adicionado um ponto e assim gerando um polígono, fazendo isso para todos os pontos é gerado o diagrama de Voronoi, nessa outra imagem conseguimos ver um primeiro polígono já gerado através daqueles passos. 
+
+Depois que nós temos o diagrama marcamos todos os polígonos como terra e precisamos utilizar a imagem binaria gerada anteriormente como entrada, usamos o OpenCV para desenhar o polígono do diagrama em uma outra imagem que vai ser comparada com a imagem binária, esse processo gera uma outra imagem, se ela contiver pontos o polígono é marcado como terra, esse processo é repetido para todos os polígonos. Com isso temos um mapa com terra e mar separados, o próximo passo é definir o litoral, que são os polígonos que tocam o mar, essencialmente percorre-se todos os polígonos fazendo essa verificação. 
+
+E agora é calcular a elevação, é feito uma busca em profundidade que começa em todo vértice de polígono que tocam a borda do mapa, inicialmente todos os vértices têm a elevação infinita e após a busca é definido um valor que começa em 0 nas bordas e vai subindo até o centro do mapa.  
+
+E para calcular a umidade primeiro é gerado os rios, para isso é verificado os vértices próximos a corpos d’água que possuem uma altura maior que um valor mínimo definido, após isso é selecionado de forma pseudoaleatória a quantidade de vértices e para cada um é verificado o tipo de terreno, se for do tipo terra é definido aresta como rio. Com isso para calcular a umidade verificado todos os polígonos que estão próximos de um corpo d’agua, e são adicionados em uma fila que será usada para fazer uma busca em profundidade, todos os polígonos que são corpos d’agua terão a umidade máxima e os do tipo terra é calculado conforme a distância e um fator multiplicador, e assim temos a umidade para cada polígono.
+
+Para selecionar o bioma de cada polígono temos o diagrama de Whittaker modificado, onde cada polígono é verificado a umidade e a elevação se tiver dentro dos valores do bioma, esse bioma é escolhido, basicamente é um monte de ifs e elses. 
+
+### Unity - Mapa 3d e Terreno
+
+Como saída temos dois resultados, o mapa com biomas e rios e o mapa de altura que é utilizado com entrada para um mapa 3D, basicamente esse mapa de altura é uma imagem onde 0 representa a altura mínima e 255 a altura máxima. Essa imagem foi utilizada no motor gráfico Unity onde utilizou-se o a ferramenta Terrain Tools que utiliza o mapa de altura para criar os relevos no mapa 3D e também o Terrain Toolkit 2017 que é um script que altera a textura conforme a elevação do terreno. 
+
+### Minimapa
+
+Para o minimapa utilizou-se o mapa 2D onde foi feito um script que possibilita localizar o jogador com base no mundo 3D. 
+
+### Jogabilidade
+
+E para a jogabilidade foi criado um personagem com scripts de movimentação e assim foi possível visualizar o mapa tridimensionalmente. 
 
 ## Testes
 
