@@ -51,6 +51,30 @@ Trabalho citado anteriormente com um solução de segmentação panóptica efici
 
 # Capitulo 3
 
+## Testes
+
+Criou-se testes para avaliar a qualidade de combinações de imagens, incluindo a imagem de entrada de geração procedural e de saídas: mapas de altura e mapas 2D.
+A avaliação de qualidade baseou-se na técnica de classificação de conjuntos gerando uma nova imagem categorizando pixels em Verdadeiros Positivos, Verdadeiros Negativos, Falsos Positivos e Falsos Negativos e salvando-a.
+
+A partir disso contou os pixeis de cada conjunto para utilizar as métricas
+F1 Score, Coeficiente de Correlação de Matthews, Taxa de Descoberta Falsa, Taxa de Falso Negativo, Acurácia e União sobre Interseção.
+
+Além disso, uma métrica para medir o desfoque em uma imagem foi aplicada, detectando bordas em x e y, calculando o gradiente e resultando no desvio padrão para mensurar a harmonia do mapa de alturas.
+
+e também a duração do tempo de execução em segundos do código, focando na parte de geração procedural dos mapas.
+
+Foi desenvolvido um teste genérico para facilitar a reprodução em diferentes cenários, permitindo a definição de diversas combinações de imagens e métricas.
+
+## Pos processamento
+
+Criou-se alguns testes para avaliar o modelo e identificar erros e soluções, o primeiro erro encontrado foi no mapa em 3d que não ficou harmonico, então aplicou-se um desfoque no mapa de altura para gerar essa harmonia e após melhorar isso percebeu-se que piorou os resultados na imagem de classificação de conjuntos, aumentando o erro destacado em vermelho que vem diretamente do mapa de altura, então aplicou-se outros testes para redimensionar a imagem e adicionar uma borda de forma que reduzi-se esses erros porém melhorando o caso do mapa em 3d
+
+## Interface gráfica
+
+Utilizou-se a biblioteca Pyqt5 para criar as telas para que o usuário possa interagir com as imagens e gerar os mapas.
+
+Usou-se loading e opções para threads para permitir selecionar imagem e clicar apos o resultado da segmentação panóptica.
+
 # Capitulo 4
 Os resultados serão apresentados por meio de tabelas que englobam testes com todas as combinações de imagens, incluindo uma imagem com os resultados finais e outra com todos os passos da aplicação.
 
@@ -88,8 +112,11 @@ A Tabela 8 reforça a confiabilidade entre a imagem 2D (minimapa) e o mapa de al
 
 A monografia apresenta uma solução para criar mapas 2D e 3D a partir do contorno de uma imagem usando segmentação panóptica, dividida em seis fases: segmentação de imagens, seleção de contornos, geração procedural de mapas, testes de eficácia, análise de pós-processamento e integração via interface gráfica.
 
-Dentre os trabalhos relacionados, segmentação panóptica, foi fundamental para entender e implementar a segmentação panóptica. O objetivo de aproximar o mapa gerado do contorno inicial foi alcançado, comprovando a eficácia da abordagem.
+Dentre os trabalhos relacionados, segmentação panóptica, foi fundamental para entender o conceito desse tipo inovador de segmentação além de dar base as métricas que utilizou-se para mensurar as segmentações. O EfficientPS ajudou muito pois é um modelo eficiente e pronto para essa solução e o Map generation for games auxiliou para a geração procedural.
 
-Contudo, a hipótese da relação entre adicionar mais pontos e melhorar os resultados se comprovou, porém junto com o tempo de execução, pode ser desafiadora em cenários com hardware de processamento inferior. A dependência da biblioteca CUDA Toolkit pode limitar a aplicabilidade.
+O objetivo de aproximar o mapa gerado do contorno inicial foi alcançado, comprovando a eficácia da abordagem. E também a hipótese da relação entre adicionar mais pontos no diagrama de Voronoi e melhorar os resultados se comprovou.
+
+
+Porém o o tempo de execução, pode ser desafiadora em cenários com hardware de processamento inferior. A dependência da biblioteca CUDA Toolkit pode limitar a aplicabilidade.
 
 Para melhorias futuras, sugere-se a utilização de modelos de segmentação panóptica multiplataforma, a implementação de paralelismo e rasterização para otimizar o tempo de execução, e a realização de testes com outros métodos de geração procedural. A proposta pode evoluir para oferecer resultados mais eficientes e acessíveis, abrindo possibilidades para desenvolvedores e consumidores de jogos.
