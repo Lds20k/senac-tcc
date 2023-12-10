@@ -106,6 +106,20 @@ Trabalho citado anteriormente sobre como gerar mapas procedurais utilizando diag
 
 # Capitulo 3
 
+## Proposta 
+
+O nosso trabalho se propôs em criar um protótipo para geração de mapas procedurais, basicamente o usuário seleciona uma imagem, escolhe o método de segmentação, seleciona o local ou a área que será usado como entrada para gerar o mapa, no meio desse processo é gerado um diagrama de Voronoi e o algoritmo irá escolher quais áreas serão terra e oceano com base na seleção e é escolhido os biomas conforme a elevação e umidade e por fim é apresentado na tela o resultado. 
+
+## Segmentar imagens 
+
+Para implementação vamos começar por segmentação, que utilizamos 2 técnicas. 
+
+A primeira utilizada é o EfficientPS que é uma solução eficiente para segmentar imagens, nós utilizamos um modelo pretreinado, a ideia principal era treinar mais esse modelo, mas surgiram diversos desafios e limitações como conseguir autorização de conjunto de dados, preparar esse conjunto de dados e limitações de hardware. Nós tivemos esse primeiro resultado (Apontar para imagem 1), o que não era esperado pois os objetos de mesmas classes possuem a mesma cor, nós tínhamos a expectativa de o resultado da segmentação fosse parecido com esse (Apontar para imagem 2), então nós fomos ao repositório oficial e encontramos uma proposta que explicava como fazer essa alteração e conseguimos essa imagem de resultado (Apontar para imagem 3), mas percebemos que não era satisfatório, porque não conseguíamos distinguir de quais classes pertenciam os objetos. 
+
+A segundo é a seleção por contorno que consiste em isolar uma área da imagem, que você pode ou selecionar por cor, onde todo local que contiver a cor escolhida será selecionado, ou por preenchimento de inundação que é um algoritmo que expande pela cor seleciona com um faixa delimitadora. 
+
+E para usar esse segmento da imagem temos a imagem binária que é uma imagem de saída de ambos os algoritmos, ela possui pixels brancos, que é o contorno selecionado, e os pretos representam nada. 
+
 ## Geração procedural do mapa
 
 Agora vamos falar sobre a implementação do algoritmo de geração procedural de mapas
