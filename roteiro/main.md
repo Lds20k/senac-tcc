@@ -1,3 +1,5 @@
+Boa noite a todos, hoje eu Matheus, O lucas e o Rafael vamos apresentar o nosso trabalho de conclusão de curso que tem o tema de geração procedural de mapas para Jogos através de técnicas de Segmentação de Imagem.
+
 # Capitulo 1
 
 ## Introdução
