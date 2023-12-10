@@ -100,11 +100,13 @@ Trabalho citado anteriormente com um solução de segmentação panóptica efici
 
 ### Polygonal Map Generation for Games
 
-
+Trabalho citado anteriormente sobre como gerar mapas procedurais utilizando diagrama de Voronoi e o diagrama de Whittaker.
 
 # Capitulo 3
 
 ## Geração procedural do mapa
+
+Agora vamos falar sobre a implementação do algoritmo de geração procedural de mapas
 
 ### Ilha gerada no contorno 
 
