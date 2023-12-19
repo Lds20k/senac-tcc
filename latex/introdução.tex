@@ -31,15 +31,15 @@ Por fim, para contribuição científica tem-se a hipótese de que quanto mais p
 
 \section{Objetivos}
 
-O objetivo principal deste trabalho é desenvolver uma ferramenta que ofereça uma alternativa para a geração procedural de mapas de ilhas, utilizando o diagrama de Voronoi para a criar biomas. Além disso, pretende-se combinar segmentação com redes neurais convolucionais para permitir a personalização desses mapas. Essa ferramenta terá a capacidade de reconhecer os contornos reconhecidos (classificados no conjunto de dados, logo o resultado terá uma detecção abrangente dentro do escopo de classes obtidas) de uma imagem, e gerar um mapa com um mapa baseado nos limites do contorno escolhido.
+O objetivo principal deste trabalho é desenvolver uma ferramenta que ofereça uma alternativa para a geração procedural de mapas de ilhas, utilizando o diagrama de Voronoi para criar biomas. Além disso, pretende-se combinar segmentação com redes neurais convolucionais para permitir a personalização desses mapas. Essa ferramenta terá a capacidade de reconhecer os contornos (classificados no conjunto de dados, logo o resultado terá uma detecção abrangente dentro do escopo de classes obtidas) de uma imagem e gerar um mapa com base nos limites do contorno escolhido.
 
 Adicionalmente, os seguintes objetivos específicos serão abordados:
 
 \begin{itemize}
-	\item Selecionar e analisar conjuntos de dados contendo classes relevantes, como pessoas, carros, entre outros, para treinar um modelo de rede neural convolucional específico para segmentação de imagens.
+	\item Selecionar e analisar conjuntos de dados contendo classes relevantes, como pessoas, carros, entre outros, para treinar um modelo de rede neural convolucional específico para a segmentação de imagens.
 	\item Utilizar algoritmos para criar diagramas de Voronoi.
-	\item Aplicar um algoritmo para reconhecer a imagem com o contorno selecionado e gerar como resultado a imagem do mapa gerado.
-	\item Utilizar o resultado da segmentação para selecionar indicar o que é terreno em cima do diagrama de Voronoi.
+	\item Aplicar um algoritmo para reconhecer a imagem com o contorno selecionado e gerar, como resultado, a imagem do mapa gerado.
+	\item Utilizar o resultado da segmentação para indicar o que é terreno sobre o diagrama de Voronoi.
 	\item Gerar os biomas no diagrama de Voronoi.
-	\item Criar testes em prol de mensurar a semelhança entre o contorno do mapa gerado com o contorno escolhido.
+	\item Criar testes com o intuito de mensurar a semelhança entre o contorno do mapa gerado e o contorno escolhido.
 \end{itemize}
