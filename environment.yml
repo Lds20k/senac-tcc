@@ -23,6 +23,11 @@ dependencies:
   - xz=5.2.5=h7b6447c_0
   - zlib=1.2.11=h7b6447c_3
   - pip:
+    - PyQt5==5.15.10
+    - PyQt5-Qt5==5.15.2
+    - PyQt5-sip==12.13.0
+    - pyqtspinner==2.0.0
+    - setuptools==59.6
     - absl-py==0.11.0
     - addict==2.4.0
     - appdirs==1.4.4
@@ -47,9 +52,9 @@ dependencies:
     - matplotlib==3.3.3
     - mmcv==0.5.9
     - networkx==2.5
-    - numpy==1.19.5
+    - numpy==1.21.6
     - oauthlib==3.1.0
-    - opencv-python==4.5.1.48
+    - opencv-python-headless==4.9.0.80
     - packaging==20.8
     - pandas==1.2.0
     - pillow==6.2.2
@@ -78,10 +83,10 @@ dependencies:
     - tifffile==2021.1.14
     - toml==0.10.2
     - tqdm==4.56.0
-    - typing==3.7.4.3
-    - typing-extensions==3.7.4.3
     - urllib3==1.26.2
     - werkzeug==1.0.1
     - xdoctest==0.15.0
     - yapf==0.30.0
     - zipp==3.4.0
+    - shapely==2.0.2
+    - typing==3.7.4.3
