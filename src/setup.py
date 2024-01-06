@@ -215,7 +215,6 @@ if __name__ == '__main__':
         name='mmdet',
         version=get_version(),
         description='Open MMLab Detection Toolbox and Benchmark',
-        long_description=readme(),
         author='OpenMMLab',
         author_email='chenkaidev@gmail.com',
         keywords='computer vision, object detection',
