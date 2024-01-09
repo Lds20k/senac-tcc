@@ -1,50 +1,146 @@
-\subsubsection*{Função de Ativação}
+\subsubsection*{Função de ativação}
 
-A função de ativação retorna a saída de um neurônio \cite{haykin1999neural}. Aqui, podem-se ver quatro tipos de funções de ativação:
+A função de ativação retorna a saída de um neurônio \space\cite{haykin1999neural}, aqui pode-se ver quatro tipos de funções de ativação:
 
 \begin{enumerate}
-	\item Função \textit{Sigmoid}, uma função não linear que produz uma curva com a forma de "S". É usada para mapear valores previstos em probabilidades e tem o valor de saída entre 0 e 1 \cite{gharat2019what}.
+	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \space\cite{gharat2019what}.
 	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{Sigmoid}.}
 	\begin{center}
-		% Conteúdo existente
+		\begin{minipage}{0.45\textwidth}
+			\begin{equation}
+				\varphi(\upsilon) = \frac{1}{1 + e^{-\upsilon}}
+			\end{equation}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xmin=-10, xmax=10,
+					ymin=-0.2, ymax=1,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
+					xlabel={$\upsilon$},
+					ylabel={$y$},
+				]
+					\addplot[blue,domain=-10:10,samples=51] {1/(1+exp(-x))};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
 	\end{center}
 	\legend{Fonte: Criação própria}
 	\label{fig:grafico_sigmoid}
 	\end{figure}
-	Segundo \citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e, para valores muito extremos, causa problemas na previsão.
+	Segundo \citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e para valores muito extremos causa problemas na previsão.
 
-	\item Função \textit{ReLu} (Unidade Linear Retificada), uma função não linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \cite{rizzo2020inteligencia}.
+	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \space\cite{rizzo2020inteligencia}.
 	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{ReLu}.}
 	\begin{center}
-		% Conteúdo existente
+		\begin{minipage}{0.45\textwidth}
+			\begin{equation}
+				\label{eq:relu_func}
+				\varphi(\upsilon) = \max(0,\upsilon)
+			\end{equation}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xmin=-2, xmax=2,
+					ymin=-0.5, ymax=2,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
+					xlabel={$\upsilon$},
+        			ylabel={$y$},
+				]
+					\addplot[line width=1pt,color=blue,domain=-2:0] plot(\x,{0});
+					\addplot[line width=1pt,color=blue,domain=0:2] plot(\x,{\x});
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
 	\end{center}
 	\legend{Fonte: Criação própria}
 	\label{fig:grafico_relu}
 	\end{figure}
-	A função \textit{ReLu} é computacionalmente eficiente e converge rapidamente; porém, quando a entrada da função se aproxima de zero, a rede neural não consegue executar a retropropagação, o que impede o aprendizado \cite{gharat2019what}.
+	A função \textit{ReLu} é computacionalmente eficiente e converge rapidamente, porém quando a entrada da função se aproxima de zero a rede neural não consegue executar o retropropagação, sendo assim não há aprendizado \space\cite{gharat2019what}.
 
-	\item Função \textit{Leaky ReLU} (Unidade Linear Retificada com Vazamento), uma função não linear variante da \textit{ReLU}, que retorna um valor positivo ou $\upsilon/a_i$, sendo $a_i$ um valor na faixa $(1,\infty)$ \cite{xu2015empirical}.
+	\item Função \textit{Leaky ReLU} (Unidade Linear Retificada com Vazamento), função não-linear variante da \textit{ReLU} que retorna um valor positivo ou $\upsilon/a_i$, sendo $a_i$ um valor na faixa $(1,\infty)$ \space\cite{xu2015empirical}.
 	\begin{figure}[ht]
-	\caption{Gráfico da função \textit{Leaky ReLU}.}
+	\caption{Gráfico da função \textit{ReLu}.}
 	\begin{center}
-		% Conteúdo existente
+		\begin{minipage}{0.45\textwidth}
+			\begin{gather}
+				\label{eq:relu_leaky_func}
+				\varphi(\upsilon) =
+				\begin{cases}
+				\upsilon & \text{if } \upsilon_k \geq 0 \\
+				\frac{\upsilon}{a_k} & \text{if } \upsilon_k < 0
+				\end{cases}
+			\end{gather}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xmin=-2, xmax=2,
+					ymin=-0.5, ymax=2,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
+					xlabel={$\upsilon$},
+        			ylabel={$y$},
+				]
+					\addplot[line width=1pt,color=blue,domain=-2:0] plot(\x,{0.3*\x});
+					\addplot[line width=1pt,color=blue,domain=0:2] plot(\x,{\x});
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
 	\end{center}
 	\legend{Fonte: Criação própria}
 	\label{fig:grafico_relu_leaky}
 	\end{figure}
-	Possui as mesmas características da função \textit{ReLU}, mas sem o problema da retropropagação \cite{gharat2019what}.
+	Possui as mesmas características da função \textit{ReLU}, mas sem o problema da retropropagação. \space\cite{gharat2019what}.
 
-	\item Função \textit{Softmax}, que calcula a distribuição de probabilidades de um evento em "n" eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica. Geralmente é usada na camada de saída \cite{gharat2019what}.
+	\item Função \textit{Softmax}, calcula a distribuição de probabilidades de um evento em "n"\space eventos e fornece a probabilidade do valor de entrada pertencer a uma classe específica, geralmente usada na camada de saída \space\cite{gharat2019what}.
 	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{Softmax}.}
 	\begin{center}
-		% Conteúdo existente
+		\begin{minipage}{0.45\textwidth}
+			\begin{equation}
+				\varphi(\upsilon) = \frac{e^{\upsilon_i}}{\sum_{j=0} e^{\upsilon_j}}
+			\end{equation}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\textwidth}
+			\begin{tikzpicture}
+				\begin{axis}[
+					width=0.9\textwidth,
+					height=0.7\textwidth,
+					xmin=-10, xmax=10,
+					ymin=-0.2, ymax=1,
+					xtick=\empty,
+					ytick=\empty,
+					axis lines=middle,
+					xlabel={$\upsilon$},
+        			ylabel={$y$},
+				]
+					\addplot[blue,domain=-10:10,samples=51] {exp(x)/sumexp(x,-4,0)};
+				\end{axis}
+			\end{tikzpicture}
+		\end{minipage}
 	\end{center}
 	\legend{Fonte: Criação própria}
 	\label{fig:grafico_softmax}
 	\end{figure}
 \end{enumerate}
 
-Com a função \textit{Softmax}, é possível normalizar a saída para valores entre 0 e 1 e calcular a probabilidade da entrada. Por causa dessas características, é utilizada na camada de saída da rede neural \cite{gharat2019what}.
+Com a função \textit{Softmax} é possível normalizar a saída para valores entre 0 e 1, bem como calcular a probabilidade da entrada, e por causa dessas características é utilizada na camada de saída da rede neural \space\cite{gharat2019what}.
