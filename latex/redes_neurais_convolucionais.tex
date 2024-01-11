@@ -1,20 +1,20 @@
 \subsubsubsection{Redes neurais convolucionais}
 
-Uma rede neural convolucional é análoga à rede neural artificial, i.e., feita de neurônios que otimizam o aprendizado através dele mesmo. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens, logo existem funcionalidades específicas da própria arquitetura para essa tarefa \space\cite{oshea2015introduction}.
+Uma rede neural convolucional é análoga à rede neural artificial, isto é, é feita de neurônios que otimizam o aprendizado por meio deles mesmos. A principal diferença é que a rede neural convolucional é amplamente utilizada em soluções que detectam padrões em imagens. Portanto, existem funcionalidades específicas da própria arquitetura voltadas para essa tarefa \space\cite{oshea2015introduction}.
 
-Uma arquitetura básica de uma rede neural convolucional tem as seguintes camadas: convolucional, agrupamento e totalmente conectada. Ilustrada na \cref{fig:arquitetura_cnn} \space\cite{dp_overview}.
+A arquitetura básica de uma rede neural convolucional possui as seguintes camadas: convolucional, de agrupamento e totalmente conectada, conforme ilustrado na \cref{fig:arquitetura_cnn} \space\cite{dp_overview}.
 
 \begin{figure}[ht]
-	\caption{Camadas principais de uma rede neural convolucional}
-	\centering % para centralizarmos a figura
-	\includegraphics[width=15cm]{figures/arquitetura_cnn.png} % leia abaixo
-	\legend{Fonte: \citeonline{dp_overview}}
-	\label{fig:arquitetura_cnn}
+\caption{Camadas principais de uma rede neural convolucional}
+\centering % para centralizarmos a figura
+\includegraphics[width=15cm]{figures/arquitetura_cnn.png} % leia abaixo
+\legend{Fonte: \citeonline{dp_overview}}
+\label{fig:arquitetura_cnn}
 \end{figure}
 
 \subsubsubsection*{Camada convolucional}
 
-Segundo \citeonline{computation11030052} camada convolucional é essencial para esse tipo de arquitetura e usa um filtro — ou kernel — para aplicar na imagem e direcionar para o próximo neurônio. Esse filtro é uma matriz de números que terá uma operação aplicada em todos os píxeis da imagem — que também é representado por matriz(es) — as informações cruciais para esse filtro são: tamanho, largura e pesos. Isto é utilizado para extrair características com uma base matemática, criando uma relação direta entre um píxel e os píxeis ao redor. Os pesos começam de forma pseudoaleatórias e são ajustados no decorrer do aprendizado. O resultado dessa camada é chamado de mapa de características. O tamanho da saída será baseado na fórmula abaixo sendo os tamanhos I da imagem, F do filtro e a S da saída \space\cite{computation11030052}.
+Conforme descrito por \citeonline{computation11030052}, a camada convolucional é essencial para esse tipo de arquitetura. Ela utiliza um filtro — ou kernel — que é aplicado na imagem e direcionado para o próximo neurônio. Esse filtro é uma matriz de números que realiza uma operação em todos os pixels da imagem — também representada por matriz(es) —. As informações cruciais para esse filtro são: tamanho, largura e pesos. Essa abordagem é utilizada para extrair características com uma base matemática, criando uma relação direta entre um pixel e os pixels ao seu redor. Os pesos começam de forma pseudoaleatória e são ajustados ao longo do aprendizado. O resultado dessa camada é chamado de mapa de características. O tamanho da saída é baseado na fórmula abaixo, considerando os tamanhos I da imagem, F do filtro e S da saída \space\cite{computation11030052}.
 
 \begin{gather}
     \mathbf{I}x - \mathbf{F}x + 1 = \mathbf{S}x \notag \\
@@ -98,19 +98,19 @@ $$
 
 \subsubsubsection*{Tamanho do passo e preenchimento}
 
-O tamanho do passo — ou \textit{stride} — serve para especificar a distância de píxeis entre os passos da camada.  No exemplo acima esse parâmetro é definido como 1, por isso a matriz selecionada pula 1 pixel para direita entre os passos. Esse valor altera o tamanho da matriz resultante \space\cite{dp_overview}.
+O tamanho do passo — ou \textit{stride} — é usado para especificar a distância, em pixels, entre os passos da camada. No exemplo mencionado anteriormente, esse parâmetro é definido como 1, o que significa que a matriz selecionada avança 1 pixel para a direita a cada passo. Esse valor altera o tamanho da matriz resultante \space\cite{dp_overview}.
 
-O preenchimento — ou \textit{padding} — é uma técnica utilizada para manter o mesmo tamanho da entrada, adicionando bordas com zeros antes das operações da camada para ter como saída uma matriz da mesma dimensão da matriz original. Isso é usado devido a desvantagem em perder os detalhes nas bordas das imagens no processamento de uma camada \space\cite{dp_overview}.
+O preenchimento — ou \textit{padding} — é uma técnica empregada para manter o mesmo tamanho da entrada, adicionando bordas com zeros antes das operações da camada. Isso resulta em uma matriz de saída com a mesma dimensão da matriz original. A técnica é utilizada para evitar a perda de detalhes nas bordas das imagens durante o processamento de uma camada \space\cite{dp_overview}.
 
 \subsubsubsection*{Camada de agrupamento}
 
-A camada de agrupamento — ou \textit{pooling} — tem como tarefa primordial uma técnica para reduzir o tamanho do mapa de características, porém preservando os padrões mais relevantes. Dentre os recursos essenciais dessa camada estão o tamanho do agrupamento e a operação que será realizada. O maior problema dessa camada é pelo fato dela apenas identificar onde essas características estão e se existem ou não, \emph{i.e.}, dependendo de qual operação e a quantidade de camadas pode não ser possível guardar as principais características de forma integra causando uma redução no desempenho final da predição \space\cite{dp_overview}.
+A camada de agrupamento — ou \textit{pooling} — tem como função primordial reduzir o tamanho do mapa de características, preservando, contudo, os padrões mais relevantes. Entre os aspectos essenciais dessa camada estão o tamanho do agrupamento e a operação a ser realizada. Um dos principais problemas dessa camada é que ela identifica apenas a presença e a localização das características, sem preservá-las integralmente. Dependendo da operação escolhida e do número de camadas, isso pode resultar em perda de características importantes, afetando negativamente o desempenho final da predição \space\cite{dp_overview}.
 
-Existem vários tipos de agrupamento, os mais utilizados são: agrupamento máximo, agrupamento médio e agrupamento global médio que estão explicados abaixo em exemplos baseados em \citeonline{Alzubaidi2021}.
+Existem vários tipos de agrupamento, sendo os mais comuns o agrupamento máximo, o agrupamento médio e o agrupamento global médio. Esses tipos são explicados abaixo, com exemplos baseados em \citeonline{Alzubaidi2021}.
 
 \subsubsubsection*{Agrupamento máximo}
 
-É definido o resultado com base no máximo encontrado pelo tamanho do agrupamento, exemplo a seguir usando um mapa de características com tamanho 4x4 e agrupamento de tamanho 2x2.
+Esta técnica define o resultado com base no valor máximo encontrado dentro do tamanho do agrupamento. Um exemplo pode ser ilustrado utilizando um mapa de características de tamanho 4x4 e um agrupamento de tamanho 2x2.
 
 $$
 \begin{tikzpicture}[baseline=-0.5ex]
@@ -131,7 +131,7 @@ $$
 
 \subsubsubsection*{Agrupamento médio}
 
-É definido o resultado com base na média encontrada pelo tamanho do agrupamento, exemplo a seguir usando um mapa de características com tamanho 4x4 e agrupamento de tamanho 2x2.
+Neste método, o resultado é definido com base na média dos valores encontrados dentro do tamanho do agrupamento. Um exemplo pode ser ilustrado utilizando um mapa de características de tamanho 4x4, com um agrupamento de tamanho 2x2. Esse processo calcula a média dos valores em cada janela de agrupamento de 2x2, gerando uma matriz de saída reduzida que preserva as informações médias das características originais.
 
 $$
 \begin{tikzpicture}[baseline=-0.5ex]
@@ -152,7 +152,7 @@ $$
 
 \subsubsubsection*{Agrupamento global médio}
 
-É definido o resultado com base na média geral do mapa o que sempre tem como saída uma matrix 1x1, exemplo a seguir usando um mapa de características com tamanho 4x4.
+Neste método, o resultado é obtido pela média geral do mapa de características, o que resulta, invariavelmente, em uma matriz de saída de dimensão 1x1. Por exemplo, considerando um mapa de características de tamanho 4x4, o agrupamento global médio calculará a média de todos os valores presentes neste mapa, condensando toda a informação em um único valor representativo. Essa abordagem é particularmente útil para reduzir significativamente as dimensões dos dados, mantendo uma representação global das características essenciais.
 
 $$
 \begin{tikzpicture}[baseline=-0.5ex]
@@ -171,17 +171,17 @@ $$
 
 \subsubsubsection*{Camada totalmente conectada}
 
-A camada totalmente conectada geralmente é utilizada no final da arquitetura e cria a partir de cada neurônio uma ligação direta para cada etiqueta final. Isso torna essa camada extremamente pesada computacionalmente. O número de neurônios dessa camada é equivalente ao número de classes propostas. Além disso é quando chega nessa camada que a função de perda é calculada e se inicia a retropropagação \space\cite{Alzubaidi2021, computation11030052}.
+A camada totalmente conectada é geralmente utilizada no final da arquitetura. Ela estabelece uma ligação direta de cada neurônio a cada etiqueta final, tornando essa camada extremamente pesada em termos computacionais. O número de neurônios nesta camada é equivalente ao número de classes propostas. Além disso, é nesta camada que a função de perda é calculada, iniciando o processo de retropropagação \space\cite{Alzubaidi2021, computation11030052}.
 
 \subsubsubsection*{Aperfeiçoamento}
 
-Segundo \citeonline{Alzubaidi2021, computation11030052} existem algumas técnicas para aperfeiçoar os resultados do modelo, sendo elas:
+De acordo com \citeonline{Alzubaidi2021, computation11030052}, existem várias técnicas para aperfeiçoar os resultados do modelo, incluindo:
 
 \begin{itemize}
-    \item Dropout: Muito utilizada para evitar sobreajuste pois está técnica irá desligar um neurônio aleatoriamente colocando a saída dele como zero no processo de treinamento e portanto forçara o modelo a aprender a identificar características diferentes em outros neurônios possibilitando a generalização do modelo.
-    \item Aumentar o tamanho do conjunto de dados: caso não seja possível criar ou encontrar um maior existem técnicas para aumentar artificialmente acrescentando pequenas mudanças nas imagens existentes, algumas são rotacionar, recortar e inverter horizontalmente ou verticalmente.
-    \item Normalização em lote: normaliza as saídas para treinar a rede mais rápido
-    \item Aumentar o tempo de treinamento
-    \item Aumentar a profundidade ou largura da arquitetura
-    \item Ajustar os hiperparâmetros
+\item Dropout: Esta técnica é amplamente utilizada para evitar o sobreajuste. Ela desativa aleatoriamente um neurônio durante o treinamento, forçando o modelo a aprender a identificar características em outros neurônios, o que possibilita a generalização do modelo.
+\item Aumentar o tamanho do conjunto de dados: Se não for possível obter um conjunto de dados maior, técnicas de aumento artificial podem ser empregadas, como rotacionar, recortar e inverter as imagens horizontal ou verticalmente.
+\item Normalização em lote: Esta técnica normaliza as saídas para acelerar o treinamento da rede.
+\item Aumentar o tempo de treinamento.
+\item Aumentar a profundidade ou largura da arquitetura.
+\item Ajustar os hiperparâmetros.
 \end{itemize}
