@@ -23,17 +23,17 @@ Adicionalmente, visando adicionar personalização e enriquecer a diversidade, p
 
 Portanto, o escopo de nossa pesquisa abrange a geração procedural de mapas com biomas, permitindo a escolha do contorno a partir de um desenho com técnicas de segmentação ou da segmentação de uma imagem mais complexa com modelos de IA. Esta aplicação viabilizará aos desenvolvedores a incorporação dessa nova funcionalidade em um jogo em fase de desenvolvimento, proporcionando ao usuário final a opção de selecionar ou capturar uma foto e escolher um contorno específico para gerar um mapa contendo os biomas.
 
-Com o intuito de contribuir cientificamente, formulamos a hipótese de que quanto mais pontos o diagrama de Voronoi tiver, maior será a precisão na compatibilidade entre o mapa gerado e o contorno escolhido. Para testar essa hipótese, serão realizados testes com métricas para avaliar a qualidade da geração procedural com o contorno selecionado.
+Com o intuito de contribuir cientificamente, formulamos a hipótese de que quanto mais pontos o diagrama de Voronoi tiver, maior será a precisão na compatibilidade entre o mapa gerado e o contorno escolhido. Para testar essa hipótese, serão realizados testes com métricas para avaliar a qualidade da geração procedural com o contorno selecionado. Além disso, será realizado um conjunto de testes com métricas específicas para verificar a hipótese formulada: a relação direta entre a precisão na compatibilidade entre o mapa gerado e o contorno escolhido e o número de pontos no diagrama de Voronoi.
 
 \section{Objetivos}
 
-O objetivo principal deste trabalho é desenvolver uma ferramenta que ofereça uma alternativa para a geração procedural de mapas de ilhas, utilizando o diagrama de Voronoi para criar biomas. Além disso, pretende-se combinar segmentação com redes neurais convolucionais para permitir a personalização desses mapas. Essa ferramenta terá a capacidade de reconhecer os contornos (classificados no conjunto de dados, logo o resultado terá uma detecção abrangente dentro do escopo de classes obtidas) de uma imagem e gerar um mapa com base nos limites do contorno escolhido.
+O objetivo principal deste trabalho é abordar um desafio inerente ao desenvolvimento de jogos digitais, mais especificamente na geração procedural de mapas. A complexidade está relacionada à criação de cenários que sejam simultaneamente atrativos e heterogêneos, buscando proporcionar aos jogadores experiências distintas a cada sessão de jogo. A solução proposta visa aprimorar essa capacidade, concentrando-se na habilidade de identificar contornos em imagens derivadas de desenhos ou cenas cotidianas. Essa abordagem pretende possibilitar a criação de mapas contendo biomas com base nos limites predefinidos pelo usuário, visando, assim, a ampliação da diversidade e personalização dos ambientes virtuais, com potencial impacto positivo na experiência do jogador.
 
 Adicionalmente, os seguintes objetivos específicos serão abordados:
 
 \begin{itemize}
-	\item Selecionar e analisar conjuntos de dados contendo classes relevantes, como pessoas, carros, entre outros, para treinar um modelo de rede neural convolucional específico para a segmentação de imagens.
-	\item Utilizar algoritmos para criar diagramas de Voronoi.
+	\item Selecionar conjuntos de dados contendo classes relevantes, como pessoas, carros, entre outros, para treinar um modelo IA específico para a segmentação de imagens.
+	\item Utilizar algoritmos para criar diagrama de Voronoi.
 	\item Aplicar um algoritmo para reconhecer a imagem com o contorno selecionado e gerar, como resultado, a imagem do mapa gerado.
 	\item Utilizar o resultado da segmentação para indicar o que é terreno sobre o diagrama de Voronoi.
 	\item Gerar os biomas no diagrama de Voronoi.
