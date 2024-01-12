@@ -71,6 +71,7 @@
 \usepackage{tabularx}
 \usepackage{mathtools}
 \usepackage{rotating}
+\usepackage{listings}
 \DeclareMathOperator{\logsumexp}{logsumexp}
 \pgfmathdeclarefunction{sumexp}{3}{%
   \begingroup%
@@ -86,10 +87,18 @@
   \pgfmathsmuggle\pgfmathresult\endgroup%
 }
 
+\lstset{
+  basicstyle=\sffamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
 
 \crefname{figure}{Figura}{Figuras}
 \crefname{equation}{Equação}{Equações}
 \crefname{table}{Tabela}{Tabelas}
+\crefname{lstlisting}{Código}{Códigos}
 % ---
 
 % ---
@@ -344,16 +353,16 @@
 % ---
 % Epígrafe
 % ---
-% \begin{epigrafe}
-%     \vspace*{\fill}
-% 	\begin{flushright}
-% 		\textit{``Não vos amoldeis às estruturas deste mundo, \\
-% 		mas transformai-vos pela renovação da mente, \\
-% 		a fim de distinguir qual é a vontade de Deus: \\
-% 		o que é bom, o que Lhe é agradável, o que é perfeito.\\
-% 		(Bíblia Sagrada, Romanos 12, 2)}
-% 	\end{flushright}
-% \end{epigrafe}
+\begin{epigrafe}
+    \vspace*{\fill}
+	\begin{flushright}
+		\textit{``Toda a educação, no momento, não parece motivo de \\
+    alegria, mas de tristeza. Depois, no entanto, produz \\ 
+    naqueles que assim foram exercitados um fruto de paz \\
+    e de justiça.\\
+		(Bíblia Sagrada, Hebreus 12, 11)}
+	\end{flushright}
+\end{epigrafe}
 % ---
 
 % ---
@@ -554,24 +563,14 @@ Neste capítulo é desenvolvido as conclusões do trabalho e trabalhos futuros p
 % ---
 % Inicia os apêndices
 % ---
-% \begin{apendicesenv}
+\begin{apendicesenv}
 
 % % Imprime uma página indicando o início dos apêndices
-% \partapendices
+\partapendices
 
-% % ----------------------------------------------------------
-% \chapter{Quisque libero justo}
-% % ----------------------------------------------------------
+\input{como_executar.tex}
 
-% \lipsum[50]
-
-% % ----------------------------------------------------------
-% \chapter{Nullam elementum urna vel imperdiet sodales elit ipsum pharetra ligula
-% ac pretium ante justo a nulla curabitur tristique arcu eu metus}
-% % ----------------------------------------------------------
-% \lipsum[55-57]
-
-% \end{apendicesenv}
+\end{apendicesenv}
 % ---
 
 

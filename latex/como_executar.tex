@@ -1,0 +1,18 @@
+\section{Instalação do Unity Hub}
+
+A instalação do Unity Hub foi realizada por meio do serviço de pacotes do Debian. Foi necessário utilizar o superusuário e adicionar o certificado do repositório do Unity, seguindo os comandos apresentados no \cref{lst:unity_certificado} \cite{install_the_unity_hub}. O comando \textit{su} permite que os comandos subsequentes sejam executados com um usuário diferente da sessão; caso não seja informado, é utilizado o usuário \textit{root} ou superusuário. Já o comando \textit{wget} é utilizado para baixar arquivos da internet. Enquanto o comando \textit{gpg} é uma ferramenta que fornece funções de criptografia e assinatura digital usando o padrão OpenPGP. Por fim, o comando \textit{tee} é utilizado para ler o arquivo da entrada padrão e gravar na saída padrão ou em um arquivo \cite{debian_man_pages}.
+
+\begin{lstlisting}[caption={Trecho de código com comando UNIX para adicionar o certificado do repositório do Unity \cite{install_the_unity_hub}},label={lst:unity_certificado},language=Bash,showstringspaces=false]
+    su
+    wget -qO - https://hub.unity3d.com/linux/keys/public | \
+    gpg --dearmor | \
+    tee /usr/share/keyrings/Unity_Technologies_ApS.gpg > /dev/null
+\end{lstlisting}
+
+Com o certificado do Unity devidamente incluído, o repositório do Unity foi adicionado ao controlador de pacotes do Debian, as informações dos pacotes foram atualizadas e o Unity foi instalado. Os comandos necessários estão detalhados no \cref{lst:unity_repositorio}. O comando \textit{sh} no Debian serve como um link para o Dash, que, por sua vez, atua como um interpretador de comandos para o sistema. Vale ressaltar que o comando \textit{echo} dentro do comando \textit{sh} tem a função de imprimir uma linha de texto no console. Ao incorporar o símbolo \emph{sinal de maior que}, o texto será direcionado para a impressão em um arquivo \cite{debian_man_pages}.
+
+\begin{lstlisting}[caption={Trecho de código com comando UNIX para adicionar o repositório do Unity \cite{install_the_unity_hub}},label={lst:unity_repositorio},language=Bash,showstringspaces=false]
+    sh -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
+    apt update
+    apt-get install unityhub
+\end{lstlisting}
