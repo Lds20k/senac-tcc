@@ -1,6 +1,8 @@
 \section{Instalação do Unity Hub}
 
-A instalação do Unity Hub foi realizada por meio do serviço de pacotes do Debian. Foi necessário utilizar o superusuário e adicionar o certificado do repositório do Unity, seguindo os comandos apresentados no \cref{lst:unity_certificado} \cite{install_the_unity_hub}. O comando \textit{su} permite que os comandos subsequentes sejam executados com um usuário diferente da sessão; caso não seja informado, é utilizado o usuário \textit{root} ou superusuário. Já o comando \textit{wget} é utilizado para baixar arquivos da internet. Enquanto o comando \textit{gpg} é uma ferramenta que fornece funções de criptografia e assinatura digital usando o padrão OpenPGP. Por fim, o comando \textit{tee} é utilizado para ler o arquivo da entrada padrão e gravar na saída padrão ou em um arquivo \cite{debian_man_pages}.
+O Unity é um motor gráfico e uma a plataforma que é líder mundial para criar e operar conteúdo 3D interativo em tempo real \cite{unity_get_started}. O Unity Hub é o gerenciador de projetos que utiliza o motor gráfico Unity \cite{unity_download}.
+
+A instalação do Unity Hub foi realizada por meio do serviço de pacotes do Debian. Foi necessário utilizar o superusuário e adicionar o certificado do repositório do Unity, seguindo os comandos apresentados no \cref{lst:unity_certificado} \cite{install_the_unity_hub}. O comando \emph{su} permite que os comandos subsequentes sejam executados com um usuário diferente da sessão; caso não seja informado, é utilizado o usuário \emph{root} ou superusuário. Já o comando \emph{wget} é utilizado para baixar arquivos da internet. Enquanto o comando \emph{gpg} é uma ferramenta que fornece funções de criptografia e assinatura digital usando o padrão OpenPGP. Por fim, o comando \emph{tee} é utilizado para ler o arquivo da entrada padrão e gravar na saída padrão ou em um arquivo \cite{debian_man_pages}.
 
 \begin{lstlisting}[caption={Trecho de código com comando UNIX para adicionar o certificado do repositório do Unity \cite{install_the_unity_hub}},label={lst:unity_certificado},language=Bash,showstringspaces=false]
     su
@@ -9,10 +11,32 @@ A instalação do Unity Hub foi realizada por meio do serviço de pacotes do Deb
     tee /usr/share/keyrings/Unity_Technologies_ApS.gpg > /dev/null
 \end{lstlisting}
 
-Com o certificado do Unity devidamente incluído, o repositório do Unity foi adicionado ao controlador de pacotes do Debian, as informações dos pacotes foram atualizadas e o Unity foi instalado. Os comandos necessários estão detalhados no \cref{lst:unity_repositorio}. O comando \textit{sh} no Debian serve como um link para o Dash, que, por sua vez, atua como um interpretador de comandos para o sistema. Vale ressaltar que o comando \textit{echo} dentro do comando \textit{sh} tem a função de imprimir uma linha de texto no console. Ao incorporar o símbolo \emph{sinal de maior que}, o texto será direcionado para a impressão em um arquivo \cite{debian_man_pages}.
+Com o certificado do Unity devidamente incluído, o repositório do Unity foi adicionado ao controlador de pacotes do Debian, as informações dos pacotes foram atualizadas e o Unity foi instalado. Os comandos necessários estão detalhados no \cref{lst:unity_repositorio}. O comando \emph{sh} no Debian serve como um link para o Dash, que, por sua vez, atua como um interpretador de comandos para o sistema. Vale ressaltar que o comando \emph{echo} dentro do comando \emph{sh} tem a função de imprimir uma linha de texto no console. Ao incorporar o símbolo \emph{sinal de maior que}, o texto será direcionado para a impressão em um arquivo \cite{debian_man_pages}.
 
 \begin{lstlisting}[caption={Trecho de código com comando UNIX para adicionar o repositório do Unity \cite{install_the_unity_hub}},label={lst:unity_repositorio},language=Bash,showstringspaces=false]
     sh -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
     apt update
     apt-get install unityhub
+\end{lstlisting}
+
+\section{Instalação do Miniconda}
+
+Conda, uma ferramenta versátil de gerenciamento de pacotes e ambientes, é compatível com sistemas operacionais Windows, macOS e Linux \cite{conda_documentation}.
+
+Miniconda, um instalador leve e gratuito para o Conda, representa uma versão compacta do Anaconda, incluindo apenas o Conda, Python, os pacotes essenciais para ambos, e um número limitado de outros pacotes \cite{miniconda_documentation}.
+
+Para a administração das dependências do projeto, optou-se pelo uso do Miniconda. O procedimento de instalação desse software pode ser visualizado no \cref{lst:miniconda_download} \cite{miniconda_documentation}. O comando \emph{mkdir} é empregado para criar diretórios ou pastas, caso estes não existam. Paralelamente, o comando \emph{wget} é utilizado para baixar arquivos; nesse contexto, ocorre o download do instalador do Miniconda. O comando \emph{bash}, um interpretador GNU Bourne-Again SHell, é empregado para a execução do arquivo do Miniconda. Por fim, o comando \emph{rm} é aplicado para remover arquivos e diretórios, sendo utilizado, neste caso, para excluir o script de instalação do Miniconda \cite{debian_man_pages}.
+
+\begin{lstlisting}[caption={Trecho de código com comando UNIX para baixar o Miniconda \cite{miniconda_documentation}},label={lst:miniconda_download},language=Bash,showstringspaces=false]
+    mkdir -p ~/miniconda3
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+    rm -rf ~/miniconda3/miniconda.sh
+\end{lstlisting}
+
+Após a instalação do Miniconda, torna-se necessário ativar o ambiente do conda para possibilitar a interação com o shell, conforme descrito na documentação do Conda \cite{conda_documentation}. A abordagem para realizar essa ativação é ilustrada no trecho de código apresentado no \cref{lst:inicializar_conda}. O comando \emph{conda init} é empregado com o propósito de inicializar o conda nos shells bash (interpretador GNU Bourne-Again SHell) e zsh (interpretador de comandos UNIX) \cite{debian_man_pages,conda_documentation}.
+
+\begin{lstlisting}[caption={Trecho de código com comando UNIX inicializar o Miniconda \cite{miniconda_documentation}},label={lst:inicializar_conda},language=Bash,showstringspaces=false]
+    ~/miniconda3/bin/conda init bash
+    ~/miniconda3/bin/conda init zsh
 \end{lstlisting}
