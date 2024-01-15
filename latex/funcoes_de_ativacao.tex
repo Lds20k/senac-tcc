@@ -3,7 +3,7 @@
 A função de ativação retorna a saída de um neurônio \space\cite{haykin1999neural}, aqui pode-se ver quatro tipos de funções de ativação:
 
 \begin{enumerate}
-	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \space\cite{gharat2019what}.
+	\item Função \textit{Sigmoid}, uma função não-linear que produz uma curva com a forma de "S". Usada para mapear valores previstos em probabilidades. Tem o valor de saída entre 0 e 1 \space\cite{gharat2019what}. Segundo \citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e para valores muito extremos causa problemas na previsão.
 	\begin{figure}[ht]
 	\caption{Gráfico da função \textit{Sigmoid}.}
 	\begin{center}
@@ -34,7 +34,6 @@ A função de ativação retorna a saída de um neurônio \space\cite{haykin1999
 	\legend{Fonte: Criação própria}
 	\label{fig:grafico_sigmoid}
 	\end{figure}
-	Segundo \citeonline{gharat2019what}, a função \textit{Sigmoid} tem uma convergência lenta, é computacionalmente cara e para valores muito extremos causa problemas na previsão.
 
 	\item Função \textit{ReLu} (Unidade Linear Retificada), função não-linear inspirada nos neurônios do cérebro que retorna um valor positivo ou 0 \space\cite{rizzo2020inteligencia}.
 	\begin{figure}[ht]

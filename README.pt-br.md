@@ -1,37 +1,37 @@
-
-# Procedural Generation of Maps for Games Through Image Segmentation Techniques
+# Geração Procedural de Mapas para Jogos Através de Técnicas de Segmentação de Imagem
 
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/Lds20k/senac-tcc/blob/main/README.md)
-[![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/Lds20k/senac-tcc/blob/main/README.pt-br.md)
 
-**Undergraduate Thesis | Bachelor of Computer Science - Senac**
+**Trabalho de Conclusão de Curso | Bacharelado em Ciência da Computação - Senac**
 
-**Authors:**
+**Autores:**
 - Lucas da Silva Santos
 - Matheus Zanivan Andrade
 - Rafael Nascimento Lourenço
 
-## System Requirements
+## Requisitos do Sistema
 * Debian
 
-## Installation
+## Instalação
+
 ### UnityHub
 ```sh
 su
-## Enter your root password ##
+## Inserir sua senha root ##
 
-# Add the Unity repository certificate #
+# Adicionar o certificado do repositório do Unity #
 wget -qO - https://hub.unity3d.com/linux/keys/public | gpg --dearmor | sudo tee /usr/share/keyrings/Unity_Technologies_ApS.gpg > /dev/null
 
-# Add the Unity repository #
+#  Adicionar o repositório do Unity #
 sh -c 'echo "deb [signed-by=/usr/share/keyrings/Unity_Technologies_ApS.gpg] https://hub.unity3d.com/linux/repos/deb stable main" > /etc/apt/sources.list.d/unityhub.list'
 
-# Update package information from all sources #
+# Atualizar a informações dos pacotes de todas as fontes #
 apt update
 
-# Install UnityHub #
+# Instalar o UnityHub #
 apt-get install unityhub
 ```
+
 ### Miniconda
 ```sh
 mkdir -p ~/miniconda3
@@ -56,5 +56,3 @@ python setup.py develop
 cd ..
 python setup.py develop
 ```
-
-
