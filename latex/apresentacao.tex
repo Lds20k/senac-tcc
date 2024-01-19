@@ -1,11 +1,10 @@
 \section{Apresentação}
 
-Para apresentar os resultados será abordado tabelas contendo testes com todas combinações de imagens, uma imagem com os resultados finais das tabelas além de uma imagem com todos os passos da aplicação
+Para apresentar os resultados, serão abordadas tabelas contendo testes com todas as combinações de imagens, uma imagem com os resultados finais das tabelas, além de uma imagem com todos os passos da aplicação.
 
-A Tabela \ref{tab:final_input_output_2d} apresenta os resultados comparativos entre a imagem de entrada e o mapa 2D. Esta comparação é realizada utilizando a técnica de classificação de conjuntos conforme definido por \cite{kirillov2019panoptic}. A análise foca na avaliação das métricas conforme o número de pontos no diagrama de Voronoi, incluindo União sobre Interseção (IoU), Acurácia (Acc), F1 Score (F1), Coeficiente de Correlação de Matthews (MCC), Taxa de Descoberta Falsa (FDR), Taxa de Falso Negativo (FNR) e o tempo de execução do código \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}.
+A Tabela \ref{tab:final_input_output_2d} apresenta os resultados comparativos entre a imagem de entrada e o mapa 2D. Esta comparação é realizada utilizando a técnica de classificação de conjuntos, conforme definido por \cite{kirillov2019panoptic}. A análise foca na avaliação das métricas, conforme o número de pontos no diagrama de Voronoi, incluindo União sobre Interseção (IoU), Acurácia (Acc), F1 Score (F1), Coeficiente de Correlação de Matthews (MCC), Taxa de Descoberta Falsa (FDR), Taxa de Falso Negativo (FNR) e o tempo de execução do código \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}.
 
 Esta tabela é crucial, pois ela evidencia, com base em dados concretos, a semelhança do mapa 2D com o contorno do mapa de entrada. Além disso, corrobora a hipótese de que um maior número de pontos no mapa leva a melhores resultados nas métricas de IoU, Acc, F1 e MCC (onde valores mais altos indicam melhor desempenho), e simultaneamente, a uma redução nos índices de FDR e FNR (onde valores menores são preferíveis, visto que representam menor erro). Observa-se, ainda, que um aumento no número de pontos implica em um maior tempo de processamento na geração procedural do mapa.
-
 
 \begin{table}[h]
 	\centering
@@ -28,7 +27,8 @@ Esta tabela é crucial, pois ela evidencia, com base em dados concretos, a semel
 
 Os resultados obtidos na \cref{tab:final_input_output_3d} derivam da comparação entre a imagem de entrada e o mapa de altura, utilizando a técnica de classificação de conjuntos conforme definida por \cite{kirillov2019panoptic}. Essa comparação foi realizada para mensurar diversos aspectos, incluindo as métricas associadas ao número de pontos no diagrama de Voronoi. As métricas abrangem União sobre Interseção (IoU), Acurácia (Acc), F1 Score (F1), Coeficiente de Correlação de Matthews (MCC), Taxa de Descoberta Falsa (FDR), Taxa de Falso Negativo (FNR) e a duração da execução do código \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}.
 
-A relevância dessa tabela reside na capacidade de demonstrar, por meio de dados concretos, a proximidade entre o mapa de altura e o contorno do mapa de entrada. Além disso, ela valida a hipótese de que o aumento no número de pontos resulta em melhores desempenhos nas métricas IoU, Acc, F1 e MCC, indicando uma maior semelhança entre os mapas. Simultaneamente, observa-se uma diminuição nas métricas FDR e FNR, evidenciando uma redução nos erros. Vale notar que a quantidade de pontos também impacta diretamente na duração da geração procedural do mapa, sendo um fator relevante a ser considerado.
+A relevância dessa tabela reside na capacidade de demonstrar, por meio de dados concretos, a proximidade entre o mapa de altura e o contorno do mapa de entrada. Além disso, ela valida a hipótese de que o aumento no número de pontos resulta em melhores desempenhos nas métricas de IoU, Acc, F1 e MCC, indicando uma maior semelhança entre os mapas. Simultaneamente, observa-se uma diminuição nas métricas de FDR e FNR, evidenciando uma redução nos erros. Vale notar que a quantidade de pontos também impacta diretamente na duração da geração procedural do mapa, sendo um fator relevante a ser considerado.
+
 
 \begin{table}[h]
 	\centering
@@ -48,7 +48,8 @@ A relevância dessa tabela reside na capacidade de demonstrar, por meio de dados
 	\end{tabular}
 \end{table}
 
-A tabela referenciada como \cref{tab:final_output_2d_output_3d} apresenta os resultados comparativos entre o mapa de altura e sua representação em mapa 2D. Esta comparação é realizada através do método de classificação de conjuntos proposto por \cite{kirillov2019panoptic}, avaliando os resultados com base em várias métricas conforme a quantidade de pontos no diagrama de Voronoi. As métricas avaliadas incluem União sobre Interseção (IoU), Acurácia (Acc), F1 Score (F1), Coeficiente de Correlação de Matthews (MCC), Taxa de Descoberta Falsa (FDR), Taxa de Falso Negativo (FNR) e o tempo de execução do código \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}. Esta tabela é crucial para demonstrar que o mapa de altura (que irá se tornar o mapa 3d) com o mapa 2D se assemelham, pois no protótipo do Unity servirá para localização do personagem, combinando o mapa 2d como minimapa e o mapa 3d com dimensão e profundidade. Observa-se também que um aumento no número de pontos resulta em maior tempo de geração procedural do mapa.
+A tabela referenciada como \cref{tab:final_output_2d_output_3d} apresenta os resultados comparativos entre o mapa de altura e sua representação em mapa 2D. Esta comparação é realizada através do método de classificação de conjuntos proposto por \cite{kirillov2019panoptic}, avaliando os resultados com base em várias métricas conforme a quantidade de pontos no diagrama de Voronoi. As métricas avaliadas incluem União sobre Interseção (IoU), Acurácia (Acc), F1 Score (F1), Coeficiente de Correlação de Matthews (MCC), Taxa de Descoberta Falsa (FDR), Taxa de Falso Negativo (FNR) e o tempo de execução do código \cite{Chicco2020, confusion_matrix_calculator, iou_metric_link}. Esta tabela é crucial para demonstrar que o mapa de altura, que se transformará no mapa 3D, assemelha-se ao mapa 2D. Essa similaridade é fundamental no protótipo do Unity para a localização do personagem, combinando o mapa 2D como minimapa e o mapa 3D com dimensão e profundidade. Observa-se também que um aumento no número de pontos resulta em maior tempo de geração procedural do mapa.
+
 
 \begin{table}[h]
 	\centering
@@ -68,7 +69,7 @@ A tabela referenciada como \cref{tab:final_output_2d_output_3d} apresenta os res
 	\end{tabular}
 \end{table}
 
-A \cref{fig:result_final} contém a ilustração da classificação dos conjuntos de cada combinação, logo a imagem a, tem a ilustração da última execução da combinação entre imagem de entrada e o mapa 2d dos resultados da \cref{tab:final_input_output_2d}, a imagem b, tem a ilustração da última execução da combinação entre imagem de entrada e o mapa de altura dos resultados da \cref{tab:final_input_output_3d}, já a imagem c, tem a ilustração da última execução da combinação entre imagem de altura e o mapa 2d dos resultados da \cref{tab:final_output_2d_output_3d}.
+A \cref{fig:result_final} contém a ilustração da classificação dos conjuntos de cada combinação. Assim, a imagem (a) ilustra a última execução da combinação entre a imagem de entrada e o mapa 2D, conforme os resultados da \cref{tab:final_input_output_2d}. A imagem (b) exibe a última execução da combinação entre a imagem de entrada e o mapa de altura, conforme os resultados da \cref{tab:final_input_output_3d}. Já a imagem (c) apresenta a última execução da combinação entre o mapa de altura e o mapa 2D, conforme os resultados da \cref{tab:final_output_2d_output_3d}.
 
 \begin{figure}[!ht]
 	\centering
@@ -78,7 +79,8 @@ A \cref{fig:result_final} contém a ilustração da classificação dos conjunto
 	\label{fig:result_final}
 \end{figure}
 
-A \cref{fig:combs_result} contém todos os passos da execução do programa gerado em Python. Sendo a imagem a, uma captura de tela da interface gráfica com PyQt5, a imagem b, é uma captura de tela abrindo uma imagem para ser segmentada, na imagem c, é uma captura de tela rodando o EfficientPS na imagem que foi escolhida, na imagem d, tem uma captura de tela da saída da segmentação panóptica pelo modelo EfficientPS, na imagem e, tem o carregamento pós seleção do usuário que no caso selecionou um carro com o método de preenchimento por inundação, na imagem f, tem o resultado do mapa 2d com o contorno selecionado anteriormente, na imagem g, tem uma captura de tela da automação usando Unity para atualizar um terreno com o mapa de altura de saída da geração procedural, e por fim a imagem h, tem uma captura de tela do Unity rodando a aplicação e abrindo o minimapa (usando o mapa 2d) para ter uma noção de localização no mapa em 3d usando um ponto para marcar a localização atual do personagem no minimapa (mapa 2d).
+A \cref{fig:combs_result} apresenta todos os passos da execução do programa gerado em Python. A imagem (a) mostra uma captura de tela da interface gráfica com PyQt5. A imagem (b) exibe uma captura de tela do processo de abertura de uma imagem para segmentação. Na imagem (c), é apresentada uma captura de tela da execução do modelo EfficientPS na imagem selecionada. A imagem (d) mostra uma captura de tela da saída da segmentação panóptica pelo modelo EfficientPS. Na imagem (e), temos o carregamento pós-seleção do usuário, que, no caso, selecionou um carro com o método de preenchimento por inundação. A imagem (f) exibe o resultado do mapa 2D com o contorno selecionado anteriormente. Na imagem (g), é apresentada uma captura de tela da automação usando Unity para atualizar um terreno com o mapa de altura resultante da geração procedural. Por fim, a imagem (h) mostra uma captura de tela do Unity rodando a aplicação e abrindo o minimapa (usando o mapa 2D) para oferecer uma noção de localização no mapa 3D, usando um ponto para marcar a localização atual do personagem no minimapa (mapa 2d).
+
 
 \begin{figure}[!ht]
 	\centering
