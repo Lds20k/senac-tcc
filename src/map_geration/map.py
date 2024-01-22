@@ -73,6 +73,7 @@ def convert_map_to_image(
                 cv2.line(image, (begginer[0], begginer[1]), (end[0], end[1]), (255, 0, 0), thickness=4)
 
     cv2.imwrite(f"{path}.png", image)
+    cv2.imwrite(f"unity/3d_map/Assets/Resources/{path}.png", image)
     return image
 
 def center_to_polygon(center: Center, plot_type, image):
