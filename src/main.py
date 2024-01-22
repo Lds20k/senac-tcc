@@ -36,7 +36,7 @@ class MapWorker(QObject):
     finished = pyqtSignal()
     result = pyqtSignal(np.ndarray)
     image = None
-    points = 300
+    points = 1000
 
     def run(self):
         logging.info("MapWorker em execução")
@@ -125,8 +125,8 @@ class QImageViewer(QMainWindow):
                 return
 
             geometria = self.geometry()
-            new_width = geometria.width() - 16
-            new_height = int((image.shape[0] * new_width) / image.shape[1])
+            new_height = geometria.height() - 16
+            new_width = int((image.shape[1] * new_height) / image.shape[0]) - 16
             image = cv2.resize(image, (new_width, new_height))
             self.update_screen_image(image)
 

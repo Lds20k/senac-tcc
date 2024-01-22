@@ -28,7 +28,7 @@ class BiomeType(Enum):
     DEEPOCEAN = 19
 
 def height_color(height, color):
-    return (height * 10) + color
+    return [int(height * 2) + rgb for rgb in color]
 
 terrainColors = {
     TerrainType.OCEAN: lambda height: [255, 191, 0],

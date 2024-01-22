@@ -26,35 +26,33 @@ def generate(image, points=25, mode = 3, output: OUTPUT = OUTPUT.BOTH, kernel_si
     redistribute_elevations(graph)
     assign_center_elevations(graph)
 
-    if output == OUTPUT.MAP_BIOME:
-        logging.info("Gerando biomas")
+    # logging.info("Gerando imagem 2D")
+    # convert_map_to_image(graph, path="output_2d", border_size=border_size)
 
-        number_of_rivers = 10
+    logging.info("Gerando imagem 3D")
+    convert_map_to_3d_image(graph, mode=mode, kernel_size=kernel_size, path="output_3d")
 
-        logging.info(f"Sera gerado um total de {number_of_rivers} rios")
-        create_rivers(graph, number_of_rivers, 0.6)
+    logging.info("Gerando biomas")
 
-        logging.info(f"Calculando umidade")
-        assign_moisture(graph)
+    number_of_rivers = 5
+    logging.info(f"Sera gerado um total de {number_of_rivers} rios")
+    create_rivers(graph, number_of_rivers, 0.6)
 
-        logging.info(f"Selecionando biomas")
-        assign_biomes(graph)
+    logging.info(f"Calculando umidade")
+    assign_moisture(graph)
 
-        logging.info(f"Gerando imagem bioma")
-        return convert_map_to_image(
-            graph,
-            path="output_biomes",
-            plot_type='biome',
-            debug_height=False, 
-            debug_moisture=False, 
-            downslope_arrows=False, 
-            rivers=True
-        )
+    logging.info(f"Selecionando biomas")
+    assign_biomes(graph)
 
-    if not output == OUTPUT.MAP_2D:
-        logging.info("Gerando imagem 3D")
-        convert_map_to_3d_image(graph, mode=mode, kernel_size=kernel_size, path="output_3d")
-
-    if not output == OUTPUT.MAP_3D:
-        logging.info("Gerando imagem 2D")
-        return convert_map_to_image(graph, path="output_2d", border_size=border_size)
+    logging.info(f"Gerando imagem bioma")
+    image = convert_map_to_image(
+        graph,
+        path="output_2d",
+        plot_type='biome',
+        debug_height=False, 
+        debug_moisture=False, 
+        downslope_arrows=False, 
+        rivers=True
+    )    
+    
+    return image

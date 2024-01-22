@@ -68,10 +68,11 @@ def convert_map_to_image(
             if edge.river > 0:
                 beg_x, beg_y = edge.v0.get_cords()
                 end_x, end_y = edge.v1.get_cords()
-                X = (beg_x, end_x)
-                Y = (beg_y, end_y)
-                plt.plot(X, Y, linewidth=2+2*np.sqrt(edge.river), color='blue')
+                begginer = np.array([beg_x * IMAGE_SIZE, beg_y * IMAGE_SIZE], dtype=np.int32)
+                end = np.array([end_x * IMAGE_SIZE, end_y * IMAGE_SIZE], dtype=np.int32)
+                cv2.line(image, (begginer[0], begginer[1]), (end[0], end[1]), (255, 0, 0), thickness=4)
 
+    cv2.imwrite(f"{path}.png", image)
     return image
 
 def center_to_polygon(center: Center, plot_type, image):
@@ -241,8 +242,8 @@ def create_rivers(graph: Graph, n, min_height):
             c.height for c in graph.corners
             if c.terrain_type == TerrainType.LAND or c.terrain_type == TerrainType.COAST
         ])
-        # print(f'Found only {len(good_beginnings)} river beginnings. Lower min_height.')
-        # print(f'min_height={min_height} | Heighest mountain has height={heighest}')
+        print(f'Found only {len(good_beginnings)} river beginnings. Lower min_height.')
+        print(f'min_height={min_height} | Heighest mountain has height={heighest}')
         return
 
     start_corners = np.random.choice(good_beginnings, n, replace=False)

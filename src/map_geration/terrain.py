@@ -35,8 +35,6 @@ def assign_terrain_from_image(image, graph: Graph):
     logging.info("Assinando poligonos como LAND")
     image_size = image.shape[1]
 
-    flag = True
-    index = 0
     for center in graph.centers:
         image_aux = np.zeros((image_size, image_size, 3), dtype=np.uint8)
 
@@ -54,10 +52,8 @@ def assign_terrain_from_image(image, graph: Graph):
 
         if(np.sum(result) > 0):
             center.terrain_type = TerrainType.LAND
-            if flag:
-                cv2.imwrite(f"src/output/mask/mask_{index}.png", mask)
-                cv2.imwrite(f"src/output/result/result_{index}.png", result)
-                index += 1
+            for corner in center.corners: 
+                corner.terrain_type = TerrainType.LAND
 
     logging.info("Procurando o primeiro poligono LAND")
     a_land_center = graph.centers[0]
