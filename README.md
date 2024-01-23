@@ -7,9 +7,28 @@
 **Undergraduate Thesis | Bachelor of Computer Science - Senac**
 
 **Authors:**
+- Rafael Nascimento Lourenço
 - Lucas da Silva Santos
 - Matheus Zanivan Andrade
-- Rafael Nascimento Lourenço
+
+## Demo
+
+### Video on [Youtube](https://www.youtube.com/watch?v=DYGtRtT66Nw)
+
+![Demo image](demo.png)
+
+## Citation
+
+```
+@article{proceduralGenerationSegmentation,
+  title={Geração Procedural de Mapas para Jogos Através de Técnicas de Segmentação de Imagem},
+  author={Rafael Lourenço and Lucas Santos and Matheus Andrade},
+  howpublished={GitHub Repository},
+  year={2023},
+  url={https://github.com/Lds20k/senac-tcc},
+  note = {Access on: \today}
+}
+```
 
 ## System Requirements
 * Debian

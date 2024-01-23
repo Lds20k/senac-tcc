@@ -5,9 +5,28 @@
 **Trabalho de Conclusão de Curso | Bacharelado em Ciência da Computação - Senac**
 
 **Autores:**
+- Rafael Nascimento Lourenço
 - Lucas da Silva Santos
 - Matheus Zanivan Andrade
-- Rafael Nascimento Lourenço
+
+## Demonstração
+
+### Video no [Youtube](https://www.youtube.com/watch?v=DYGtRtT66Nw)
+
+![Demo image](demo%20pt-br.png)
+
+## Citação
+
+```
+@article{geracaoProceduralSegmentacao,
+  title={Geração Procedural de Mapas para Jogos Através de Técnicas de Segmentação de Imagem},
+  author={Rafael Lourenço and Lucas Santos and Matheus Andrade},
+  howpublished={Repositório do GitHub},
+  year={2023},
+  url={https://github.com/Lds20k/senac-tcc},
+  note = {Acesso em: \today}
+}
+```
 
 ## Requisitos do Sistema
 * Debian
